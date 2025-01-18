@@ -6,7 +6,9 @@ import AddProduct from './dashboard/pages/admin/Add_product'
 import BuildingNodes from './dashboard/pages/admin/buildingNodes'
 import Buildings from './dashboard/pages/admin/buildings'
 import Clients from './dashboard/pages/admin/clients'
+import GatewaysPage from './dashboard/pages/admin/Gateways'
 import MainPage from './dashboard/pages/admin/hero'
+import NodesPage from './dashboard/pages/admin/Nodes'
 import Products from './dashboard/pages/admin/products'
 import UserTable from './dashboard/pages/admin/users'
 import Authentication from './pages/authentication'
@@ -34,8 +36,8 @@ const App = () => {
 					<Route path='add-client' element={<AddClient />} />
 					<Route path='users' element={<UserTable />} />
 					<Route path='products' element={<Products />} />
-					<Route path='product/gateways' element={''} />
-					<Route path='product/nodes' element={''} />
+					<Route path='product/gateways' element={<GatewaysPage />} />
+					<Route path='product/nodes' element={<NodesPage />} />
 					<Route path='clients' element={<Clients />} />
 					<Route path='clients' element={<Clients />} />
 					<Route path='client/:id' element={<Buildings />} />

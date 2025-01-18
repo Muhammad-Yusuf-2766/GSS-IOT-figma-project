@@ -4,7 +4,7 @@ import { TbXboxX } from 'react-icons/tb'
 
 const ClientCard: React.FC<{ client: IClient }> = ({ client }) => {
 	return (
-		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border-2'>
+		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border border-slate-400'>
 			<h2 className='text-lg font-semibold mb-6'>Hyundai Engineering</h2>
 			<div className='space-y-4'>
 				<div className='flex items-center justify-between'>

@@ -15,7 +15,7 @@ const MainPage = () => {
 				<h1 className='font-bold w-fit'>
 					환영합니다! <br />
 					GSS-GROUP 매니저-
-					<span className='text-xl font-bold text-blue-700'>Yang da yeoun</span>
+					<span className='text-xl font-bold text-blue-800'>Yang da yeoun</span>
 				</h1>
 				{/* 1-div */}
 				<div className='w-full flex flex-col lg:flex-row gap-x-5'>

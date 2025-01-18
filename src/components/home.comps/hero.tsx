@@ -97,6 +97,7 @@ const Hero = () => {
 						</div>
 					)}
 				</div>
+				{/* Authentication part */}
 
 				{/* Main contnet */}
 				<div

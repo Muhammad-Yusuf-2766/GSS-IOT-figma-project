@@ -1,93 +1,138 @@
 'use client'
 
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useEffect, useState } from 'react'
+import { Nodes } from '@/constants'
+import { useState } from 'react'
+import TotalcntCsv from './TotalnctCSV'
 
-interface DoorStatus {
-	id: number
-	isOpen: boolean
-	batteryStatus: string
-}
+const BuildingNodes = () => {
+	const [filteredNodes, setFilteredNodes] = useState(Nodes) // Filtrlangan nodlar
 
-export default function BuildingNodes() {
-	const [isConnected, setIsConnected] = useState(false)
-	const [hasOpenDoors, setHasOpenDoors] = useState(false)
-	const [doors, setDoors] = useState<DoorStatus[]>(
-		Array.from({ length: 96 }, (_, i) => ({
-			id: i,
-			isOpen: i < 6,
-			batteryStatus: '12.2V',
-		}))
-	)
+	const handleFilterChange = (filterOpenDoors: boolean) => {
+		if (filterOpenDoors) {
+			setFilteredNodes(Nodes.filter(node => node.doorChk === 1)) // Faqat eshik ochiq bo'lganlarni saqlash
+		} else {
+			setFilteredNodes(Nodes) // Barcha nodlarni saqlash
+		}
+	}
 
-	// useEffect(() => {
-	// 	const socket = io('ws://localhost:3000')
+	// ========== Battery percentage ============ //
+	const getBatteryIconAndPercentage = (batteryLevel: number) => {
+		// let icon
+		let color
+		let percentage
 
-	// 	socket.on('connect', () => {
-	// 		setIsConnected(true)
-	// 	})
+		switch (true) {
+			case batteryLevel >= 42:
+				color = 'bg-green-500'
+				percentage = '100%'
+				break
+			case batteryLevel >= 41:
+				color = 'bg-green-500'
+				percentage = '84%'
+				break
+			case batteryLevel >= 40:
+				color = 'bg-green-500'
+				percentage = '65%'
+				break
+			case batteryLevel >= 39:
+				color = 'bg-blue-400'
+				percentage = '56%'
+				break
+			case batteryLevel >= 38:
+				color = 'bg-green-400'
+				percentage = '50%'
+				break
+			case batteryLevel >= 37:
+				color = 'bg-red-400'
+				percentage = '41%'
+				break
+			case batteryLevel >= 36:
+				color = 'bg-red-400'
+				percentage = '35%'
+				break
+			case batteryLevel >= 35:
+				color = 'bg-red-400'
+				percentage = '25%'
+				break
+			case batteryLevel >= 34:
+				color = 'bg-red-400'
+				percentage = '20%'
+				break
+			case batteryLevel >= 30:
+				color = 'bg-red-500'
+				percentage = '10%'
+				break
 
-	// 	socket.on('disconnect', () => {
-	// 		setIsConnected(false)
-	// 	})
+			default:
+				color = 'bg-indigo-500'
+				percentage = '100%'
+		}
 
-	// 	return () => {
-	// 		socket.disconnect()
-	// 	}
-	// }, [])
-
-	useEffect(() => {
-		const openDoors = doors.some(door => door.isOpen)
-		setHasOpenDoors(openDoors)
-	}, [doors])
+		return { color, percentage }
+	}
+	// ========== Battery percentage ============ //
 
 	return (
 		<div className='w-full md:p-5 mx-auto'>
 			<div className='space-y-6'>
 				<div className='text-center space-y-2'>
-					<h1 className='text-2xl font-bold'>Hello MQTT & Socket.io</h1>
-					<p className='text-muted-foreground'>
-						Socket is {isConnected ? 'Connected' : 'Disconnected'}
-					</p>
+					<h1 className='md:text-2xl text-lg md:font-bold font-semibold'>
+						Hello MQTT & Socket.io
+					</h1>
 				</div>
 
-				{hasOpenDoors && (
-					<Alert variant='destructive'>
-						<AlertDescription className='text-center'>
-							There is some open doors,
-							<br />
-							So alarm audio play for 15 seconds
-						</AlertDescription>
-					</Alert>
-				)}
+				{/* TotalcntCsv komponenti */}
+				<div className='w-full'>
+					<TotalcntCsv nodes={Nodes} onFilterChange={handleFilterChange} />
+				</div>
 
-				<ScrollArea className='md:h-[530px] h-[450px] w-full rounded-lg border border-slate-400'>
-					<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4'>
-						{doors.map(door => (
-							<Card
-								key={door.id}
-								className={`${
-									door.isOpen ? 'bg-[#1e3a8a] text-white' : 'bg-gray-100'
-								}`}
-							>
-								<CardContent className='p-6 text-center space-y-1'>
-									<div className='text-xl font-medium'>
-										{door.isOpen ? '열림' : '닫힘'}
-									</div>
-									<div className='text-sm'>
-										Door is {door.isOpen ? 'Open' : 'Closed'}
-									</div>
-									<div className='text-sm'>
-										Battery Status: {door.batteryStatus}
-									</div>
-								</CardContent>
-							</Card>
-						))}
+				{/* Filtrlangan nodlarni ko'rsatish */}
+				<ScrollArea className='md:h-[530px] h-[74vh] w-full rounded-lg border border-slate-400'>
+					<div className='grid grid-cols-3  md:grid-cols-6 md:gap-4 gap-2 md:p-4 p-2'>
+						{filteredNodes.map(door => {
+							const { color, percentage } = getBatteryIconAndPercentage(
+								door.betChk
+							)
+							return (
+								<Card
+									key={door._id}
+									className={`${
+										door.doorChk
+											? 'bg-[#1e3a8a] text-white '
+											: 'bg-gray-100 border border-blue-900'
+									}`}
+								>
+									{/* <p className='w-5 h-5 flex justify-center items-center rounded-full bg-white border-indigo-400 border text-gray-700 absolute top-0 left-0'>
+									{door.doorNum}
+								</p> */}
+									<CardContent className='md:p-6 p-2 text-center space-y-1 md:text-xl text-sm relative'>
+										<p className='md:w-7 md:h-7 w-5 h-5 flex justify-center items-center rounded-full bg-white border-blue-800 border text-blue-700 absolute -top-1 -left-1 text-sm'>
+											{door.doorNum}
+										</p>
+										<div className='flex items-center gap-2 text-sm bg-gray-300 p-1 rounded-md mb-2'>
+											<p className='text-gray-700'>위치: {door.position}</p>
+										</div>
+										<div className=''>{door.doorChk ? '열림' : '닫힘'}</div>
+										<div className='w-full flex justify-center items-center space-x-4'>
+											<div className='md:w-2/3 w-full bg-gray-300 rounded-full md:h-4 h-2'>
+												<div
+													className={`${color} h-full rounded-full`}
+													style={{ width: `${percentage}` }}
+												></div>
+											</div>
+											<span className='text-[10px] '>{percentage}</span>
+										</div>
+									</CardContent>
+								</Card>
+							)
+						})}
 					</div>
 				</ScrollArea>
 			</div>
 		</div>
 	)
 }
+
+export default BuildingNodes

@@ -1,8 +1,8 @@
-import { INodes } from '@/types/interfaces'
+import { INode } from '@/types/interfaces'
 import { useState } from 'react'
 
 interface GatewayFormProps {
-	nodes: INodes[]
+	nodes: INode[]
 }
 
 const GatewayForm = ({ nodes }: GatewayFormProps) => {

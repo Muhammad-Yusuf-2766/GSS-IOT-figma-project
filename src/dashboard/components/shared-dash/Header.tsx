@@ -16,7 +16,7 @@ const Header = () => {
 					<h1 className='md:text-2xl  font-bold text-gray-700'>환영합니다!</h1>
 					<p className='md:text-md font-semibold text-gray-700'>
 						GSS-GROUP 매니저{' '}
-						<span className='md:text-xl font-bold text-blue-700'>
+						<span className='md:text-xl font-bold text-blue-800'>
 							{' '}
 							Yang da yeoun
 						</span>
@@ -31,7 +31,7 @@ const Header = () => {
 							to={`http://localhost:5173/admin/dashboard/${route}`}
 							key={id}
 						>
-							<div className='hover:bg-gray-200 p-2 rounded md:text-[35px] text-[25px] text-blue-700'>
+							<div className='hover:bg-gray-200 p-2 rounded md:text-[35px] text-[25px] text-blue-800'>
 								<Icon />
 							</div>
 						</Link>

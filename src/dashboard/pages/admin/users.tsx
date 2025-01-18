@@ -72,7 +72,7 @@ export default function UserTable() {
 					모든 사용자들
 				</h1>
 				{/* <div className='w-full md:max-h-[570px] max-h-[90vh] overflow-y-auto'> */}
-				<ScrollArea className='w-full md:h-[570px] h-[550px] px-4'>
+				<ScrollArea className='w-full md:h-[570px] h-[550px] pr-4'>
 					<table className='w-full text-sm text-center rtl:text-right text-gray-500'>
 						<thead className='md:h-12 sticky top-0 text-white font-bold text-xs uppercase bg-blue-800'>
 							<tr>

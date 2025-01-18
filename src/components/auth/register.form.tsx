@@ -57,10 +57,10 @@ const Register = () => {
 						className=' cursor-pointer underline underline-offset-4'
 						onClick={() => setAuth('login')}
 					>
-						Sign in
+						Login
 					</span>
 				</p>
-				<Link to={'/'} className='hover:underline underline-offset-4'>
+				<Link to={'/'} className='underline underline-offset-4'>
 					Back
 				</Link>
 			</div>

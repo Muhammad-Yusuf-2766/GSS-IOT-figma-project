@@ -17,9 +17,8 @@ const CompanyMembers = () => {
 					{/* Kartalarni dinamik generatsiya qilish */}
 					<div className='h-auto md:flex flex flex-col space-y-5	'>
 						{members.slice(0, 3).map(member => (
-							<>
+							<div key={member.id}>
 								<div
-									key={member.id}
 									className={`md:absolute md:w-[350px] md:h-[450px] w-[300px] h-[400px] group cursor-pointer transition-all duration-400 ${
 										hoveredMember === member.id ? 'z-50 scale-105' : 'z-10'
 									}`}
@@ -53,7 +52,7 @@ const CompanyMembers = () => {
 										<MoveRight className='' />
 									</Link>
 								</div>
-							</>
+							</div>
 						))}
 						<Link
 							to={'/community'}

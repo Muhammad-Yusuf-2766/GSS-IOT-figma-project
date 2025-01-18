@@ -74,7 +74,7 @@ export interface IBuildingFormProps {
 }
 
 // ============== Data-Base related Data interfaces ========== //
-export interface INodes {
+export interface INode {
 	_id: string
 	doorNum: number
 	doorChk: 0 | 1
@@ -86,7 +86,7 @@ export interface INodes {
 export interface IGateway {
 	_id: string
 	serial_number: string
-	nodes: string[]
+	nodes: INode[]
 	product_status: boolean
 }
 

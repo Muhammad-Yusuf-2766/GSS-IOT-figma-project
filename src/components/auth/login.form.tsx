@@ -61,7 +61,7 @@ const Login = () => {
 						Sign up
 					</span>
 				</p>
-				<Link to={'/'} className='md: hover:underline underline-offset-4'>
+				<Link to={'/'} className='underline underline-offset-4'>
 					Back
 				</Link>
 			</div>

@@ -26,7 +26,7 @@ const ClientForm = ({ users }: IClientFormProps) => {
 			<form className='w-full p-4 border bg-white rounded-lg shadow-lg shadow-gray-300'>
 				{/* Client Company */}
 				<div className='mb-4'>
-					<label className='block  text-sm font-medium mb-2'>현장대표:</label>
+					<label className='block font-medium mb-2'>현장대표:</label>
 					<input
 						required
 						type='text'
@@ -38,7 +38,7 @@ const ClientForm = ({ users }: IClientFormProps) => {
 
 				{/* Number of Buildings */}
 				{/* <div className='mb-4'>
-					<label className='block  text-sm font-medium mb-2'>
+					<label className='block font-medium mb-2'>
 						Number of Buildings:
 					</label>
 					<input
@@ -53,7 +53,7 @@ const ClientForm = ({ users }: IClientFormProps) => {
 
 				{/* Buildings Addresses */}
 				<div className='mb-4'>
-					<label className='block  text-sm font-medium mb-2'>기업주소:</label>
+					<label className='block font-medium mb-2'>기업주소:</label>
 					<input
 						required
 						type='text'

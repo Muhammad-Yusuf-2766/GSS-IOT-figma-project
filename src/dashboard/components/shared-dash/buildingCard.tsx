@@ -19,7 +19,7 @@ export function BuildingCard({
 	location,
 }: BuildingCardProps) {
 	return (
-		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border-2'>
+		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border border-slate-400'>
 			<div className='flex justify-between items-start mb-6'>
 				<h2 className='text-lg'>
 					<span className='text-blue-600 font-medium'>Hyundai:</span>
