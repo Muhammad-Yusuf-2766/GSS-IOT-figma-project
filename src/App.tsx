@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { MembersDetail } from './components/pages.comp/memberDetail'
+import { Toaster } from './components/ui/sonner'
 import ActiveClientsPage from './dashboard/pages/admin/activeClientPage'
 import AddClient from './dashboard/pages/admin/Add_client'
 import AddProduct from './dashboard/pages/admin/Add_product'
@@ -22,12 +23,15 @@ const App = () => {
 	return (
 		<div className='max-w-[100vw]'>
 			<Routes>
-				<Route path='/' element={<Home />} />
-				<Route path='/auth' element={<Authentication />} />
-				<Route path='/resources' element={<Resource />} />
-				<Route path='/services' element={<Services />} />
-				<Route path='/community' element={<Community />} />
-				<Route path='/community/:memberId' element={<MembersDetail />} />
+				<Route path='/'>
+					<Route path='' element={<Home />} />
+					<Route path='/auth' element={<Authentication />} />
+					<Route path='/resources' element={<Resource />} />
+					<Route path='/services' element={<Services />} />
+					<Route path='/community' element={<Community />} />
+					<Route path='/community/:memberId' element={<MembersDetail />} />
+				</Route>
+
 				{/* Dashboard routes */}
 				<Route path='/admin/dashboard' element={<Dashboard />}>
 					<Route path='' element={<MainPage />} />
@@ -39,11 +43,14 @@ const App = () => {
 					<Route path='product/gateways' element={<GatewaysPage />} />
 					<Route path='product/nodes' element={<NodesPage />} />
 					<Route path='clients' element={<Clients />} />
-					<Route path='clients' element={<Clients />} />
-					<Route path='client/:id' element={<Buildings />} />
-					<Route path='client/:id/building/:id' element={<BuildingNodes />} />
+					<Route path='client/:clientId/buildings' element={<Buildings />} />
+					<Route
+						path='client/:id/buildings/:buldingId'
+						element={<BuildingNodes />}
+					/>
 				</Route>
 			</Routes>
+			<Toaster position='top-center' />
 		</div>
 	)
 }

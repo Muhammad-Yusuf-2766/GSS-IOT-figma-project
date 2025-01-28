@@ -1,15 +1,9 @@
+import { IUser } from '@/types/interfaces'
 import { create } from 'zustand'
 
-type UserType = {
-	id: string
-	name: string
-	email: string
-	role?: string // Ixtiyoriy maydon
-} | null
-
 interface IUserInterface {
-	user: UserType
-	setUser: (user: UserType) => void
+	user: IUser | null
+	setUser: (user: IUser) => void
 	clearUser: () => void // Foydalanuvchini o'chirish funksiyasi
 }
 

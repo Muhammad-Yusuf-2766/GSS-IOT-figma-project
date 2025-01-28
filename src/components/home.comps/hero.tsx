@@ -1,14 +1,18 @@
 import Navbar from '@/components/shared/navbar'
 import { useAuthState } from '@/stores/auth.store'
+import { useUserState } from '@/stores/user.auth.store'
 import { ICarouselItem } from '@/types/interfaces'
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import UserBox from '../shared/userBox'
 
 const Hero = () => {
-	const [user, setUser] = useState<boolean>(false)
 	const [currentIndex, setCurrentIndex] = useState<number>(0)
 	const { setAuth } = useAuthState()
+	const { user } = useUserState()
+
+	console.log(user)
 
 	const carouselData: ICarouselItem[] = [
 		{
@@ -33,8 +37,6 @@ const Hero = () => {
 				'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		},
 	]
-
-	console.log(setUser)
 
 	const handlePrev = () => {
 		setCurrentIndex(prevIndex =>
@@ -66,16 +68,7 @@ const Hero = () => {
 				<div className='w-full h-auto flex justify-end mb-2'>
 					{user ? (
 						<div className=' w-fit h-fit flex items-center mr-10 gap-3'>
-							<Link to={''} className='hover:underline underline-offset-2'>
-								Yusuf
-							</Link>
-							<div className='w-[2px] h-3 bg-white' />
-							<Link
-								to={'/my-page'}
-								className='hover:underline underline-offset-2 '
-							>
-								My Profile
-							</Link>
+							<UserBox />
 						</div>
 					) : (
 						<div className=' w-fit h-fit flex items-center mr-10 gap-3'>

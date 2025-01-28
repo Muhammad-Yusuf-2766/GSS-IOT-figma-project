@@ -1,15 +1,15 @@
+import { useUserState } from '@/stores/user.auth.store'
 import { IResource } from '@/types/interfaces'
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from './navbar'
+import UserBox from './userBox'
 
 interface PageNavProps {
 	data: IResource // `data` ni to'g'ri aniqlash
 }
 
 const PagesNavbar: React.FC<PageNavProps> = ({ data }) => {
-	const [user, setUser] = useState<boolean>(false)
-	console.log(setUser)
+	const { user } = useUserState()
 	const { img, title } = data
 	return (
 		<>
@@ -27,16 +27,7 @@ const PagesNavbar: React.FC<PageNavProps> = ({ data }) => {
 				<div className='w-full h-auto flex justify-end mb-2'>
 					{user ? (
 						<div className=' w-fit h-fit flex items-center mr-10 gap-3'>
-							<Link to={''} className='hover:underline underline-offset-2'>
-								Yusuf
-							</Link>
-							<div className='w-[2px] h-3 bg-white' />
-							<Link
-								to={'/my-page'}
-								className='hover:underline underline-offset-2 '
-							>
-								My Profile
-							</Link>
+							<UserBox />
 						</div>
 					) : (
 						<div className=' w-fit h-fit flex items-center mr-10 gap-3'>

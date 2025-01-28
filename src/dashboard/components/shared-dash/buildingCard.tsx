@@ -1,29 +1,24 @@
+import { IBuilding } from '@/types/interfaces'
 import { BsBuildingFill, BsBuildingsFill, BsCalendarDate } from 'react-icons/bs'
 import { FaHourglassStart } from 'react-icons/fa6'
 import { MdOutlineLocationCity } from 'react-icons/md'
 interface BuildingCardProps {
-	buildingNumber: number
-	totalGateways: number
-	totalWorkers: number
-	remainingDays: number
-	expiryDate: string
-	location: string
+	building: IBuilding
 }
 
-export function BuildingCard({
-	buildingNumber,
-	totalGateways,
-	totalWorkers,
-	remainingDays,
-	expiryDate,
-	location,
-}: BuildingCardProps) {
+const BuildingCard = ({ building }: BuildingCardProps) => {
+	const expirationDate = new Date(building.expiration_date)
+	const today = new Date()
+	const daysLeft = Math.ceil(
+		(expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+	)
+
 	return (
 		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border border-slate-400'>
 			<div className='flex justify-between items-start mb-6'>
 				<h2 className='text-lg'>
 					<span className='text-blue-600 font-medium'>Hyundai:</span>
-					<span className='ml-2'>건물-{buildingNumber}</span>
+					<span className='ml-2'>건물-{building.building_num}</span>
 				</h2>
 				<BsBuildingsFill />
 			</div>
@@ -34,7 +29,7 @@ export function BuildingCard({
 						<BsBuildingFill />
 						<span>총 게이트웨이</span>
 					</div>
-					<span>{totalGateways}</span>
+					<span>{building.gateway_sets.length}</span>
 				</div>
 
 				<div className='flex justify-between items-center'>
@@ -42,7 +37,7 @@ export function BuildingCard({
 						<BsBuildingFill />
 						<span>총 근로자</span>
 					</div>
-					<span>{totalWorkers}</span>
+					<span>{building.users.length}</span>
 				</div>
 
 				<div className='flex justify-between items-center'>
@@ -50,7 +45,7 @@ export function BuildingCard({
 						<FaHourglassStart />
 						<span>잔여일</span>
 					</div>
-					<span className='text-red-600'>{remainingDays}</span>
+					<span className='text-red-600'>{daysLeft}</span>
 				</div>
 
 				<div className='flex justify-between items-center'>
@@ -58,7 +53,7 @@ export function BuildingCard({
 						<BsCalendarDate />
 						<span>만료일</span>
 					</div>
-					<span>{expiryDate}</span>
+					<span>{building.expiration_date}</span>
 				</div>
 
 				<div className='flex justify-between items-center'>
@@ -66,9 +61,11 @@ export function BuildingCard({
 						<MdOutlineLocationCity />
 						<span>현장 주소</span>
 					</div>
-					<span className='text-right'>{location}</span>
+					<span className='text-right'>{building.building_addr}</span>
 				</div>
 			</div>
 		</div>
 	)
 }
+
+export default BuildingCard

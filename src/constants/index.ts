@@ -207,7 +207,7 @@ export const Users: IUser[] = [
 
 export const Nodes: INode[] = [
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: '234kmnj',
 		betChk: 39,
 		doorChk: 1,
 		doorNum: 1,
@@ -215,7 +215,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: '234kmnjGhn',
 		betChk: 39,
 		doorChk: 1,
 		doorNum: 2,
@@ -223,7 +223,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sfdghjmf234kmnj',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 1,
@@ -231,7 +231,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sfdg234kmnjAFGhn',
 		betChk: 39,
 		doorChk: 1,
 		doorNum: 3,
@@ -239,7 +239,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sf234kmnjdsAFGhn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 4,
@@ -247,7 +247,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sfdghjmfg234kmnjFGhn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 5,
@@ -255,7 +255,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sf234kmnjfgdsAFGhn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 6,
@@ -263,7 +263,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 's234kmnjn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 7,
@@ -271,7 +271,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sfd234kmnjn',
 		betChk: 39,
 		doorChk: 1,
 		doorNum: 8,
@@ -279,7 +279,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 's234kmnjhjmfgdsAFGhn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 9,
@@ -287,7 +287,7 @@ export const Nodes: INode[] = [
 		product_status: false,
 	},
 	{
-		_id: 'sfdghjmfgdsAFGhn',
+		_id: 'sfdghjmfgds234kmnjFGhn',
 		betChk: 39,
 		doorChk: 0,
 		doorNum: 10,
@@ -298,43 +298,43 @@ export const Nodes: INode[] = [
 
 export const Gateways: IGateway[] = [
 	{
-		_id: 'sadfgsfda',
+		_id: 'sadfg',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0001',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'sgsfda',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0002',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'sadda',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0003',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'sadfgsf',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0004',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'gsfda',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0005',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'sad',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0006',
 	},
 	{
-		_id: 'sadfgsfda',
+		_id: 'sa234kmnjsfda',
 		nodes: Nodes,
 		product_status: false,
 		serial_number: '0007',

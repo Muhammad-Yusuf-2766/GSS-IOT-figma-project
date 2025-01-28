@@ -1,6 +1,5 @@
 import { loginSchema } from '@/lib/vatidation'
 import { loginRequest } from '@/services/apiRequests'
-import { useAuthState } from '@/stores/auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -20,9 +19,7 @@ import {
 } from '../ui/form'
 import { Input } from '../ui/input'
 
-const Login = () => {
-	const { setAuth } = useAuthState()
-	// const { setUser } = useUserState()
+const ResetPassword = () => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState('')
 
@@ -67,27 +64,8 @@ const Login = () => {
 
 	return (
 		<div className='flex flex-col text-secondary'>
-			<h2 className='text-xl font-bold'>Login</h2>
-			<div className='flex justify-start flex-col space-y-2'>
-				<p>
-					Don't have an account?{' '}
-					<span
-						className='cursor-pointer underline underline-offset-4'
-						onClick={() => setAuth('register')}
-					>
-						Sign up
-					</span>
-				</p>
-				<p>
-					forgot password?{' '}
-					<span
-						className='cursor-pointer underline underline-offset-4'
-						onClick={() => setAuth('reset-password')}
-					>
-						reset-password
-					</span>
-				</p>
-			</div>
+			<h2 className='text-xl font-bold mb-2'>Reset password</h2>
+			<p className=''>Enter your email for confirmation</p>
 
 			{error && (
 				<Alert className='text-red-600 py-2 mt-2' variant='default'>
@@ -130,7 +108,7 @@ const Login = () => {
 					/>
 
 					{/* Password Field */}
-					<FormField
+					{/* <FormField
 						control={form.control}
 						name='user_password'
 						render={({ field }) => (
@@ -148,7 +126,7 @@ const Login = () => {
 								<FormMessage />
 							</FormItem>
 						)}
-					/>
+					/> */}
 
 					<div>
 						<Button
@@ -165,4 +143,4 @@ const Login = () => {
 	)
 }
 
-export default Login
+export default ResetPassword

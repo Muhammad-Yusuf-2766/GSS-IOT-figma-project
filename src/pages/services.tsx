@@ -1,5 +1,6 @@
 import backgroundImage from '@/assets/pageBs2.jpg'
 import ServicesMain from '@/components/pages.comp/servicesMain'
+import Footer from '@/components/shared/footer'
 import PagesNavbar from '@/components/shared/pagesNavbar'
 import { IResource } from '@/types/interfaces'
 
@@ -12,6 +13,7 @@ const Services = () => {
 		<div className='overflow-hidden'>
 			<PagesNavbar data={resource} />
 			<ServicesMain />
+			<Footer />
 		</div>
 	)
 }

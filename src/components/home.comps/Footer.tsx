@@ -1,4 +1,4 @@
-const Footer = () => {
+const MainFooter = () => {
 	return (
 		<div className='w-full h-full text-secondary'>
 			<div
@@ -65,4 +65,4 @@ const Footer = () => {
 	)
 }
 
-export default Footer
+export default MainFooter

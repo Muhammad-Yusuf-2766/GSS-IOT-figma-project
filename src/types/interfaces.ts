@@ -48,16 +48,9 @@ export interface ISidebarLink {
 	icon: React.ElementType
 }
 
-export interface User {
-	id: string
-	name: string
-	email: string
-	type: 'User' | 'Client' | 'Admin'
-}
-
 export interface ITotalCountBoxProps {
 	itemName: string
-	itemCount: number
+	itemCount: number | undefined
 	icon: React.ReactNode
 }
 
@@ -111,15 +104,35 @@ export interface IClient {
 	status: boolean
 }
 
-type UserTitle = 'BOSS' | 'WORKER'
-type UserType = 'USER' | 'CLIENT' | 'ADMIN'
+export type UserTitle = 'BOSS' | 'WORKER' | null
+export type UserType = 'USER' | 'CLIENT' | 'ADMIN'
 
 export interface IUser {
 	_id: string
 	user_name: string
 	user_email: string
 	user_phone: number
-	user_title: UserTitle
+	user_password: string
+	user_title?: UserTitle
+	user_type?: UserType
+}
+
+export interface IRegisterUser {
+	user_name: string
+	user_email: string
+	user_phone: number
+	user_password: string
+	user_title?: UserTitle
+	user_type?: UserType
+}
+export interface ILogin {
+	user_email: string
+	user_password: string
+}
+
+export interface IUpdateUserType {
+	user_id: string
 	user_type: UserType
 }
+
 // ============== Data-Base related Data interfaces ========== //

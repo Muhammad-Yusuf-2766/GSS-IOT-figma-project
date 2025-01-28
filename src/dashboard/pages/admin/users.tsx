@@ -1,7 +1,13 @@
+import GeneralError from '@/components/errors/api.errors'
+import FillLoading from '@/components/shared/fill-laoding'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import Header from '@/dashboard/components/shared-dash/Header'
-import { User } from '@/types/interfaces'
-import { useState } from 'react'
+import { deleteUser, getUsers, updateUserTypes } from '@/services/apiRequests'
+import { useUsersState } from '@/stores/usersStore'
+import { IUpdateUserType } from '@/types/interfaces'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 type Thead = string
 
@@ -14,66 +20,61 @@ const tHead: Thead[] = [
 	'삭제',
 ]
 
-const initialUsers: User[] = [
-	{ id: '1', name: 'John Doe', email: 'john@example.com', type: 'User' },
-	{ id: '2', name: 'Jane Smith', email: 'jane@example.com', type: 'User' },
-	{ id: '3', name: 'John Doe', email: 'john@example.com', type: 'User' },
-	{ id: '4', name: 'Jane Smith', email: 'jane@example.com', type: 'User' },
-	{ id: '5', name: 'John Doe', email: 'john@example.com', type: 'Client' },
-	{ id: '6', name: 'Jane Smith', email: 'jane@example.com', type: 'Client' },
-	{ id: '7', name: 'John Doe', email: 'john@example.com', type: 'Client' },
-	{ id: '8', name: 'Jane Smith', email: 'jane@example.com', type: 'Client' },
-	{ id: '9', name: 'John Doe', email: 'john@example.com', type: 'Client' },
-	{ id: '10', name: 'Alice Johnson', email: 'alice@example.com', type: 'User' },
-	{ id: '11', name: 'Bob Williams', email: 'bob@example.com', type: 'Client' },
-	{
-		id: '12',
-		name: 'Charlie Brown',
-		email: 'charlie@example.com',
-		type: 'Admin',
-	},
-]
-
 export default function UserTable() {
-	const [users, setUsers] = useState<User[]>(initialUsers)
+	const { users, setUsers } = useUsersState()
 
-	const handleMakeClient = (userId: string) => {
-		setUsers(
-			users.map(user =>
-				user.id === userId ? { ...user, type: 'Client' } : user
-			)
-		)
+	const { isLoading, error, data, refetch } = useQuery({
+		queryKey: ['get-users'],
+		queryFn: getUsers,
+		enabled: !users || users.length === 0, // bu muhim!!!: users mavjud bo'lganda qayta so'rov yubormaydi.
+		retry: 1,
+	})
+
+	useEffect(() => {
+		if (data?.users) {
+			setUsers(data.users)
+		}
+	}, [data, setUsers])
+
+	const updateUserType = async (updatingData: IUpdateUserType) => {
+		await updateUserTypes(updatingData)
+			.then(() => {
+				toast.success('User type changed successfully!')
+				refetch()
+			})
+			.catch(error => {
+				toast.error(error.message || 'Error on deleting-user')
+			})
 	}
 
-	const handleMakeUser = (userId: string) => {
-		setUsers(
-			users.map(user => (user.id === userId ? { ...user, type: 'User' } : user))
-		)
-	}
-
-	const handleMakeAdmin = (userId: string) => {
-		setUsers(
-			users.map(user =>
-				user.id === userId ? { ...user, type: 'Admin' } : user
-			)
-		)
-	}
-
-	const handleDelete = (userId: string) => {
-		setUsers(users.filter(user => user.id !== userId))
+	const handleDelete = async (user_id: string) => {
+		try {
+			await deleteUser(user_id)
+			toast.success('deleted successfully!')
+			refetch()
+		} catch (error: any) {
+			toast.error(error.message || 'Error on deleting-user')
+		}
 	}
 
 	return (
 		<div className='w-full h-full'>
 			<Header />
-
 			<div className='grid grid-cols-1 max-w-7xl mx-auto'>
 				<h1 className='leading-none md:text-2xl text-xl font-bold text-gray-700 pb-2 my-2'>
 					모든 사용자들
 				</h1>
-				{/* <div className='w-full md:max-h-[570px] max-h-[90vh] overflow-y-auto'> */}
-				<ScrollArea className='w-full md:h-[570px] h-[550px] pr-4'>
-					<table className='w-full text-sm text-center rtl:text-right text-gray-500'>
+				<ScrollArea className='w-full md:h-[570px] h-[550px] relative'>
+					{error && (
+						<div className='absolute inset-0 flex justify-center items-center w-1/2 mx-auto'>
+							<GeneralError
+								message='Error'
+								error={error}
+								variant='destructive'
+							/>
+						</div>
+					)}
+					<table className='w-full text-sm text-center text-gray-500'>
 						<thead className='md:h-12 sticky top-0 text-white font-bold text-xs uppercase bg-blue-800'>
 							<tr>
 								{tHead.map(head => (
@@ -87,73 +88,91 @@ export default function UserTable() {
 								))}
 							</tr>
 						</thead>
-						<tbody className='text-center'>
-							{users.map(user => (
-								<tr
-									key={user.id}
-									className='border border-slate-400 hover:bg-gray-100'
-								>
-									<th
-										scope='row'
-										className='md:px-4 py-3 font-medium text-gray-900 whitespace-nowrap'
-									>
-										{user.name}
-									</th>
-									<td className='md:px-4 px-2 py-3 border-x border-gray-400 '>
-										{user.email}
-									</td>
-									<td className='md:px-4 px-2 py-3 border-x border-gray-400'>
-										{user.type}
-									</td>
-									<td className='md:px-4 px-2 py-3 border-x border-gray-400 text-center'>
-										{user.type === 'Client' ? (
-											<button
-												onClick={() => handleMakeUser(user.id)}
-												className='border py-2 md:px-4 px-2 rounded-md bg-gray-500 text-white hover:bg-gray-600'
-											>
-												상태변경
-											</button>
-										) : (
-											<button
-												onClick={() => handleMakeClient(user.id)}
-												className='border py-2 md:px-4 px-2 rounded-md bg-blue-700 text-white hover:bg-blue-800'
-											>
-												상태 변경
-											</button>
-										)}
-									</td>
-									<td className='md:px-4 px-2 py-3 border-x border-gray-400 text-center'>
-										<button
-											onClick={() => handleMakeAdmin(user.id)}
-											disabled={user.type === 'Admin'}
-											className={`border py-2 md:px-4 px-2 rounded-md ${
-												user.type === 'Admin'
-													? 'bg-gray-500'
-													: 'bg-green-500 hover:bg-green-600'
-											} text-white`}
+						{!error && (
+							<tbody className='text-center'>
+								{isLoading && <FillLoading />}
+								{users &&
+									users.map(user => (
+										<tr
+											key={user._id}
+											className='border border-slate-400 hover:bg-gray-100'
 										>
-											Admin 추가
-										</button>
-									</td>
-									<td className='md:px-4 px-2 py-3 border-x border-gray-400 text-center'>
-										<button
-											onClick={() =>
-												confirm(`${user.name} 사용자를 삭제 하시겠습니까 ?`) &&
-												handleDelete(user.id)
-											}
-											className='border py-2 md:px-4 px-2 rounded-md bg-red-500 text-white hover:bg-red-600'
-										>
-											삭제
-										</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
+											<th
+												scope='row'
+												className='md:px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
+											>
+												{user.user_name}
+											</th>
+											<td className='md:px-4 px-2 py-2 border-x border-gray-400 '>
+												{user.user_email}
+											</td>
+											<td className='md:px-4 px-2 py-2 border-x border-gray-400'>
+												{user.user_type}
+											</td>
+											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
+												{user.user_type === 'CLIENT' ? (
+													<button
+														onClick={() =>
+															updateUserType({
+																user_id: user._id,
+																user_type: 'USER',
+															})
+														}
+														className='border py-1 px-2 rounded-md bg-gray-500 text-white hover:bg-gray-600'
+													>
+														상태변경
+													</button>
+												) : (
+													<button
+														onClick={() =>
+															updateUserType({
+																user_id: user._id,
+																user_type: 'CLIENT',
+															})
+														}
+														className='border py-1 px-2 rounded-md bg-blue-800 text-white hover:bg-blue-900'
+													>
+														상태 변경
+													</button>
+												)}
+											</td>
+											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
+												<button
+													onClick={() =>
+														updateUserType({
+															user_id: user._id,
+															user_type: 'ADMIN',
+														})
+													}
+													disabled={user.user_type === 'ADMIN'}
+													className={`border py-1 px-2 rounded-md ${
+														user.user_type === 'ADMIN'
+															? 'bg-gray-500'
+															: 'bg-green-500 hover:bg-green-600'
+													} text-white`}
+												>
+													Admin 추가
+												</button>
+											</td>
+											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
+												<button
+													onClick={() =>
+														confirm(
+															`${user.user_name} 사용자를 삭제 하시겠습니까 ?`
+														) && handleDelete(user._id)
+													}
+													className='border py-1 px-2 rounded-md bg-red-500 text-white hover:bg-red-600'
+												>
+													삭제
+												</button>
+											</td>
+										</tr>
+									))}
+							</tbody>
+						)}
 					</table>
 					<ScrollBar orientation='horizontal' />
 				</ScrollArea>
-
-				{/* </div> */}
 			</div>
 		</div>
 	)

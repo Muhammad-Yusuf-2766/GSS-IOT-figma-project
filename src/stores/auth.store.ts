@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type AuhtState = 'login' | 'register'
+type AuhtState = 'login' | 'register' | 'reset-password'
 
 interface IAuthStateStore {
 	authState: AuhtState

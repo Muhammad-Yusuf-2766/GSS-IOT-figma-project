@@ -5,11 +5,12 @@ import FilteredTotalCnt from '@/dashboard/components/shared-dash/TotalNumFiltere
 
 const GatewaysPage = () => {
 	return (
-		<div className='w-full h-full flex flex-col'>
+		<div className='w-full h-full'>
 			<Header />
-			<div className='w-full grid grid-cols-1 mx-auto'>
+
+			<div className='grid grid-cols-1 mx-auto'>
 				<FilteredTotalCnt item={Gateways} itemName={'게이트웨이'} />
-				<GatewaysList allgateways={Gateways} />
+				<GatewaysList />
 			</div>
 		</div>
 	)
