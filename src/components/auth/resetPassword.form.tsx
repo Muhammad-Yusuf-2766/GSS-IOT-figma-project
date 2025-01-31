@@ -1,13 +1,18 @@
-import { loginSchema } from '@/lib/vatidation'
-import { loginRequest } from '@/services/apiRequests'
+import {
+	resetPasswordSchemaStep1,
+	resetPasswordSchemaStep2,
+} from '@/lib/vatidation'
+import {
+	resetPasswordRequest,
+	resetPasswordVerifyRequest,
+} from '@/services/apiRequests'
+import { useAuthState } from '@/stores/auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import FillLoading from '../shared/fill-laoding'
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Button } from '../ui/button'
 import {
 	Form,
@@ -20,125 +25,196 @@ import {
 import { Input } from '../ui/input'
 
 const ResetPassword = () => {
-	const [isLoading, setIsLoading] = useState(true)
-	const [error, setError] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
+	const [step, setStep] = useState(1) // 1-bosqichda boshlanadi
+	const [savedEmail, setSavedEmail] = useState('') // Emailni saqlash
+	const { setAuth } = useAuthState()
 
-	const form = useForm<z.infer<typeof loginSchema>>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: { user_email: '', user_password: '' }, // To'g'ri yozilgan
+	// 1-form: faqat email
+	const formStep1 = useForm<z.infer<typeof resetPasswordSchemaStep1>>({
+		resolver: zodResolver(resetPasswordSchemaStep1),
+		defaultValues: { user_email: '' },
 	})
 
-	const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-		setIsLoading(false)
+	// 2-form: otp va new_password
+	const formStep2 = useForm<z.infer<typeof resetPasswordSchemaStep2>>({
+		resolver: zodResolver(resetPasswordSchemaStep2),
+		defaultValues: { user_email: savedEmail, otp: 0, new_password: '' }, // ✅ Emailni saqlash
+	})
+
+	// 1️⃣ - Email yuborish
+	const handleEmailSend = async (
+		values: z.infer<typeof resetPasswordSchemaStep1>
+	) => {
+		setIsLoading(true)
 		try {
-			const resPromise = loginRequest(values)
+			const resPromise = resetPasswordRequest(values)
 			toast.promise(resPromise, {
 				loading: 'Loading...',
 				success: res => {
 					if (res.state === 'success') {
-						setError('')
+						setSavedEmail(values.user_email) // Emailni saqlash
+
 						setTimeout(() => {
-							setIsLoading(true)
-							window.location.reload()
-						}, 2000)
-						return 'Login successfully!'
+							setStep(2) // 2-bosqichga o‘tish
+							formStep2.reset({ user_email: values.user_email }) // ✅ Reset form to include email
+							setIsLoading(false)
+						}, 500)
+						return res.message
 					}
-					setIsLoading(true)
-					throw new Error('Unexpected response structure')
+					setIsLoading(false)
 				},
 				error: err => {
-					setIsLoading(true)
-					// Xato xabarini konsolga chop etish va ko‘rsatish
-					console.error('Error:', err)
-					const errorMessage = err.message || 'Something went wrong'
-					setError(errorMessage)
-					return errorMessage
+					setIsLoading(false)
+
+					return err.message
 				},
 			})
+		} catch (error: any) {
+			toast.error(error.message || 'Error on sending OTP code')
 			setIsLoading(false)
-		} catch (error) {
-			const result = error as Error
-			setError(result.message)
+		}
+	}
+
+	// 2️⃣ - OTP va yangi parolni yuborish
+	const handleResetPassword = async (
+		values: z.infer<typeof resetPasswordSchemaStep2>
+	) => {
+		setIsLoading(true)
+		try {
+			const resPromise = resetPasswordVerifyRequest({
+				...values,
+				user_email: savedEmail, // Emailni backendga yuborish
+			})
+			toast.promise(resPromise, {
+				loading: 'Loading...',
+				success: res => {
+					if (res.state === 'success') {
+						setTimeout(() => {
+							setAuth('login')
+							setIsLoading(false)
+						}, 1000)
+						return res.message
+					}
+					setIsLoading(false)
+					throw new Error(res.message)
+				},
+				error: err => {
+					setIsLoading(false)
+					return err.message
+				},
+			})
+		} catch (error: any) {
+			toast.error(error.message)
+			setIsLoading(false)
 		}
 	}
 
 	return (
 		<div className='flex flex-col text-secondary'>
-			<h2 className='text-xl font-bold mb-2'>Reset password</h2>
-			<p className=''>Enter your email for confirmation</p>
+			<h2 className='text-xl font-bold mb-2'>Reset Password</h2>
 
-			{error && (
-				<Alert className='text-red-600 py-2 mt-2' variant='default'>
-					<AlertCircle className='h-4 w-4' color='red' />
-					<AlertTitle>Error</AlertTitle>
-					<AlertDescription>{error}</AlertDescription>
-				</Alert>
+			{/* 1️⃣ Email Form */}
+			{step === 1 && (
+				<Form {...formStep1}>
+					<form
+						onSubmit={formStep1.handleSubmit(handleEmailSend)}
+						className='space-y-8 mt-5 relative'
+					>
+						<FormField
+							control={formStep1.control}
+							name='user_email'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email address</FormLabel>
+									<FormControl>
+										<Input
+											placeholder='example@gmail.com'
+											disabled={isLoading}
+											{...field}
+											className='placeholder:text-white/75 text-white bg-transparent'
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						{isLoading && <FillLoading />}
+
+						<div>
+							<Button
+								type='submit'
+								className='h-12 w-full mt-2'
+								disabled={isLoading}
+							>
+								Send Code
+							</Button>
+						</div>
+					</form>
+				</Form>
 			)}
 
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className='space-y-8 mt-5 relative'
-				>
-					{/* FillLoading komponenti */}
-					{!isLoading && (
-						<div className='absolute inset-0 flex items-center justify-center z-10'>
-							<FillLoading />
+			{/* 2️⃣ OTP va New Password Form */}
+			{step === 2 && (
+				<Form {...formStep2}>
+					<form
+						onSubmit={formStep2.handleSubmit(handleResetPassword)}
+						className='space-y-8 mt-5 relative'
+					>
+						<FormField
+							control={formStep2.control}
+							name='otp'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>OTP Code</FormLabel>
+									<FormControl>
+										<Input
+											type='number'
+											placeholder='428563'
+											disabled={isLoading}
+											{...field}
+											className='placeholder:text-white/75 text-white bg-transparent'
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={formStep2.control}
+							name='new_password'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>New Password</FormLabel>
+									<FormControl>
+										<Input
+											type='password'
+											placeholder='****'
+											disabled={isLoading}
+											{...field}
+											className='placeholder:text-white/75 text-white bg-transparent'
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						{isLoading && <FillLoading />}
+
+						<div>
+							<Button
+								type='submit'
+								className='h-12 w-full mt-2'
+								disabled={isLoading}
+							>
+								Submit
+							</Button>
 						</div>
-					)}
-
-					{/* Email Field */}
-					<FormField
-						control={form.control}
-						name='user_email'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email address</FormLabel>
-								<FormControl>
-									<Input
-										placeholder='example@gmail.com'
-										disabled={!isLoading}
-										{...field}
-										className='placeholder:text-white/75 text-white bg-transparent'
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					{/* Password Field */}
-					{/* <FormField
-						control={form.control}
-						name='user_password'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input
-										type='password'
-										placeholder='****'
-										disabled={!isLoading}
-										{...field}
-										className='placeholder:text-white/75 text-white bg-transparent'
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/> */}
-
-					<div>
-						<Button
-							type='submit'
-							className='h-12 w-full mt-2'
-							disabled={!isLoading}
-						>
-							Submit
-						</Button>
-					</div>
-				</form>
-			</Form>
+					</form>
+				</Form>
+			)}
 		</div>
 	)
 }

@@ -18,3 +18,15 @@ export const registerSchema = z
 		message: 'Passwords do not match, check passwords',
 		path: ['confirmPassword'], // bu path yurqoirdagi hatolik paydo bo'lganda path ning ichidagi qismda message ni ko'rsatadi, ya'ni hatolik qaysi elementga tegishli ekanini belgilaydi
 	})
+
+// 1-bosqich: faqat emailni qabul qiladi
+export const resetPasswordSchemaStep1 = z.object({
+	user_email: z.string().email(),
+})
+
+// 2-bosqich: otp, yangi parol va emailni qabul qiladi
+export const resetPasswordSchemaStep2 = z.object({
+	user_email: z.string().email(),
+	otp: z.string().transform(v => Number(v) || 0),
+	new_password: z.string().min(4, 'Password must be at least 4 characters'),
+})

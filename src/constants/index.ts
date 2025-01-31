@@ -117,7 +117,7 @@ export const resourceServices: IResourceData[] = [
 		app: '/path/to/application',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit.Perferendis, corporis ullam? Corporis, possimus cupiditatevoluptatem voluptatibus deserunt est perspiciatis recusandaedistinctio corrupti assumenda accusantium aspernaturrepellendus cum expedita temporibus qui! Blanditiis reiciendisnatus quos dolores officiis ullam accusantium officia maximenemo fuga eveniet quidem ad, consectetur ducimus iste atqueconsequuntur, tempore perferendis velit! Id dolorem nihilquam! Tempore, quod amet.',
+			'E Green Light는 사물과 사물 사이에 메시(Mesh)라는 무선망 그물 형태의 자체 RF 무선 통신 네트워크로 이루어져 있기 때문에 터널의 채굴과 터널 안전의 한 획을 긋고 나노 튜브시에 적외 통제가 없으며 메시의 불필요합니다. 이를 통해 된, 높장, 제도 공장시나 편식 등 어디에나 설치된 구동기들을 개별 및 그룹으로써 제어가 가능하고 각종 구동부터 큰 규모까지 커스터마이징 될 수 있습니다.',
 	},
 	{
 		id: 2,
@@ -127,7 +127,7 @@ export const resourceServices: IResourceData[] = [
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit.Perferendis, corporis ullam? Corporis, possimus cupiditatevoluptatem voluptatibus deserunt est perspiciatis recusandaedistinctio corrupti assumenda accusantium aspernaturrepellendus cum expedita temporibus qui! Blanditiis reiciendisnatus quos dolores officiis ullam accusantium officia maximenemo fuga eveniet quidem ad, consectetur ducimus iste atqueconsequuntur, tempore perferendis velit! Id dolorem nihilquam! Tempore, quod amet.',
+			'E Green Light는 사물과 사물 사이에 메시(Mesh)라는 무선망 그물 형태의 자체 RF 무선 통신 네트워크로 이루어져 있기 때문에 터널의 채굴과 터널 안전의 한 획을 긋고 나노 튜브시에 적외 통제가 없으며 메시의 불필요합니다. 이를 통해 된, 높장, 제도 공장시나 편식 등 어디에나 설치된 구동기들을 개별 및 그룹으로써 제어가 가능하고 각종 구동부터 큰 규모까지 커스터마이징 될 수 있습니다.',
 	},
 	{
 		id: 3,
@@ -137,7 +137,7 @@ export const resourceServices: IResourceData[] = [
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit.Perferendis, corporis ullam? Corporis, possimus cupiditatevoluptatem voluptatibus deserunt est perspiciatis recusandaedistinctio corrupti assumenda accusantium aspernaturrepellendus cum expedita temporibus qui! Blanditiis reiciendisnatus quos dolores officiis ullam accusantium officia maximenemo fuga eveniet quidem ad, consectetur ducimus iste atqueconsequuntur, tempore perferendis velit! Id dolorem nihilquam! Tempore, quod amet.',
+			'E Green Light는 사물과 사물 사이에 메시(Mesh)라는 무선망 그물 형태의 자체 RF 무선 통신 네트워크로 이루어져 있기 때문에 터널의 채굴과 터널 안전의 한 획을 긋고 나노 튜브시에 적외 통제가 없으며 메시의 불필요합니다. 이를 통해 된, 높장, 제도 공장시나 편식 등 어디에나 설치된 구동기들을 개별 및 그룹으로써 제어가 가능하고 각종 구동부터 큰 규모까지 커스터마이징 될 수 있습니다.',
 	},
 
 	{
@@ -148,7 +148,7 @@ export const resourceServices: IResourceData[] = [
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit.Perferendis, corporis ullam? Corporis, possimus cupiditatevoluptatem voluptatibus deserunt est perspiciatis recusandaedistinctio corrupti assumenda accusantium aspernaturrepellendus cum expedita temporibus qui! Blanditiis reiciendisnatus quos dolores officiis ullam accusantium officia maximenemo fuga eveniet quidem ad, consectetur ducimus iste atqueconsequuntur, tempore perferendis velit! Id dolorem nihilquam! Tempore, quod amet.',
+			'E Green Light는 사물과 사물 사이에 메시(Mesh)라는 무선망 그물 형태의 자체 RF 무선 통신 네트워크로 이루어져 있기 때문에 터널의 채굴과 터널 안전의 한 획을 긋고 나노 튜브시에 적외 통제가 없으며 메시의 불필요합니다. 이를 통해 된, 높장, 제도 공장시나 편식 등 어디에나 설치된 구동기들을 개별 및 그룹으로써 제어가 가능하고 각종 구동부터 큰 규모까지 커스터마이징 될 수 있습니다.',
 	},
 ]
 

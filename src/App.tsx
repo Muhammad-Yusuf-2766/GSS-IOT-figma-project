@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { MembersDetail } from './components/pages.comp/memberDetail'
+import ServiceDetail from './components/pages.comp/serviceDetail'
 import { Toaster } from './components/ui/sonner'
 import ActiveClientsPage from './dashboard/pages/admin/activeClientPage'
 import AddClient from './dashboard/pages/admin/Add_client'
@@ -28,6 +29,7 @@ const App = () => {
 					<Route path='/auth' element={<Authentication />} />
 					<Route path='/resources' element={<Resource />} />
 					<Route path='/services' element={<Services />} />
+					<Route path='/services/:serviceId' element={<ServiceDetail />} />
 					<Route path='/community' element={<Community />} />
 					<Route path='/community/:memberId' element={<MembersDetail />} />
 				</Route>

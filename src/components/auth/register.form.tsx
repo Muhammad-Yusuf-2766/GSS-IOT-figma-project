@@ -56,7 +56,7 @@ const Register = () => {
 							setUser(res.user)
 							setIsLoading(true)
 							window.location.reload()
-						}, 2000)
+						}, 1000)
 						return 'Registered successfully!'
 					}
 					setIsLoading(true)

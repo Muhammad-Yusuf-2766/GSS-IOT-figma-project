@@ -5,6 +5,8 @@ import {
 	IClient,
 	ILogin,
 	IRegisterUser,
+	IResetPasswordStep1,
+	IResetPasswordStep2,
 	IUpdateUserType,
 } from '@/types/interfaces'
 import axios from 'axios'
@@ -72,6 +74,66 @@ export const logoutRequest = async () => {
 		return true
 	} catch (error: any) {
 		throw new Error(error.message || 'Error on logout: undefined error')
+	}
+}
+
+export const resetPasswordRequest = async (user_email: IResetPasswordStep1) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/auth/reset-password`,
+			user_email,
+			{
+				withCredentials: true,
+			}
+		)
+
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on reset-password')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error qayta ishlash
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on reset-password')
+		}
+		// Boshqa xatolik
+		throw new Error(
+			error.message || 'Error on reset-password: Undefined error.'
+		)
+	}
+}
+
+export const resetPasswordVerifyRequest = async (
+	resetData: IResetPasswordStep2
+) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/auth/password-verify`,
+			resetData,
+			{
+				withCredentials: true,
+			}
+		)
+
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on reset-password')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error qayta ishlash
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on reset-password')
+		}
+		// Boshqa xatolik
+		throw new Error(
+			error.message || 'Error on reset-password: Undefined error.'
+		)
 	}
 }
 

@@ -30,6 +30,17 @@ export interface IResourceData {
 	info: string
 }
 
+export interface IService {
+	id: number
+	name: string
+	title: string
+	role: string
+	video: string
+	image: string
+	catalog: string
+	description: string
+}
+
 export interface IMember {
 	id: number
 	name: string
@@ -128,6 +139,15 @@ export interface IRegisterUser {
 export interface ILogin {
 	user_email: string
 	user_password: string
+}
+
+export interface IResetPasswordStep1 {
+	user_email: string
+}
+export interface IResetPasswordStep2 {
+	user_email: string
+	otp: number
+	new_password?: string
 }
 
 export interface IUpdateUserType {
