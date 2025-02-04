@@ -3,6 +3,10 @@
 import {
 	IBuilding,
 	IClient,
+	ICreateBuilding,
+	ICreateClient,
+	ICreateGateway,
+	ICreateNode,
 	ILogin,
 	IRegisterUser,
 	IResetPasswordStep1,
@@ -154,7 +158,6 @@ export const resetPasswordVerifyRequest = async (
 
 export const getUsers = async () => {
 	try {
-		console.log('getUsers request')
 		const res = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/auth/get-users`,
 			{ withCredentials: true }
@@ -164,7 +167,7 @@ export const getUsers = async () => {
 		if (data.state === 'fail') {
 			throw new Error(data.message || 'Error on login: Undefined error')
 		}
-		return data
+		return data.users
 	} catch (error: any) {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
@@ -206,13 +209,10 @@ export const deleteUser = async (user_id: string) => {
 	}
 }
 
-//  ============= USER related requests ============ //
-
 //  ============= PRODUCT related requests ============ //
 
 export const getGateways = async () => {
 	try {
-		console.log('getGateways request')
 		const res = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-gateways`,
 			{ withCredentials: true }
@@ -229,10 +229,27 @@ export const getGateways = async () => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
+export const getActiveGateways = async () => {
+	try {
+		const res = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-active-gateways`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on getting-gateways: Undefined error'
+			)
+		}
+		return data.gateways
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
 
 export const getNodes = async () => {
 	try {
-		console.log('getNodes request')
 		const res = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-nodes`,
 			{ withCredentials: true }
@@ -248,18 +265,162 @@ export const getNodes = async () => {
 	}
 }
 
+export const getActiveNodes = async () => {
+	try {
+		const res = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-active-nodes`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on getting-Nodes: Undefined error')
+		}
+		return data.nodes
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
+export const createNodeRequest = async (nodes: ICreateNode[]) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-nodes`,
+			nodes,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
+export const createGatewayRequest = async (nodes: ICreateGateway) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-gateway`,
+			nodes,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
 //  ============= PRODUCT related requests ============ //
 
-// ====================================================== //
+//  ============= CLIENT related requests ============ //
+
+export const createBuildingRequest = async (buildingData: ICreateBuilding) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/create-building`,
+			buildingData,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
+export const createClientRequest = async (clientData: ICreateClient) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/create-client`,
+			clientData,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
+export const getActiveBuildings = async () => {
+	try {
+		const res = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/get-active-buildings`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on getting-Nodes: Undefined error')
+		}
+		return data.buildings
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
 
 export const fetchClients = async (): Promise<IClient[]> => {
 	try {
-		console.log('React-query request run')
+		await new Promise(resolve => setTimeout(resolve, 1000))
 
 		const response = await axios.get(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/clients`
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients`
 		)
-		return response.data
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data.clients
 	} catch (error: any) {
 		// Xatoni React Queryga yuborish uchun qayta o'rash
 		throw new Error(
@@ -269,12 +430,18 @@ export const fetchClients = async (): Promise<IClient[]> => {
 	}
 }
 
-export const fetchClientData = async (clientId: string | undefined) => {
+export const fetchClientBuildings = async (clientId: string | undefined) => {
 	try {
 		const response = await axios.get(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/clients/${clientId}`
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients/${clientId}`
 		)
-		return response.data
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
 	} catch (error: any) {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
@@ -290,3 +457,24 @@ export const fetchBuildings = async (
 	)
 	return response.data
 }
+
+export const fetchBuildingNodes = async (buildingId: string) => {
+	try {
+		const response = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/buildings/${buildingId}`
+		)
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data.nodes
+	} catch (error: any) {
+		return new Error(
+			error.response?.data?.message || 'Error on fetching client data.'
+		)
+	}
+}
+
+//  ============= CLIENT creating related requests ============ //

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import GeneralError from '@/components/errors/api.errors'
 import FillLoading from '@/components/shared/fill-laoding'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -31,8 +32,8 @@ export default function UserTable() {
 	})
 
 	useEffect(() => {
-		if (data?.users) {
-			setUsers(data.users)
+		if (data) {
+			setUsers(data)
 		}
 	}, [data, setUsers])
 
@@ -88,9 +89,17 @@ export default function UserTable() {
 								))}
 							</tr>
 						</thead>
-						{!error && (
+						{isLoading ? (
+							// Agar yuklanayotgan bo'lsa, butun `<tbody>` o'rniga shunchaki biror `<tr>` qaytariladi
+							<tbody>
+								<tr>
+									<td colSpan={tHead.length}>
+										<FillLoading />
+									</td>
+								</tr>
+							</tbody>
+						) : (
 							<tbody className='text-center'>
-								{isLoading && <FillLoading />}
 								{users &&
 									users.map(user => (
 										<tr
@@ -171,6 +180,7 @@ export default function UserTable() {
 							</tbody>
 						)}
 					</table>
+
 					<ScrollBar orientation='horizontal' />
 				</ScrollArea>
 			</div>

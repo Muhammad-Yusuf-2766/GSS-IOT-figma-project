@@ -7,11 +7,15 @@ interface BuildingCardProps {
 }
 
 const BuildingCard = ({ building }: BuildingCardProps) => {
-	const expirationDate = new Date(building.expiration_date)
+	const expirationDate = new Date(building.expiry_date)
 	const today = new Date()
+
 	const daysLeft = Math.ceil(
 		(expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
 	)
+
+	// Expiry date ni YYYY-MM-DD formatida chiqarish
+	const formattedExpiryDate = expirationDate.toISOString().split('T')[0]
 
 	return (
 		<div className='p-6 rounded-xl bg-white shadow-xl shadow-gray-200 cursor-pointer hover:shadow-gray-400 border border-slate-400'>
@@ -53,7 +57,7 @@ const BuildingCard = ({ building }: BuildingCardProps) => {
 						<BsCalendarDate />
 						<span>만료일</span>
 					</div>
-					<span>{building.expiration_date}</span>
+					<span>{formattedExpiryDate}</span>
 				</div>
 
 				<div className='flex justify-between items-center'>

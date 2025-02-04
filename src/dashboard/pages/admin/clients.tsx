@@ -17,11 +17,9 @@ const Clients = () => {
 		retry: 1,
 	})
 
-	const totalClientCount = data?.length
-
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '임대 현황',
-		itemCount: totalClientCount,
+		clients: data,
 		icon: <LuUser />,
 	}
 
@@ -54,10 +52,14 @@ const Clients = () => {
 					data.map(client => (
 						<Link
 							key={client._id}
-							to={`/admin/dashboard/client/${client._id}/buildings`}
-							state={client.buildings} // React Router orqali state yuborish
+							to={`/admin/dashboard/clients/${client._id}/buildings`}
 						>
-							<ClientCard client={client} />
+							<ClientCard
+								client={{
+									...client,
+									client_buildings: client.client_buildings ?? [],
+								}}
+							/>
 						</Link>
 					))}
 			</div>

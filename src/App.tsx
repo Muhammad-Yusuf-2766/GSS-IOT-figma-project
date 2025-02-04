@@ -45,9 +45,9 @@ const App = () => {
 					<Route path='product/gateways' element={<GatewaysPage />} />
 					<Route path='product/nodes' element={<NodesPage />} />
 					<Route path='clients' element={<Clients />} />
-					<Route path='client/:clientId/buildings' element={<Buildings />} />
+					<Route path='clients/:clientId/buildings' element={<Buildings />} />
 					<Route
-						path='client/:id/buildings/:buldingId'
+						path='clients/:id/buildings/:buldingId'
 						element={<BuildingNodes />}
 					/>
 				</Route>

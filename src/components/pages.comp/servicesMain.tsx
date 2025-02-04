@@ -6,7 +6,7 @@ const ServicesMain = () => {
 		<div className='w-full relative'>
 			<div className='w-full grid md:grid-cols-2 text-secondary relative z-10'>
 				{resourceServices.map(service => (
-					<ServiceCard service={service} />
+					<ServiceCard key={service.id} service={service} />
 				))}
 			</div>
 		</div>

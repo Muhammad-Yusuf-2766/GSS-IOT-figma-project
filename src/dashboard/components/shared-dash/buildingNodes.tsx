@@ -2,18 +2,22 @@
 
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Nodes } from '@/constants'
+import { INode } from '@/types/interfaces'
 import { useState } from 'react'
 import TotalcntCsv from './TotalnctCSV'
 
-const BuildingNodes = () => {
-	const [filteredNodes, setFilteredNodes] = useState(Nodes) // Filtrlangan nodlar
+interface INodeProps {
+	nodes: INode[] | []
+}
+
+const BuildingNodes = ({ nodes }: INodeProps) => {
+	const [filteredNodes, setFilteredNodes] = useState(nodes) // Filtrlangan nodlar
 
 	const handleFilterChange = (filterOpenDoors: boolean) => {
 		if (filterOpenDoors) {
-			setFilteredNodes(Nodes.filter(node => node.doorChk === 1)) // Faqat eshik ochiq bo'lganlarni saqlash
+			setFilteredNodes(nodes.filter(node => node.doorChk === 1)) // Faqat eshik ochiq bo'lganlarni saqlash
 		} else {
-			setFilteredNodes(Nodes) // Barcha nodlarni saqlash
+			setFilteredNodes(nodes) // Barcha nodlarni saqlash
 		}
 	}
 
@@ -85,7 +89,7 @@ const BuildingNodes = () => {
 
 				{/* TotalcntCsv komponenti */}
 				<div className='w-full'>
-					<TotalcntCsv nodes={Nodes} onFilterChange={handleFilterChange} />
+					<TotalcntCsv nodes={nodes} onFilterChange={handleFilterChange} />
 				</div>
 
 				{/* Filtrlangan nodlarni ko'rsatish */}

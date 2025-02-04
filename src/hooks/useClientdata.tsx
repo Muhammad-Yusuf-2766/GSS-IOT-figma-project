@@ -1,5 +1,9 @@
-import { fetchClientData, fetchClients } from '@/services/apiRequests'
-import { IClient } from '@/types/interfaces'
+import {
+	fetchBuildingNodes,
+	fetchClientBuildings,
+	fetchClients,
+} from '@/services/apiRequests'
+import { IClient, IClientBuildings, INode } from '@/types/interfaces'
 import { useQuery } from '@tanstack/react-query'
 
 // ==========================================================================================================
@@ -13,9 +17,16 @@ export const useAllClients = () => {
 	})
 }
 
-export const useClientData = (clientId: string) => {
-	return useQuery<IClient>({
+export const useClientBuildings = (clientId: string) => {
+	return useQuery<IClientBuildings>({
 		queryKey: ['clients', clientId],
-		queryFn: () => fetchClientData(clientId),
+		queryFn: () => fetchClientBuildings(clientId),
+	})
+}
+
+export const useBuildingNodes = (buildingId: string) => {
+	return useQuery<INode[]>({
+		queryKey: ['building-nodes', buildingId],
+		queryFn: () => fetchBuildingNodes(buildingId),
 	})
 }

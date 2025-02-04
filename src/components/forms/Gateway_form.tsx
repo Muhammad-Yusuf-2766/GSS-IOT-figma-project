@@ -1,94 +1,189 @@
-import { INode } from '@/types/interfaces'
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { addGatewaychema } from '@/lib/vatidation'
+import { createGatewayRequest } from '@/services/apiRequests'
+import { ICreateGateway, INode } from '@/types/interfaces'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { Button } from '../ui/button'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '../ui/form'
+import { Input } from '../ui/input'
 
 interface GatewayFormProps {
 	nodes: INode[]
+	refetch: () => void
 }
 
-const GatewayForm = ({ nodes }: GatewayFormProps) => {
-	const [gatewayData, setGatewayData] = useState({
-		serial_number: '00',
-		product_status: true,
-		nodes: [],
+const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
+	const form = useForm<z.infer<typeof addGatewaychema>>({
+		resolver: zodResolver(addGatewaychema),
+		defaultValues: {
+			selected_nodes: [],
+		},
 	})
+	const { startNumber, endNumber } = form.getValues()
+	const { setValue, watch } = form
 
-	const [startNumber, setStartNumber] = useState('')
-	const [endNumber, setEndNumber] = useState('')
-	console.log(nodes)
+	// =============== Handle Node selection ============ //
+
+	const handleSelectedNodes = () => {
+		console.log(nodes)
+		const selectedNodes = nodes
+			.filter(node => node.doorNum >= startNumber && node.doorNum <= endNumber)
+			.map(node => node._id)
+		setValue('selected_nodes', selectedNodes, { shouldDirty: true })
+	}
+
+	// =============== Handle submit funtion ============ //
+
+	const onSubmit = async (values: z.infer<typeof addGatewaychema>) => {
+		try {
+			const sendingData: ICreateGateway = {
+				serial_number: values.serial_number,
+				nodes: values.selected_nodes,
+			}
+
+			const resPromise = createGatewayRequest(sendingData)
+			toast.promise(resPromise, {
+				loading: 'Loading...',
+				success: res => {
+					setTimeout(() => {
+						form.reset({ startNumber: 0, endNumber: 0 })
+						refetch()
+					}, 1000)
+					return res.message
+				},
+				error: err => {
+					return err.message || 'Something went wrong :('
+				},
+			})
+		} catch (error: any) {
+			toast.error(error.message || 'Something went wrong :(')
+		}
+	}
+
+	// =============== Handle submit funtion ============ //
+
+	// Watch for changes to 'selected_nodes' to trigger re-render
+	const selectedNodes = watch('selected_nodes', [])
 
 	return (
 		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-500'>
 			<h1 className='leading-none text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
 				게이트웨이 생성
 			</h1>
-			<form
-				className='w-full h-auto p-4 pb-8 border bg-white rounded-lg shadow-lg shadow-gray-300'
-				// onSubmit={handleSubmit}
-			>
-				<h4 className='text-center  capitalize mb-4'>
-					스마트가드 게이트웨이 No.
-				</h4>
-				<div className='mb-4'>
-					<label className='block  mb-2'>게이트웨이 No.</label>
-					<input
-						type='text'
+			<Form {...form}>
+				<form
+					className='w-full h-auto p-4 pb-8 border bg-white rounded-lg shadow-lg shadow-gray-300 space-y-3'
+					onSubmit={form.handleSubmit(onSubmit)}
+				>
+					<h4 className='text-center  capitalize mb-4'>
+						스마트가드 게이트웨이 No.
+					</h4>
+					<FormField
+						control={form.control}
 						name='serial_number'
-						value={gatewayData.serial_number}
-						// onChange={handleChange}
-						className='w-full outline outline-1 outline-blue-500 px-3 py-2 border border-gray-300 rounded-md'
-						required
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>게이트웨이 No.</FormLabel>
+								<FormControl>
+									<Input
+										type='number'
+										{...field}
+										value={field.value ?? ''}
+										onChange={e => {
+											const num = parseFloat(e.target.value)
+											field.onChange(isNaN(num) ? '' : num)
+										}}
+										className='border-gray-700 focus:border-transparent'
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-				</div>
-				<div className='mb-4'>
-					<label className='block  mb-2'>노드 시작넘버:</label>
-					<input
-						type='number'
+					<FormField
+						control={form.control}
 						name='startNumber'
-						value={startNumber}
-						// onChange={handleNumberChange}
-						className='w-full outline outline-1 outline-blue-500 px-3 py-2 border border-gray-300 rounded-md'
-						required
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>노드 시작넘버:</FormLabel>
+								<FormControl>
+									<Input
+										type='number'
+										{...field}
+										value={field.value ?? ''}
+										onChange={e => {
+											const num = parseFloat(e.target.value)
+											field.onChange(isNaN(num) ? '' : num)
+										}}
+										className='border-gray-700 focus:border-transparent'
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-				</div>
-				<div className='mb-4'>
-					<label className='block  mb-2'>노드 끝넘버:</label>
-					<input
-						type='number'
+					<FormField
+						control={form.control}
 						name='endNumber'
-						value={endNumber}
-						// onChange={handleNumberChange}
-						className='w-full outline outline-1 outline-blue-500 px-3 py-2 border border-gray-300 rounded-md'
-						required
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>노드 끝넘버:</FormLabel>
+								<FormControl>
+									<Input
+										type='number'
+										{...field}
+										value={field.value ?? ''}
+										onChange={e => {
+											const num = parseFloat(e.target.value)
+											field.onChange(isNaN(num) ? '' : num)
+										}}
+										className='border-gray-700 focus:border-transparent'
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-				</div>
-				<button
-					type='button'
-					// onClick={handleNodesSelection}
-					className='w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all duration-200 mb-4'
-				>
-					노드 확인
-				</button>
-				<div className='mb-4'>
-					<label className='block  mb-2'>노드 선택:</label>
-					{gatewayData.nodes.length > 0 ? (
-						<div className='flex flex-wrap'>
-							{gatewayData.nodes.map(nodeId => (
-								<span key={nodeId} className='mr-4'>
-									{nodeId}
-								</span>
-							))}
-						</div>
-					) : (
-						<p>선택된 노드 없음</p>
-					)}
-				</div>
-				<button
-					type='submit'
-					className='w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all duration-200'
-				>
-					게이트웨이 생성
-				</button>
-			</form>
+					<Button
+						type='button'
+						onClick={handleSelectedNodes}
+						className='h-12 w-full mt-2'
+					>
+						노드 세트 확인
+					</Button>
+					<div className='mb-4'>
+						<label className='block text-[16px] '>노드 선택:</label>
+						{selectedNodes.length > 0 ? (
+							<div className='flex flex-wrap'>
+								{selectedNodes.map(nodeId => (
+									<span key={nodeId} className='mr-4'>
+										{nodeId}
+									</span>
+								))}
+							</div>
+						) : (
+							<p>선택된 노드 없음</p>
+						)}
+					</div>
+					<Button
+						type='submit'
+						// disabled={isLoading}
+						className='h-12 w-full mt-2'
+					>
+						게이트웨이 생성
+					</Button>
+				</form>
+			</Form>
 		</div>
 	)
 }

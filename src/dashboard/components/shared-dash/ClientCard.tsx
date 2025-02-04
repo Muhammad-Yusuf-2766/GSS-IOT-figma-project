@@ -10,13 +10,13 @@ const ClientCard: React.FC<{ client: IClient }> = ({ client }) => {
 				<div className='flex items-center justify-between'>
 					<span className='text-gray-600'>총 건물</span>
 					<span className='flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700'>
-						{client.buildings.length}
+						{client.client_buildings.length}
 					</span>
 				</div>
 				<div className='flex items-center justify-between'>
-					<span className='text-gray-600'>회사 상태태</span>
+					<span className='text-gray-600'>회사 상태</span>
 					<span className='flex items-center justify-center w-8 h-8  text-blue-700'>
-						{client.status ? (
+						{client.client_status ? (
 							<ImSpinner9 size={25} className='animate-spin text-blue-500' />
 						) : (
 							<TbXboxX size={30} color='red' />
@@ -26,7 +26,7 @@ const ClientCard: React.FC<{ client: IClient }> = ({ client }) => {
 				<div className='flex items-center justify-between'>
 					<span className='text-gray-600'>주소</span>
 					<span className='px-3 py-1 rounded-full bg-blue-700 text-white text-sm'>
-						{client.company_addr}
+						{client.client_addr}
 					</span>
 				</div>
 			</div>

@@ -12,8 +12,6 @@ const Hero = () => {
 	const { setAuth } = useAuthState()
 	const { user } = useUserState()
 
-	console.log(user)
-
 	const carouselData: ICarouselItem[] = [
 		{
 			backgroundImage: "url('/src/assets/service_safety.jpg')",

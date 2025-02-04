@@ -3,29 +3,22 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import BuildingCard from '@/dashboard/components/shared-dash/buildingCard'
 import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
-import { useClientData } from '@/hooks/useClientdata'
+import { useClientBuildings } from '@/hooks/useClientdata'
 import { IBuilding, ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { BsBuildingsFill } from 'react-icons/bs'
 import { Link, useParams } from 'react-router-dom'
 
 const Buildings = () => {
-	// const location = useLocation()
-	// const buildings = Array.isArray(location.state) ? location.state : []
-	// const totalBuildingNum = buildings.length
-
 	const { clientId } = useParams()
 	if (!clientId) {
 		throw new Error('Client ID is missing')
 	}
 
-	console.log(clientId)
-	const { data, isLoading, error } = useClientData(clientId)
-	const totalBuildingNum = data?.buildings?.length || 0
-
+	const { data, isLoading, error } = useClientBuildings(clientId)
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '클라이언트 건물',
-		itemCount: totalBuildingNum,
+		clients: data?.client_buildings,
 		icon: <BsBuildingsFill />,
 	}
 
@@ -53,20 +46,21 @@ const Buildings = () => {
 			{/* Data field */}
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto'>
 				{!isLoading &&
-					data &&
-					(data.buildings ? (
-						data.buildings.map((building: IBuilding) => (
+				data &&
+				Array.isArray(data.client_buildings) &&
+				data.client_buildings.length > 0 ? (
+					data.client_buildings.map((building: IBuilding) =>
+						building._id ? (
 							<Link key={building._id} to={`${building._id}`}>
 								<BuildingCard building={building} />
 							</Link>
-						))
-					) : (
-						<>
-							<h1 className='text-center text-red-600'>
-								There is no any buldings for this client
-							</h1>
-						</>
-					))}
+						) : null
+					)
+				) : (
+					<h1 className='text-center text-red-600'>
+						There are no buildings for this client
+					</h1>
+				)}
 			</div>
 		</div>
 	)

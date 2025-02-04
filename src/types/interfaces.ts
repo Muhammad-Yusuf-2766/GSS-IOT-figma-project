@@ -61,7 +61,7 @@ export interface ISidebarLink {
 
 export interface ITotalCountBoxProps {
 	itemName: string
-	itemCount: number | undefined
+	clients?: IClient[] | IBuilding[]
 	icon: React.ReactNode
 }
 
@@ -70,11 +70,6 @@ export interface IHeadButton {
 	icon: IconType
 	name: string
 	route: string
-}
-
-export interface IBuildingFormProps {
-	gateways: IGateway[]
-	users: IUser[]
 }
 
 // ============== Data-Base related Data interfaces ========== //
@@ -87,11 +82,21 @@ export interface INode {
 	position: string
 }
 
+export interface ICreateNode {
+	doorNum: number
+}
+
 export interface IGateway {
 	_id: string
 	serial_number: string
-	nodes: INode[]
+	nodes: string[]
+	building_id: string
 	product_status: boolean
+}
+
+export interface ICreateGateway {
+	serial_number: number
+	nodes: string[]
 }
 
 export interface IBuilding {
@@ -99,20 +104,41 @@ export interface IBuilding {
 	building_name: string
 	building_num: number
 	building_addr: string
-	gateway_sets: IGateway[]
-	users: IUser[]
+	gateway_sets: string[]
+	users: string[]
 	permit_date: string
-	expiration_date: string
-	building_sts: boolean
+	expiry_date: string
+	building_status: boolean
+}
+export interface ICreateBuilding {
+	building_name: string
+	building_num: number
+	building_addr: string
+	gateway_sets: string[]
+	users?: string[]
+	permit_date: string
+	expiry_date: string
 }
 
 export interface IClient {
 	_id: string
-	company: string
-	company_addr: string
-	buildings: IBuilding[]
+	client_name: string
+	client_addr: string
+	client_buildings: IBuilding[]
 	boss_users: IUser[]
-	status: boolean
+	client_status: boolean
+}
+
+export interface IClientBuildings {
+	state: string
+	client_buildings: IBuilding[]
+}
+
+export interface ICreateClient {
+	client_name: string
+	client_addr: string
+	client_buildings: string[]
+	boss_users: string[]
 }
 
 export type UserTitle = 'BOSS' | 'WORKER' | null
@@ -123,7 +149,6 @@ export interface IUser {
 	user_name: string
 	user_email: string
 	user_phone: number
-	user_password: string
 	user_title?: UserTitle
 	user_type?: UserType
 }
