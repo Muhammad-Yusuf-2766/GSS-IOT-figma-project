@@ -17,6 +17,7 @@ import Authentication from './pages/authentication'
 import Community from './pages/community'
 import Dashboard from './pages/dashboard'
 import Home from './pages/Home'
+import MyPage from './pages/my-page'
 import Resource from './pages/resources'
 import Services from './pages/services'
 
@@ -32,6 +33,7 @@ const App = () => {
 					<Route path='/services/:serviceId' element={<ServiceDetail />} />
 					<Route path='/community' element={<Community />} />
 					<Route path='/community/:memberId' element={<MembersDetail />} />
+					<Route path='/my-page' element={<MyPage />} />
 				</Route>
 
 				{/* Dashboard routes */}

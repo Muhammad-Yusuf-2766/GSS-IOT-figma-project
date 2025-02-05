@@ -24,7 +24,9 @@ const Header = () => {
 				<div className='flex'>
 					{headButtons.map(({ id, icon: Icon, route }) => (
 						<Link
-							to={`http://localhost:5173/admin/dashboard/${route}`}
+							to={`${
+								import.meta.env.VITE_REACT_BASE_URL
+							}/admin/dashboard/${route}`}
 							key={id}
 						>
 							<div className='hover:bg-gray-200 p-2 rounded md:text-[35px] text-[25px] text-blue-800'>

@@ -70,7 +70,7 @@ const BuildingNodes = ({ nodes }: INodeProps) => {
 				break
 
 			default:
-				color = 'bg-indigo-500'
+				color = 'bg-blue-700'
 				percentage = '100%'
 		}
 

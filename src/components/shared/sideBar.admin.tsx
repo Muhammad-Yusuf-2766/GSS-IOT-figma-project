@@ -1,3 +1,4 @@
+import logo from '@/assets/GSS-logo.svg'
 import { sidebarLinks } from '@/constants'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -14,7 +15,7 @@ const SidebarAdmin = () => {
 							GSS
 						</h1>
 						<img
-							src='/src/assets/Gss-logo-blue.svg'
+							src={logo}
 							alt='Logo'
 							className='w-38 hidden lg:flex md:flex'
 						/>
