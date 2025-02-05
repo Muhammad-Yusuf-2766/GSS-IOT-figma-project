@@ -2,20 +2,22 @@ import { headButtons } from '@/constants'
 import ProjectStatistics from '@/dashboard/components/const/chartgraph'
 import MetricCard from '@/dashboard/components/const/roundchart'
 import ActiveClientsList from '@/dashboard/components/shared-dash/activeClients'
+import { useUserState } from '@/stores/user.auth.store'
 import { User2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-// import ProjectStatistics from '../components/const/chartgraph'
-// import MetricCard from '../components/const/roundchart'
-// import ActiveClientsList from '../components/shared-dash/activeClients'
 
 const MainPage = () => {
+	const { user } = useUserState()
+
 	return (
 		<>
 			<div className='w-full h-full grid grid-cols-1 md:flex flex-col gap-y-5 py-5 md:ml-4 md:text-xl text-lg'>
 				<h1 className='font-bold w-fit'>
 					환영합니다! <br />
 					GSS-GROUP 매니저-
-					<span className='text-xl font-bold text-blue-800'>Yang da yeoun</span>
+					<span className='text-xl font-bold text-blue-800'>
+						{user?.user_name}
+					</span>
 				</h1>
 				{/* 1-div */}
 				<div className='w-full flex flex-col lg:flex-row gap-x-5'>

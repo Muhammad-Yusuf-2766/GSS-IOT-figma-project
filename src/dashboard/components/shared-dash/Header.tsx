@@ -1,13 +1,10 @@
 // === Icons === //
 import { headButtons } from '@/constants'
-import { useState } from 'react'
+import { useUserState } from '@/stores/user.auth.store'
 import { Link } from 'react-router-dom'
 
 const Header = () => {
-	const [user, setUser] = useState(true)
-
-	// Handle logout
-	//.......
+	const { user } = useUserState()
 
 	return (
 		<div className='w-full h-auto md:flex grid grid-cols-2 justify-between items-center px-4 py-2 border-slate-400 border-b'>
@@ -18,7 +15,7 @@ const Header = () => {
 						GSS-GROUP 매니저{' '}
 						<span className='md:text-xl font-bold text-blue-800'>
 							{' '}
-							Yang da yeoun
+							{user?.user_name}
 						</span>
 					</p>
 				</div>

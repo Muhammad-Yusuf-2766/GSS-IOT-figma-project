@@ -86,7 +86,7 @@ const ServiceDetail = () => {
 				</h1>
 				<div className='aspect-video md:w-1/2 mx-auto bg-black rounded-lg overflow-hidden border border-gray-900'>
 					<video
-						src='/public/videos/회사-소개-동영상.mp4'
+						src='/videos/회사-소개-동영상.mp4'
 						controls
 						className='w-full h-full'
 						poster='/src/assets/pageBg.jpg'
