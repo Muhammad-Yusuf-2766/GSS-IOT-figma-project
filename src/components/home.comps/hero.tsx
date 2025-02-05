@@ -1,3 +1,6 @@
+import gssSafety from '@/assets/GSS_Safety.jpg'
+import serviceSafety from '@/assets/service_safety.jpg'
+import servicesFarm from '@/assets/services_farm.jpg'
 import Navbar from '@/components/shared/navbar'
 import { useAuthState } from '@/stores/auth.store'
 import { useUserState } from '@/stores/user.auth.store'
@@ -14,21 +17,21 @@ const Hero = () => {
 
 	const carouselData: ICarouselItem[] = [
 		{
-			backgroundImage: '/src/assets/service_safety.jpg',
+			backgroundImage: serviceSafety,
 			title: 'e-Smart',
 			subtitle: 'Safety',
 			description:
 				'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		},
 		{
-			backgroundImage: '/src/assets/services_farm.jpg',
+			backgroundImage: servicesFarm,
 			title: 'e-Smart',
 			subtitle: 'Farm',
 			description:
 				'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		},
 		{
-			backgroundImage: '/src/assets/GSS_Safety.jpg',
+			backgroundImage: gssSafety,
 			title: 'GSS-건설현장',
 			subtitle: '안전관리시스템',
 			description:
