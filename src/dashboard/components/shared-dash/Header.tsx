@@ -1,4 +1,3 @@
-// === Icons === //
 import { headButtons } from '@/constants'
 import { useUserState } from '@/stores/user.auth.store'
 import { Link } from 'react-router-dom'

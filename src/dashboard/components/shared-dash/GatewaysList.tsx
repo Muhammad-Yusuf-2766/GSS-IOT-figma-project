@@ -1,26 +1,12 @@
-import { getGateways } from '@/services/apiRequests'
-import { useGatewaysListState } from '@/stores/gatewaysListStore'
-import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { IGateway } from '@/types/interfaces'
 
 const tHead = ['No.', '게이트웨이 No.', '노드', '상태', '상태 변경', '삭제']
 
-const GatewaysList = () => {
-	const { gateways, setGateways } = useGatewaysListState()
+interface IGatewayProps {
+	gateways: IGateway[]
+}
 
-	const { isLoading, error, data } = useQuery({
-		queryKey: ['get-users'],
-		queryFn: getGateways,
-		enabled: !gateways || gateways.length === 0, // bu muhim!!!: users mavjud bo'lganda qayta so'rov yubormaydi.
-		retry: 1,
-	})
-
-	useEffect(() => {
-		if (data?.gateways) {
-			setGateways(data.gateways)
-		}
-	}, [data, setGateways])
-
+const GatewaysList = ({ gateways }: IGatewayProps) => {
 	return (
 		<div className='max-h-[550px] overflow-y-auto bg-white'>
 			<table className='w-full text-sm text-center text-gray-500  rounded-md'>

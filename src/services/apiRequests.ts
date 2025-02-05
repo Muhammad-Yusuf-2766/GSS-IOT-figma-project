@@ -409,7 +409,7 @@ export const getActiveBuildings = async () => {
 
 export const fetchClients = async (): Promise<IClient[]> => {
 	try {
-		await new Promise(resolve => setTimeout(resolve, 1000))
+		await new Promise(resolve => setTimeout(resolve, 500))
 
 		const response = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients`

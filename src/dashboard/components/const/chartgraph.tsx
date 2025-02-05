@@ -1,3 +1,4 @@
+import ApexCharts from 'apexcharts'
 import { useEffect, useRef } from 'react'
 
 const ProjectStatistics = () => {

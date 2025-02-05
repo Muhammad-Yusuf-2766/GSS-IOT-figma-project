@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 
 const NodesPage = () => {
 	const { nodes, setNodes } = useNodesListState()
-	const { isLoading, error, data } = useQuery({
+	const { data } = useQuery({
 		queryKey: ['get-users'],
 		queryFn: getNodes,
 		enabled: !nodes || nodes.length === 0, // bu muhim!!!: users mavjud bo'lganda qayta so'rov yubormaydi.

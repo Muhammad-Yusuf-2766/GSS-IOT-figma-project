@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
-	const [fileData, setFileData] = useState([])
+	// const [fileData, setFileData] = useState([])
 	const fileInputRef = useRef(null) // Fayl input uchun ref
 	const [filterOpenDoors, setFilterOpenDoors] = useState(false)
 
@@ -64,7 +64,7 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 
 			{/* CSV file data viewing in table */}
 
-			{fileData.length > 0 && (
+			{/* {fileData.length > 0 && (
 				<>
 					<table className='table-auto border-collapse border border-gray-400 mt-4 text-gray-700'>
 						<thead>
@@ -87,7 +87,6 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 											key={idx}
 											className='border border-gray-400 px-4 py-2 bg-white'
 										>
-											{/* {value || 'N/A'} */}
 										</td>
 									))}
 								</tr>
@@ -96,12 +95,12 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 					</table>
 					<button
 						className='py-2 px-3 w-fit h-auto bg-indigo-500 text-white text-mg rounded-md mt-3'
-						// onClick={() => SetPostionRequest(fileData)}
+						onClick={() => SetPostionRequest(fileData)}
 					>
 						노드 위치 설정
 					</button>
 				</>
-			)}
+			)} */}
 		</div>
 	)
 }

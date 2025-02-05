@@ -98,7 +98,7 @@ export default function UserTable() {
 									</td>
 								</tr>
 							</tbody>
-						) : (
+						) : users && users.length > 0 ? (
 							<tbody className='text-center'>
 								{users &&
 									users.map(user => (
@@ -177,6 +177,17 @@ export default function UserTable() {
 											</td>
 										</tr>
 									))}
+							</tbody>
+						) : (
+							<tbody>
+								<tr>
+									<td
+										colSpan={tHead.length}
+										className='text-center text-gray-500 py-4'
+									>
+										No users found
+									</td>
+								</tr>
 							</tbody>
 						)}
 					</table>
