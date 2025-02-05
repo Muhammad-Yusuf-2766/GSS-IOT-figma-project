@@ -1,9 +1,11 @@
+import serviceSafety from '@/assets/service_safety.jpg'
+
 const UnauthorizedPage = () => {
 	return (
 		<div
 			className='h-screen w-full flex justify-center items-center text-3xl py-10 md:px-16 relative z-10'
 			style={{
-				backgroundImage: "url('/src/assets/service_safety.jpg')",
+				backgroundImage: `url(${serviceSafety})`,
 				backgroundRepeat: 'no-repeat',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',

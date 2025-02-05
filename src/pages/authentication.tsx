@@ -1,4 +1,5 @@
 import GssLogo from '@/assets/GSS-logo.svg'
+import serviceSafety from '@/assets/service_safety.jpg'
 import Login from '@/components/auth/login.form'
 import Register from '@/components/auth/register.form'
 import ResetPassword from '@/components/auth/resetPassword.form'
@@ -23,7 +24,7 @@ const Authentication = () => {
 		<div
 			className='w-full h-screen flex flex-col py-10 md:px-16 relative z-10 text-secondary'
 			style={{
-				backgroundImage: "url('/src/assets/service_safety.jpg')",
+				backgroundImage: `url(${serviceSafety})`,
 				backgroundRepeat: 'no-repeat',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
