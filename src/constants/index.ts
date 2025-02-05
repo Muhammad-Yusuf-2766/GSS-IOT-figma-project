@@ -1,4 +1,8 @@
 import gssSafety from '@/assets/GSS_Safety.jpg'
+import Kim_manager from '@/assets/Kim_mngr.jpg'
+import Kim_prof_img from '@/assets/Kim_prof.jpg'
+import Yusuf_dev from '@/assets/me_dev.jpg'
+import servicesLight from '@/assets/service_light.avif'
 import serviceSafety from '@/assets/service_safety.jpg'
 import servicesFarm from '@/assets/services_farm.jpg'
 import {
@@ -28,7 +32,7 @@ export const members: IMember[] = [
 		id: 1,
 		name: 'Kim Song Kang',
 		role: 'Professor & Director',
-		image: '/src/assets/Kim_prof.jpg',
+		image: Kim_prof_img,
 		position: { left: '0', top: '0' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -37,7 +41,7 @@ export const members: IMember[] = [
 		id: 2,
 		name: 'Kim Jye Hyun',
 		role: 'CEO manager',
-		image: '/src/assets/Kim_mngr.jpg',
+		image: Kim_manager,
 		position: { left: '250px', top: '50px' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -46,7 +50,7 @@ export const members: IMember[] = [
 		id: 3,
 		name: 'Yusuf',
 		role: 'Web-Developer',
-		image: '/src/assets/me_dev.jpg',
+		image: Yusuf_dev,
 		position: { left: '500px', top: '100px' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -55,7 +59,7 @@ export const members: IMember[] = [
 		id: 4,
 		name: 'Yusuf',
 		role: 'Web-Developer',
-		image: '/src/assets/me_dev.jpg',
+		image: Yusuf_dev,
 		position: { left: '500px', top: '100px' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -64,7 +68,7 @@ export const members: IMember[] = [
 		id: 5,
 		name: 'Kim Jye Hyun',
 		role: 'CEO manager',
-		image: '/src/assets/Kim_mngr.jpg',
+		image: Kim_manager,
 		position: { left: '250px', top: '50px' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -73,7 +77,7 @@ export const members: IMember[] = [
 		id: 6,
 		name: 'Kim Song Kang',
 		role: 'Professor & Director',
-		image: '/src/assets/Kim_prof.jpg',
+		image: Kim_prof_img,
 		position: { left: '0', top: '0' },
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
@@ -107,7 +111,7 @@ export const resourceServices: IResourceData[] = [
 		name: 'Smart Guard',
 		title: 'Gss-건설현장장',
 		subtitle: '안전관리시스템',
-		image: '/src/assets/GSS_Safety.jpg',
+		image: gssSafety,
 		catalog: '/path/to/catalog',
 		app: '/path/to/application',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
@@ -118,7 +122,7 @@ export const resourceServices: IResourceData[] = [
 		id: 2,
 		title: 'e-Smart Safety',
 		subtitle: '',
-		image: '/src/assets/service_safety.jpg',
+		image: serviceSafety,
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
@@ -128,7 +132,7 @@ export const resourceServices: IResourceData[] = [
 		id: 3,
 		title: 'e-Smart Light',
 		subtitle: '',
-		image: '/src/assets/service_light.avif',
+		image: servicesLight,
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:
@@ -139,7 +143,7 @@ export const resourceServices: IResourceData[] = [
 		id: 4,
 		title: 'e-Smart Farm',
 		subtitle: '',
-		image: '/src/assets/services_farm.jpg',
+		image: servicesFarm,
 		catalog: '',
 		info: 'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		description:

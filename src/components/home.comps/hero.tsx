@@ -14,21 +14,21 @@ const Hero = () => {
 
 	const carouselData: ICarouselItem[] = [
 		{
-			backgroundImage: "url('/src/assets/service_safety.jpg')",
+			backgroundImage: '/src/assets/service_safety.jpg',
 			title: 'e-Smart',
 			subtitle: 'Safety',
 			description:
 				'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		},
 		{
-			backgroundImage: "url('/src/assets/services_farm.jpg')",
+			backgroundImage: '/src/assets/services_farm.jpg',
 			title: 'e-Smart',
 			subtitle: 'Farm',
 			description:
 				'IoT 기술이 적용된 악취제거 시스템을 스마트폰으로 쉽고 간편하게 제어하여 쾌적한 환경을 만들어줍니다.',
 		},
 		{
-			backgroundImage: "url('/src/assets/GSS_Safety.jpg')",
+			backgroundImage: '/src/assets/GSS_Safety.jpg',
 			title: 'GSS-건설현장',
 			subtitle: '안전관리시스템',
 			description:
@@ -55,7 +55,7 @@ const Hero = () => {
 			<div
 				className='w-full h-screen flex flex-col py-5 md:px-16 relative z-10 text-secondary'
 				style={{
-					backgroundImage: backgroundImage,
+					backgroundImage: `url(${backgroundImage})`,
 					backgroundRepeat: 'no-repeat',
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',

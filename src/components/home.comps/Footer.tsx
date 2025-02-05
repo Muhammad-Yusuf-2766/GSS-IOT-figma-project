@@ -1,10 +1,12 @@
+import footer_img from '@/assets/Footer-bg.jpg'
+
 const MainFooter = () => {
 	return (
 		<div className='w-full h-full text-secondary'>
 			<div
 				className='w-full h-screen flex justify-center items-center relative z-10'
 				style={{
-					backgroundImage: `url('/src/assets/Footer-bg.jpg')`,
+					backgroundImage: `url(${footer_img})`,
 					backgroundRepeat: 'no-repeat',
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',

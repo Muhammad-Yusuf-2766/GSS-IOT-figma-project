@@ -1,3 +1,4 @@
+import about_img from '@/assets/about_us.webp'
 import { ChevronRight } from 'lucide-react'
 
 const About = () => {
@@ -22,7 +23,7 @@ const About = () => {
 				<div
 					className='w-full md:h-full h-[85%] flex flex-col items-center justify-center relative z-10'
 					style={{
-						backgroundImage: `url('/src/assets/about_us.webp')`,
+						backgroundImage: `url(${about_img})`,
 						backgroundRepeat: 'no-repeat',
 						backgroundSize: 'cover',
 						backgroundPosition: 'center',
