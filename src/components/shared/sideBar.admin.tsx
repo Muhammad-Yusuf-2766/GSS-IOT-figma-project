@@ -1,4 +1,4 @@
-import logo from '@/assets/GSS-logo.svg'
+import logo from '@/assets/Gss-logo-blue.svg'
 import { sidebarLinks } from '@/constants'
 import { Link, useLocation } from 'react-router-dom'
 

@@ -1,13 +1,19 @@
 import footer_img from '@/assets/Footer-bg.jpg'
 import logo from '@/assets/GSS-logo.svg'
 import { useAuthState } from '@/stores/auth.store'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const MainFooter = () => {
 	const { setAuth } = useAuthState()
+	const navigate = useNavigate()
 
 	const handleLoginClick = () => {
-		setAuth('register') // authState ni 'login' ga o'zgartirish
+		setAuth('login')
+		navigate('/auth')
+	}
+	const handleRegisterClick = () => {
+		setAuth('register')
+		navigate('/auth')
 	}
 
 	return (
@@ -27,27 +33,25 @@ const MainFooter = () => {
 						GSS 기업과 함게 스마트한 일상을 경험해보세요!
 					</h1>
 					<div className='w-full flex items-center justify-between gap-x-3'>
-						<Link to={`${import.meta.env.VITE_REACT_BASE_URL}/auth`}>
-							{' '}
-							<button className='md:w-[330px] w-full md:text-xl font-bold text-black/70 p-2 rounded-full bg-gray-300/50 hover:bg-gray-300/65'>
-								로기인인 <br />
-								<span className='text-sm font-thin md:block hidden'>
-									로그인 하고 더 많은 서비스를 형험해보세요
-								</span>
-							</button>
-						</Link>
-
-						<Link
-							to={`${import.meta.env.VITE_REACT_BASE_URL}/auth`}
+						<button
 							onClick={handleLoginClick}
+							className='md:w-[330px] w-full md:text-xl font-bold text-black/70 p-2 rounded-full bg-gray-300/50 hover:bg-gray-300/65'
 						>
-							<button className='md:w-[330px] w-full md:text-xl font-bold text-black/70 p-2 rounded-full bg-gray-300/50 hover:bg-gray-300/65'>
-								회원가입 <br />
-								<span className='text-sm font-thin md:block hidden'>
-									GSS의 회원 되러 바로 가기
-								</span>
-							</button>
-						</Link>
+							로기인인 <br />
+							<span className='text-sm font-thin md:block hidden'>
+								로그인 하고 더 많은 서비스를 형험해보세요
+							</span>
+						</button>
+
+						<button
+							onClick={handleRegisterClick}
+							className='md:w-[330px] w-full md:text-xl font-bold text-black/70 p-2 rounded-full bg-gray-300/50 hover:bg-gray-300/65'
+						>
+							회원가입 <br />
+							<span className='text-sm font-thin md:block hidden'>
+								GSS의 회원 되러 바로 가기
+							</span>
+						</button>
 					</div>
 				</div>
 			</div>

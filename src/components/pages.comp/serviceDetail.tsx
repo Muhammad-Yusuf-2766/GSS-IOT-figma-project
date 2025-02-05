@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
-import { navLinks, resourceServices } from '@/constants'
+import { resourceServices } from '@/constants'
 import { ArrowRight } from 'lucide-react'
-import { Link, NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import DetailPageHeader from '../shared/detailPageHeader'
 
 const ServiceDetail = () => {
 	const { serviceId } = useParams<{ serviceId: string }>()
@@ -15,45 +16,7 @@ const ServiceDetail = () => {
 	return (
 		<div className='h-auto bg-white'>
 			{/* Header */}
-			<header className='border-b'>
-				<div className='max-w-[1320px] mx-auto px-4 py-4'>
-					<div className='flex items-center justify-between'>
-						{/* Logo */}
-						<Link to='/' className='flex items-center text-gray-900'>
-							<img src='/src/assets//gsslogo-black-figma.svg' alt='' />
-						</Link>
-						<div className='flex items-center gap-12'>
-							{/* Navigation */}
-							<nav className='hidden md:flex items-center gap-8'>
-								{navLinks.map(link => (
-									<NavLink
-										to={link.path}
-										className={({ isActive }) =>
-											`font-semibold hover:underline underline-offset-4 decoration-[2px] ${
-												isActive
-													? 'underline underline-offset-4 decoration-[2px]'
-													: ''
-											}`
-										}
-									>
-										{link.label}
-									</NavLink>
-								))}
-							</nav>
-						</div>
-						{/* Auth */}
-						<div className='flex items-center gap-4 text-sm'>
-							<Link to='/login' className='hover:text-gray-600'>
-								Log In
-							</Link>
-							<span>|</span>
-							<Link to='/profile' className='hover:text-gray-600'>
-								My Profile
-							</Link>
-						</div>
-					</div>
-				</div>
-			</header>
+			<DetailPageHeader />
 
 			{/* Main Content */}
 			<main className='h-full px-4 py-12 space-y-3'>
