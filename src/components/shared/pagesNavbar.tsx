@@ -14,7 +14,7 @@ const PagesNavbar: React.FC<PageNavProps> = ({ data }) => {
 	return (
 		<>
 			<div
-				className='w-full h-screen flex flex-col py-10 md:px-16 relative z-10 text-secondary'
+				className='w-full h-screen flex flex-col py-5 md:px-16 relative z-10 text-secondary'
 				style={{
 					backgroundImage: `url("${img}")`,
 					backgroundRepeat: 'no-repeat',
@@ -55,9 +55,9 @@ const PagesNavbar: React.FC<PageNavProps> = ({ data }) => {
 				>
 					<Navbar />
 					<div className='w-full h-3/5 flex justify-center'>
-						<div className='w-2/3 h-full flex items-center justify-between'>
+						<div className='md:w-2/3 h-full flex items-center justify-between'>
 							<h1 className='text-6xl font-outfit font-semibold'>{title}</h1>
-							<div className='w-2/3 h-[3px] bg-secondary' />
+							<div className='w-2/3 h-[3px] bg-secondary md:flex hidden' />
 						</div>
 					</div>
 				</div>

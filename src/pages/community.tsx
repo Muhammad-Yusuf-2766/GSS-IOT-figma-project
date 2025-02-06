@@ -10,7 +10,7 @@ const Community = () => {
 		title: 'Community',
 	}
 	return (
-		<div>
+		<div className='overflow-hidden'>
 			<PagesNavbar data={resource} />
 			<CommunityMain />
 			<Footer />

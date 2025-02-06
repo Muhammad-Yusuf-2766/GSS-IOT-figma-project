@@ -101,7 +101,7 @@ const Hero = () => {
 					<Navbar />
 					<div className='w-full h-full md:flex items-center justify-between'>
 						{/* Left side */}
-						<div className='md:w-[50%] md:h-full h-2/5 flex justify-start'>
+						<div className='md:w-[50%] md:h-full h-2/5 hidden md:flex justify-start'>
 							<div className='w-full md:h-[55%]  flex itmes-center justify-between'>
 								<div className='w-[150px] flex flex-col justify-between'>
 									<div className='text-lg'>
@@ -156,11 +156,12 @@ const Hero = () => {
 						</div>
 
 						{/* Right Side */}
-						<div className='md:w-[30%] md:h-auto h-3/5 flex flex-col justify-center md:mt-5'>
+						<div className='md:w-[30%] h-full h-f flex flex-col justify-center space-y-5 md:mt-5'>
 							<div className='relative'>
 								<input
 									type='text'
-									className='w-full bg-transparent border-b-4 border-white py-2 pl-4 pr-10 focus:outline-none'
+									placeholder='Search . . .'
+									className='w-full bg-transparent border-b-4 border-white py-2 pl-4 pr-10 focus:outline-none placeholder:text-white/60'
 								/>
 								<div className='absolute right-2 top-1/2 transform -translate-y-1/2'>
 									<Search className='w-6 h-6 text-white' />

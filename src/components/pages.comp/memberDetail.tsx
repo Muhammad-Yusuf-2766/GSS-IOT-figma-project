@@ -3,7 +3,7 @@ import { IMember } from '@/types/interfaces'
 import { useParams } from 'react-router-dom'
 import DetailPageHeader from '../shared/detailPageHeader'
 
-export const MembersDetail: React.FC = () => {
+const MembersDetail: React.FC = () => {
 	// URL parametrlardan ID olish
 	const { memberId } = useParams<{ memberId: string }>()
 	// ID asosida `member` ma'lumotini topish
@@ -47,3 +47,5 @@ export const MembersDetail: React.FC = () => {
 		</>
 	)
 }
+
+export default MembersDetail
