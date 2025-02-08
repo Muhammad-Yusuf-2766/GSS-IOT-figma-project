@@ -6,7 +6,7 @@ interface IGatewayStore {
 	setGateways: (gateways: IGateway[]) => void
 }
 
-export const useGatewaysListState = create<IGatewayStore>(set => ({
+export const useGatewaysListStore = create<IGatewayStore>(set => ({
 	gateways: [],
 	setGateways: gateways => set({ gateways }),
 }))

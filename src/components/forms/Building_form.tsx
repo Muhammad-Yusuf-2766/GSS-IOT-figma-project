@@ -38,12 +38,18 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 			building_addr: '',
 			permit_date: '',
 			expiry_date: '',
+			gateway_sets: [], // yangi default values
+			users: [],
 		},
 	})
 
 	useEffect(() => {
 		form.setValue('gateway_sets', selectedGateways)
 	}, [selectedGateways, form])
+
+	useEffect(() => {
+		form.setValue('users', selectedUsers)
+	}, [selectedUsers, form])
 
 	const toggleGatewaySelection = (id: string) => {
 		setSelectedGateways(prev => {
@@ -53,14 +59,9 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 
 	const toggleUserSelection = (id: string) => {
 		setSelectedUsers(prev => {
-			const updatedUsers = prev.includes(id)
+			return prev.includes(id)
 				? prev.filter(user => user !== id)
 				: [...prev, id]
-
-			// form.setValue() ni setState callback ichida chaqirish
-			form.setValue('users', updatedUsers)
-
-			return updatedUsers
 		})
 	}
 
@@ -68,12 +69,12 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 		try {
 			if (values.gateway_sets?.length <= 0) {
 				setError('최소 1개 게이트웨이를 선택해주세요')
-				console.log(error)
 				return
 			}
+
 			const resPromise = createBuildingRequest({
 				...values,
-				users: values.users ?? [], // Agar `undefined` bo‘lsa, bo‘sh massivga o‘zgartir
+				users: values.users ?? [],
 				gateway_sets: values.gateway_sets ?? [],
 			})
 
@@ -81,20 +82,21 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 				loading: 'Loading...',
 				success: res => {
 					setTimeout(() => {
+						// Formani reset qilish va dropdown-larni yangilash
 						form.reset()
+
+						setSelectedGateways([]) // Reset `selectedGateways`
+						setSelectedUsers([]) // Reset `selectedUsers`
 						refetch()
 					}, 1000)
 					return res.message
 				},
-				error: err => {
-					return err.message || 'Something went wrong :('
-				},
+				error: err => err.message || 'Something went wrong :(',
 			})
 		} catch (error: any) {
 			toast.error(error.message || 'Something went wrong :(')
 		}
 	}
-
 	return (
 		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-500'>
 			<h1 className='leading-none md:text-3xl text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>

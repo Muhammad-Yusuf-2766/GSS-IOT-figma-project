@@ -34,9 +34,7 @@ const AddClient = () => {
 	const users = results[1].data
 	const builidngs = results[2].data
 	const isLoading = results.some(query => query.isLoading)
-	// const isError = results.some(query => query.isError)
-
-	// Refetch funksiyalarini olish
+	const refetch = results[2].refetch
 	const refetchAll = () => {
 		results.forEach(query => query.refetch())
 	}
@@ -49,7 +47,7 @@ const AddClient = () => {
 			<Header />
 			<div className='w-full h-full md:flex justify-center md:items-start mt-10 gap-3 p-3 pb-6 md:space-y-0 space-y-5'>
 				<BuildingForm gateways={gateways} users={users} refetch={refetchAll} />
-				<ClientForm buildings={builidngs} users={users} />
+				<ClientForm buildings={builidngs} users={users} refetch={refetch} />
 			</div>
 		</div>
 	)

@@ -3,19 +3,14 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import ClientCard from '@/dashboard/components/shared-dash/ClientCard'
 import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
-import { fetchClients } from '@/services/apiRequests'
-import { IClient, ITotalCountBoxProps } from '@/types/interfaces'
-import { useQuery } from '@tanstack/react-query'
+import { useClients } from '@/hooks/useClientdata'
+import { ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { LuUser } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
 const Clients = () => {
-	const { data, isLoading, error } = useQuery<IClient[]>({
-		queryKey: ['clients'],
-		queryFn: fetchClients,
-		retry: 1,
-	})
+	const { data, isLoading, error } = useClients()
 
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '임대 현황',

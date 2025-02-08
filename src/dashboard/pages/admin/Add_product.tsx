@@ -9,7 +9,6 @@ const AddProduct = () => {
 	const { data, refetch } = useQuery({
 		queryKey: ['get-active-nodes'],
 		queryFn: getActiveNodes,
-		// enabled: !users || users.length === 0, // bu muhim!!!: users mavjud bo'lganda qayta so'rov yubormaydi.
 		retry: 1,
 	})
 

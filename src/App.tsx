@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Toaster } from './components/ui/sonner'
+import SocketComponent from './test/testSocket'
 
 // Lazy loading components
 const MembersDetail = lazy(() => import('./components/pages.comp/memberDetail'))
@@ -19,7 +20,7 @@ const Buildings = lazy(() => import('./dashboard/pages/admin/buildings'))
 const Clients = lazy(() => import('./dashboard/pages/admin/clients'))
 const GatewaysPage = lazy(() => import('./dashboard/pages/admin/Gateways'))
 const MainPage = lazy(() => import('./dashboard/pages/admin/hero'))
-const NodesPage = lazy(() => import('./dashboard/pages/admin/Nodes'))
+// const NodesPage = lazy(() => import('./dashboard/pages/admin/Nodes'))
 const Products = lazy(() => import('./dashboard/pages/admin/products'))
 const UserTable = lazy(() => import('./dashboard/pages/admin/users'))
 const Authentication = lazy(() => import('./pages/authentication'))
@@ -58,7 +59,7 @@ const App = () => {
 						<Route path='users' element={<UserTable />} />
 						<Route path='products' element={<Products />} />
 						<Route path='product/gateways' element={<GatewaysPage />} />
-						<Route path='product/nodes' element={<NodesPage />} />
+						<Route path='product/nodes' element={<SocketComponent />} />
 						<Route path='clients' element={<Clients />} />
 						<Route path='clients/:clientId/buildings' element={<Buildings />} />
 						<Route

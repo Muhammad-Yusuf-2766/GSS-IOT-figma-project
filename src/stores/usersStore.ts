@@ -6,7 +6,7 @@ interface IUsersInterface {
 	setUsers: (users: IUser[]) => void
 }
 
-export const useUsersState = create<IUsersInterface>(set => ({
+export const useUsersStore = create<IUsersInterface>(set => ({
 	users: [],
 	setUsers: users => set({ users }),
 }))

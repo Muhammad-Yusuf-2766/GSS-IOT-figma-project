@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // api.ts
 import {
-	IBuilding,
 	IClient,
 	ICreateBuilding,
 	ICreateClient,
@@ -213,6 +212,7 @@ export const deleteUser = async (user_id: string) => {
 
 export const getGateways = async () => {
 	try {
+		console.log('getGateways')
 		const res = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-gateways`,
 			{ withCredentials: true }
@@ -224,7 +224,7 @@ export const getGateways = async () => {
 				data.message || 'Error on getting-gateways: Undefined error'
 			)
 		}
-		return data
+		return data.gateways
 	} catch (error: any) {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
@@ -259,7 +259,7 @@ export const getNodes = async () => {
 		if (data.state === 'fail') {
 			throw new Error(data.message || 'Error on getting-Nodes: Undefined error')
 		}
-		return data
+		return data.nodes
 	} catch (error: any) {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
@@ -409,7 +409,7 @@ export const getActiveBuildings = async () => {
 
 export const fetchClients = async (): Promise<IClient[]> => {
 	try {
-		await new Promise(resolve => setTimeout(resolve, 500))
+		// await new Promise(resolve => setTimeout(resolve, 500))
 
 		const response = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients`
@@ -441,7 +441,7 @@ export const fetchClientBuildings = async (clientId: string | undefined) => {
 			throw new Error(data.message || 'Error on creating node')
 		}
 
-		return data
+		return data.client_buildings
 	} catch (error: any) {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
@@ -449,14 +449,14 @@ export const fetchClientBuildings = async (clientId: string | undefined) => {
 	}
 }
 
-export const fetchBuildings = async (
-	clientId: string
-): Promise<IBuilding[]> => {
-	const response = await axios.get(
-		`${import.meta.env.VITE_SERVER_BASE_URL}/buildings?client_id=${clientId}`
-	)
-	return response.data
-}
+// export const fetchBuildings = async (
+// 	clientId: string
+// ): Promise<IBuilding[]> => {
+// 	const response = await axios.get(
+// 		`${import.meta.env.VITE_SERVER_BASE_URL}/buildings?client_id=${clientId}`
+// 	)
+// 	return response.data
+// }
 
 export const fetchBuildingNodes = async (buildingId: string) => {
 	try {

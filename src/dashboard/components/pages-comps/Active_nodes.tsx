@@ -26,19 +26,27 @@ const ActiveNodes = ({ nodes }: INodeProps) => {
 							</tr>
 						</thead>
 						<tbody className='text-center'>
-							{nodes?.map(node => (
-								<tr key={node._id} className='border-b'>
-									<th
-										scope='row'
-										className='px-4 py-3 font-medium text-gray-900 border-r'
-									>
-										{node.doorNum}
-									</th>
-									<td className='px-4 py-3 text-center'>
-										{<IoCheckmarkSharp size={25} color='green' />}
+							{nodes && nodes.length > 0 ? (
+								nodes.map(node => (
+									<tr key={node._id} className='border-b'>
+										<th
+											scope='row'
+											className='px-4 py-3 font-medium text-gray-900 border-r'
+										>
+											{node.doorNum}
+										</th>
+										<td className='px-4 py-3 text-center'>
+											{<IoCheckmarkSharp size={25} color='green' />}
+										</td>
+									</tr>
+								))
+							) : (
+								<tr>
+									<td colSpan={6} className='text-center py-4 text-gray-500'>
+										<p>다 노드가 사용중, 새로운 노드를 생성하세요</p>
 									</td>
 								</tr>
-							))}
+							)}
 						</tbody>
 					</table>
 				</div>

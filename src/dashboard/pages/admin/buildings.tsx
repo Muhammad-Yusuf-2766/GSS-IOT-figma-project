@@ -4,6 +4,7 @@ import BuildingCard from '@/dashboard/components/shared-dash/buildingCard'
 import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
 import { useClientBuildings } from '@/hooks/useClientdata'
+import { useBuildingsStore } from '@/stores/buildingsStore'
 import { IBuilding, ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { BsBuildingsFill } from 'react-icons/bs'
@@ -15,10 +16,12 @@ const Buildings = () => {
 		throw new Error('Client ID is missing')
 	}
 
-	const { data, isLoading, error } = useClientBuildings(clientId)
+	const { isLoading, error } = useClientBuildings(clientId)
+	const { buildings } = useBuildingsStore()
+
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '클라이언트 건물',
-		clients: data?.client_buildings,
+		clients: buildings ? buildings : [],
 		icon: <BsBuildingsFill />,
 	}
 
@@ -46,10 +49,10 @@ const Buildings = () => {
 			{/* Data field */}
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto'>
 				{!isLoading &&
-				data &&
-				Array.isArray(data.client_buildings) &&
-				data.client_buildings.length > 0 ? (
-					data.client_buildings.map((building: IBuilding) =>
+				buildings &&
+				Array.isArray(buildings) &&
+				buildings.length > 0 ? (
+					buildings.map((building: IBuilding) =>
 						building._id ? (
 							<Link key={building._id} to={`${building._id}`}>
 								<BuildingCard building={building} />

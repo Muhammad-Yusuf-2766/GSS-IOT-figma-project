@@ -20,8 +20,9 @@ import { Input } from '../ui/input'
 interface IClientFormProps {
 	buildings: IBuilding[]
 	users: IUser[]
+	refetch: () => void
 }
-const ClientForm = ({ users, buildings }: IClientFormProps) => {
+const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 	// State to manage the visibility of the dropdown
 	const [userDropdownOpen, setUserDropdownOpen] = useState(false)
 	const [buildigDropdownOpen, setBuildingDropdownOpen] = useState(false)
@@ -69,7 +70,9 @@ const ClientForm = ({ users, buildings }: IClientFormProps) => {
 				success: res => {
 					setTimeout(() => {
 						form.reset()
-						// refetch()
+						setSelectedBuildings([])
+						setSelectedUsers([])
+						refetch()
 					}, 1000)
 					return res.message
 				},
@@ -166,7 +169,7 @@ const ClientForm = ({ users, buildings }: IClientFormProps) => {
 							{buildigDropdownOpen && (
 								<div className='mt-2 p-4 border border-gray-300 rounded-md bg-gray-200 absolute w-full z-10'>
 									{(buildings?.length || 0) === 0 ? (
-										<p className=''>사용불가 ( 건물 )</p>
+										<p className='text-[15px]'>사용불가 ( 건물 )</p>
 									) : (
 										buildings.map((building, index) => (
 											<div key={index} className='flex items-center mb-2'>
@@ -236,7 +239,7 @@ const ClientForm = ({ users, buildings }: IClientFormProps) => {
 							{userDropdownOpen && (
 								<div className='mt-2 p-4 border border-gray-300 rounded-md bg-gray-200 absolute w-full z-10'>
 									{(users?.length || 0) === 0 ? (
-										<p className=''>사용불가 ( 사용자 )</p>
+										<p className='text-[15px]'>사용불가 ( 사용자 )</p>
 									) : (
 										users.map((user, index) => (
 											<div key={index} className='flex items-center mb-2'>

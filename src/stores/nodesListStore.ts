@@ -6,7 +6,7 @@ interface INodesStore {
 	setNodes: (nodes: INode[]) => void
 }
 
-export const useNodesListState = create<INodesStore>(set => ({
+export const useNodesListStore = create<INodesStore>(set => ({
 	nodes: [],
 	setNodes: nodes => set({ nodes }),
 }))

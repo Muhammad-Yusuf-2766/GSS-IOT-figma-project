@@ -3,11 +3,10 @@ import GeneralError from '@/components/errors/api.errors'
 import FillLoading from '@/components/shared/fill-laoding'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import Header from '@/dashboard/components/shared-dash/Header'
-import { deleteUser, getUsers, updateUserTypes } from '@/services/apiRequests'
-import { useUsersState } from '@/stores/usersStore'
+import { useUsersList } from '@/hooks/useUsersData'
+import { deleteUser, updateUserTypes } from '@/services/apiRequests'
+import { useUsersStore } from '@/stores/usersStore'
 import { IUpdateUserType } from '@/types/interfaces'
-import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 type Thead = string
@@ -22,20 +21,8 @@ const tHead: Thead[] = [
 ]
 
 export default function UserTable() {
-	const { users, setUsers } = useUsersState()
-
-	const { isLoading, error, data, refetch } = useQuery({
-		queryKey: ['get-users'],
-		queryFn: getUsers,
-		enabled: !users || users.length === 0, // bu muhim!!!: users mavjud bo'lganda qayta so'rov yubormaydi.
-		retry: 1,
-	})
-
-	useEffect(() => {
-		if (data) {
-			setUsers(data)
-		}
-	}, [data, setUsers])
+	const { isLoading, error, refetch } = useUsersList()
+	const { users } = useUsersStore()
 
 	const updateUserType = async (updatingData: IUpdateUserType) => {
 		await updateUserTypes(updatingData)

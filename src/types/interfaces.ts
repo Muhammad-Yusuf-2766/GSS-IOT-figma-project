@@ -78,7 +78,7 @@ export interface INode {
 	doorNum: number
 	doorChk: 0 | 1
 	betChk: number
-	product_status: boolean
+	node_status: boolean
 	position: string
 }
 
@@ -91,7 +91,7 @@ export interface IGateway {
 	serial_number: string
 	nodes: string[]
 	building_id: string
-	product_status: boolean
+	gateway_status: boolean
 }
 
 export interface ICreateGateway {

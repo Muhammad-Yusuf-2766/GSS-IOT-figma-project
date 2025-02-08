@@ -2,12 +2,17 @@ import { IGateway, INode } from '@/types/interfaces'
 
 interface IProps {
 	itemName: string
-	item: IGateway[] | INode[]
+	item?: IGateway[] | INode[]
 	handleNodeStatus?: () => void
 }
 
 const FilteredTotalCnt = ({ itemName, item, handleNodeStatus }: IProps) => {
 	const itemArray = Array.isArray(item) ? item : []
+
+	// INode turini tekshirish uchun type guard funksiya
+	const isNode = (obj: IGateway | INode): obj is INode => {
+		return (obj as INode).node_status !== undefined
+	}
 
 	return (
 		<div className=''>
@@ -19,12 +24,24 @@ const FilteredTotalCnt = ({ itemName, item, handleNodeStatus }: IProps) => {
 				<span className='flex items-center gap-2 px-2'>
 					<div className='w-5 h-5 rounded-full bg-green-500 mx-auto animate-pulse' />
 					사용중 <span className='md:flex hidden'>{itemName}</span>: {''}
-					{itemArray.filter(node => node.product_status === false).length}
+					{
+						itemArray.filter(obj =>
+							isNode(obj)
+								? obj.node_status === false
+								: obj.gateway_status === false
+						).length
+					}
 				</span>
 				<div className=' px-2 flex items-center gap-2'>
 					<div className='w-5 h-5 rounded-full bg-red-500 mx-auto animate-pulse' />
 					<span className='md:flex hidden'>{itemName}</span> 재고: {''}
-					{itemArray.filter(node => node.product_status === true).length}
+					{
+						itemArray.filter(obj =>
+							isNode(obj)
+								? obj.node_status === true
+								: obj.gateway_status === true
+						).length
+					}
 				</div>
 				<button
 					type='button'

@@ -3,15 +3,17 @@ import { create } from 'zustand'
 
 interface NodeState {
 	nodes: INode[]
-	updateNode: (doorNum: number, updatedData: Partial<INode>) => void
+	setNodes: (nodes: INode[]) => void
+	updateNode: (node: INode) => void
 }
 
-export const useNodeStore = create<NodeState>(set => ({
+export const useNodesStore = create<NodeState>(set => ({
 	nodes: [],
-	updateNode: (doorNum, updatedData) =>
+	setNodes: nodes => set({ nodes }),
+	updateNode: newNode =>
 		set(state => ({
 			nodes: state.nodes.map(node =>
-				node.doorNum === doorNum ? { ...node, ...updatedData } : node
+				node.doorNum === newNode.doorNum ? newNode : node
 			),
 		})),
 }))
