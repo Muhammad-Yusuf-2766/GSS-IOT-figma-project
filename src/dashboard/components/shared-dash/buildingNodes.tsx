@@ -2,17 +2,46 @@
 
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useBuildingNodes } from '@/hooks/useClientdata'
 import { useNodesStore } from '@/stores/nodeStore'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { io } from 'socket.io-client'
+import { INode } from '../../../types/interfaces'
 import TotalcntCsv from './TotalnctCSV'
+const socket = io('http://localhost:3005') // Backend server manzilini o'zgartiring
 
 const BuildingNodes = () => {
 	const { nodes } = useNodesStore()
-
 	const [filteredNodes, setFilteredNodes] = useState(nodes)
+	const { updateNode } = useNodesStore() // updateNode funksiyasi kerak
+	const { buildingId } = useParams()
+
+	if (!buildingId) {
+		throw new Error('Building ID is missing')
+	}
+
+	const { isLoading } = useBuildingNodes(buildingId)
+
+	useEffect(() => {
+		const topic = `mqtt/building/${buildingId}`
+		socket.on(topic, (updatedNode: INode) => {
+			console.log('New MQTT Data:', updatedNode)
+			updateNode(updatedNode)
+		})
+
+		return () => {
+			socket.off(topic)
+		}
+	}, [buildingId, updateNode])
+
 	useEffect(() => {
 		setFilteredNodes(nodes)
 	}, [nodes])
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
 
 	const handleFilterChange = (filterOpenDoors: boolean) => {
 		if (filterOpenDoors) {
