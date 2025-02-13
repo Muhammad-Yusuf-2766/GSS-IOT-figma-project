@@ -3,18 +3,19 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useBuildingNodes } from '@/hooks/useClientdata'
-import { useNodesStore } from '@/stores/nodeStore'
+import { useClientStore } from '@/stores/buildingsStore'
+import { useBuildingNodesStore } from '@/stores/nodeStore'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { INode } from '../../../types/interfaces'
 import TotalcntCsv from './TotalnctCSV'
-const socket = io('http://localhost:3005') // Backend server manzilini o'zgartiring
+const socket = io('http://52.79.50.40:3000/') // Backend server manzilini o'zgartiring
 
 const BuildingNodes = () => {
-	const { nodes } = useNodesStore()
+	const { building, nodes, updateNode } = useBuildingNodesStore()
+	const { client } = useClientStore()
 	const [filteredNodes, setFilteredNodes] = useState(nodes)
-	const { updateNode } = useNodesStore() // updateNode funksiyasi kerak
 	const { buildingId } = useParams()
 
 	if (!buildingId) {
@@ -112,8 +113,8 @@ const BuildingNodes = () => {
 		<div className='w-full md:p-5 mx-auto'>
 			<div className='space-y-6'>
 				<div className='text-center space-y-2'>
-					<h1 className='md:text-2xl text-lg md:font-bold font-semibold'>
-						Hello MQTT & Socket.io
+					<h1 className='md:text-2xl text-lg md:font-bold font-semibold text-gray-700'>
+						{client?.client_name}, building-{building?.building_num}
 					</h1>
 				</div>
 

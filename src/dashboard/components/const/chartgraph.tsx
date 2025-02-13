@@ -18,7 +18,7 @@ const ProjectStatistics = () => {
 			},
 		],
 		chart: {
-			height: '390px',
+			// height: '500px',
 			maxWidth: '100%',
 			type: 'area',
 			fontFamily: 'Inter, sans-serif',
@@ -109,7 +109,7 @@ const ProjectStatistics = () => {
 	}, [options])
 	return (
 		<div>
-			<div className='w-full  shadow-[0px_0px_10px_5px_rgba(0,_0,_0,_0.1)] rounded-xl p-4 md:p-6'>
+			<div className='w-full shadow-[0px_0px_10px_5px_rgba(0,_0,_0,_0.1)] rounded-xl p-4 md:p-6'>
 				<div className='flex justify-between'>
 					<div>
 						<h5 className='leading-none md:text-2xl font-bold text-gray-700 pb-2'>

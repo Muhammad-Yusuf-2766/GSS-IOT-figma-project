@@ -149,8 +149,8 @@ export interface IUser {
 	user_name: string
 	user_email: string
 	user_phone: number
-	user_title?: UserTitle
-	user_type?: UserType
+	user_title: UserTitle
+	user_type: UserType
 }
 
 export interface IRegisterUser {
@@ -178,6 +178,12 @@ export interface IResetPasswordStep2 {
 export interface IUpdateUserType {
 	user_id: string
 	user_type: UserType
+}
+
+export interface IUpdateProductStatus {
+	product_type: 'NODE' | 'GATEWAY'
+	product_id: string
+	product_endpoint: '/update-product' | '/delete-product'
 }
 
 // ============== Data-Base related Data interfaces ========== //

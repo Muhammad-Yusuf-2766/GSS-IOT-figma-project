@@ -1,8 +1,8 @@
 import logo from '@/assets/Gss-logo-blue.svg'
-import { sidebarAdminLinks } from '@/constants'
+import { sidebarClientLinks } from '@/constants'
 import { Link, useLocation } from 'react-router-dom'
 
-const SidebarAdmin = () => {
+const SidebarClient = () => {
 	const location = useLocation()
 
 	return (
@@ -24,8 +24,8 @@ const SidebarAdmin = () => {
 				{/* Logo */}
 
 				{/* Navigation Links */}
-				<ul className='h-2/4 w-full mt-2 space-y-7 flex flex-col justify-around'>
-					{sidebarAdminLinks.map((link, index) => (
+				<ul className='h-2/4 w-full mt-2 space-y-7 flex flex-col'>
+					{sidebarClientLinks.map((link, index) => (
 						<Link
 							to={link.path}
 							key={index}
@@ -60,4 +60,4 @@ const SidebarAdmin = () => {
 	)
 }
 
-export default SidebarAdmin
+export default SidebarClient

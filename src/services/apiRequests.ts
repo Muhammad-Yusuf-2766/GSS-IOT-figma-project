@@ -10,6 +10,7 @@ import {
 	IRegisterUser,
 	IResetPasswordStep1,
 	IResetPasswordStep2,
+	IUpdateProductStatus,
 	IUpdateUserType,
 } from '@/types/interfaces'
 import axios from 'axios'
@@ -334,6 +335,52 @@ export const createGatewayRequest = async (nodes: ICreateGateway) => {
 	}
 }
 
+export const updateProductStatus = async (updateData: IUpdateProductStatus) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product${
+				updateData.product_endpoint
+			}`,
+			{
+				product_type: updateData.product_type,
+				product_id: updateData.product_id,
+			},
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on updating-user: Undefined error')
+		}
+		return data
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
+export const deleteProduct = async (deleteData: IUpdateProductStatus) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product${
+				deleteData.product_endpoint
+			}`,
+			{
+				product_type: deleteData.product_type,
+				product_id: deleteData.product_id,
+			},
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on deleting-user: Undefined error')
+		}
+		return data
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
 //  ============= PRODUCT related requests ============ //
 
 //  ============= CLIENT related requests ============ //
@@ -412,7 +459,8 @@ export const fetchClients = async (): Promise<IClient[]> => {
 		// await new Promise(resolve => setTimeout(resolve, 500))
 
 		const response = await axios.get(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients`
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients`,
+			{ withCredentials: true }
 		)
 		const data = response.data
 
@@ -433,7 +481,8 @@ export const fetchClients = async (): Promise<IClient[]> => {
 export const fetchClientBuildings = async (clientId: string | undefined) => {
 	try {
 		const response = await axios.get(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients/${clientId}`
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/clients/${clientId}`,
+			{ withCredentials: true }
 		)
 		const data = response.data
 
@@ -441,7 +490,7 @@ export const fetchClientBuildings = async (clientId: string | undefined) => {
 			throw new Error(data.message || 'Error on creating node')
 		}
 
-		return data.client_buildings
+		return data
 	} catch (error: any) {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
@@ -449,19 +498,11 @@ export const fetchClientBuildings = async (clientId: string | undefined) => {
 	}
 }
 
-// export const fetchBuildings = async (
-// 	clientId: string
-// ): Promise<IBuilding[]> => {
-// 	const response = await axios.get(
-// 		`${import.meta.env.VITE_SERVER_BASE_URL}/buildings?client_id=${clientId}`
-// 	)
-// 	return response.data
-// }
-
 export const fetchBuildingNodes = async (buildingId: string) => {
 	try {
 		const response = await axios.get(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/company/buildings/${buildingId}`
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/buildings/${buildingId}`,
+			{ withCredentials: true }
 		)
 		const data = response.data
 
@@ -469,7 +510,7 @@ export const fetchBuildingNodes = async (buildingId: string) => {
 			throw new Error(data.message || 'Error on creating node')
 		}
 
-		return data.nodes
+		return data
 	} catch (error: any) {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
@@ -478,3 +519,51 @@ export const fetchBuildingNodes = async (buildingId: string) => {
 }
 
 //  ============= CLIENT creating related requests ============ //
+
+//  ============= CLIENT-Boss type user related requests ============ //
+
+export const fetchBossClients = async (userId: string): Promise<IClient[]> => {
+	try {
+		// await new Promise(resolve => setTimeout(resolve, 500))
+		const response = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/boss-clients`,
+			{ userId },
+			{ withCredentials: true }
+		)
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data.clients
+	} catch (error: any) {
+		// Xatoni React Queryga yuborish uchun qayta o'rash
+		throw new Error(
+			error.response?.data?.message ||
+				'Server bilan bog‘lanishda xatolik yuz berdi'
+		)
+	}
+}
+
+export const fetchClientBossBuildings = async (
+	clientId: string | undefined
+) => {
+	try {
+		const response = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/client/boss/${clientId}`,
+			{ withCredentials: true }
+		)
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		return new Error(
+			error.response?.data?.message || 'Error on fetching client data.'
+		)
+	}
+}

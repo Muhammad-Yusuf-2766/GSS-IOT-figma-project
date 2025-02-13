@@ -4,7 +4,7 @@ import 'react-circular-progressbar/dist/styles.css'
 const MetricCard = () => {
 	const chartBarValue: number = 73
 	return (
-		<div className='w-full full flex gap-6 justify-center'>
+		<div className='w-full full flex md:gap-x-6 gap-x-2 justify-center'>
 			{/* Users Card */}
 			<div className='w-1/2 h-3/5 p-5 bg-white rounded-xl shadow-[0px_0px_10px_5px_rgba(0,_0,_0,_0.1)] text-center'>
 				<h3 className='text-lg font-semibold'>Users</h3>

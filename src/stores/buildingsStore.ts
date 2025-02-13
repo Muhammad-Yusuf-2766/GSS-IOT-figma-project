@@ -1,12 +1,16 @@
-import { IBuilding } from '@/types/interfaces'
+import { IBuilding, IClient } from '@/types/interfaces'
 import { create } from 'zustand'
 
 interface NodeState {
-	buildings: IBuilding[]
+	client: IClient | null
+	client_buildings: IBuilding[]
+	setClient: (client: IClient) => void
 	setBuildings: (buildings: IBuilding[]) => void
 }
 
-export const useBuildingsStore = create<NodeState>(set => ({
-	buildings: [],
-	setBuildings: buildings => set({ buildings }),
+export const useClientStore = create<NodeState>(set => ({
+	client: null,
+	client_buildings: [],
+	setClient: client => set({ client }),
+	setBuildings: client_buildings => set({ client_buildings }),
 }))

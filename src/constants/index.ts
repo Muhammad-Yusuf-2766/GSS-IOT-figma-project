@@ -14,6 +14,7 @@ import {
 } from '@/types/interfaces'
 import { LucideBox } from 'lucide-react'
 import { AiOutlineProduct } from 'react-icons/ai'
+import { BsBuildingsFill } from 'react-icons/bs'
 import { FaClipboardList, FaUserPlus } from 'react-icons/fa'
 import { HiSquaresPlus } from 'react-icons/hi2'
 import { LuUser } from 'react-icons/lu'
@@ -24,7 +25,6 @@ export const navLinks = [
 	{ label: '자료실', path: '/resources' },
 	{ label: '서비스', path: '/services' },
 	{ label: '커뮤니티', path: '/community' },
-	{ label: '대시보드', path: '/admin/dashboard' },
 ]
 
 export const members: IMember[] = [
@@ -151,12 +151,22 @@ export const resourceServices: IResourceData[] = [
 	},
 ]
 
-export const sidebarLinks: ISidebarLink[] = [
+export const sidebarAdminLinks: ISidebarLink[] = [
 	{ path: '/admin/dashboard', name: '대시보드', icon: LucideBox },
 	{ path: '/admin/dashboard/users', name: '사용자', icon: TbUsers },
 	{ path: '/admin/dashboard/products', name: '제품', icon: AiOutlineProduct },
 	{ path: '/admin/dashboard/clients', name: '임대 현황', icon: LuUser },
 ]
+
+export const sidebarClientLinks: ISidebarLink[] = [
+	{ path: '/client/dashboard', name: '대시보드', icon: LucideBox },
+	{
+		path: '/client/dashboard/clients',
+		name: '총 임대현황',
+		icon: BsBuildingsFill,
+	},
+]
+
 export const headButtons: IHeadButton[] = [
 	{
 		id: '1',
@@ -167,236 +177,6 @@ export const headButtons: IHeadButton[] = [
 	{ id: '2', icon: HiSquaresPlus, name: '제품 등록', route: 'add-product' },
 	{ id: '3', icon: FaUserPlus, name: '사용자 생성', route: 'add-client' },
 ]
-
-// =========== Temporary Testing datas =========== //
-// export const Users: IUser[] = [
-// 	{
-// 		_id: 'asfdghfgfsa',
-// 		user_name: 'Mansur',
-// 		user_email: 'asfdnj@gmail.com',
-// 		user_phone: 123456432,
-// 		user_title: 'BOSS',
-// 		user_type: 'CLIENT',
-// 	},
-// 	{
-// 		_id: 'asfdghfgfsa',
-// 		user_name: 'Mansur',
-// 		user_email: 'asfdnj@gmail.com',
-// 		user_phone: 123456432,
-// 		user_title: 'BOSS',
-// 		user_type: 'CLIENT',
-// 	},
-// 	{
-// 		_id: 'asfdghfgfsa',
-// 		user_name: 'Mansur',
-// 		user_email: 'asfdnj@gmail.com',
-// 		user_phone: 123456432,
-// 		user_title: 'BOSS',
-// 		user_type: 'CLIENT',
-// 	},
-// 	{
-// 		_id: 'asfdghfgfsa',
-// 		user_name: 'Mansur',
-// 		user_email: 'asfdnj@gmail.com',
-// 		user_phone: 123456432,
-// 		user_title: 'BOSS',
-// 		user_type: 'CLIENT',
-// 	},
-// ]
-
-// export const Nodes: INode[] = [
-// 	{
-// 		_id: '234kmnj',
-// 		betChk: 39,
-// 		doorChk: 1,
-// 		doorNum: 1,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: '234kmnjGhn',
-// 		betChk: 39,
-// 		doorChk: 1,
-// 		doorNum: 2,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sfdghjmf234kmnj',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 1,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sfdg234kmnjAFGhn',
-// 		betChk: 39,
-// 		doorChk: 1,
-// 		doorNum: 3,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sf234kmnjdsAFGhn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 4,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sfdghjmfg234kmnjFGhn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 5,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sf234kmnjfgdsAFGhn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 6,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 's234kmnjn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 7,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sfd234kmnjn',
-// 		betChk: 39,
-// 		doorChk: 1,
-// 		doorNum: 8,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 's234kmnjhjmfgdsAFGhn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 9,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// 	{
-// 		_id: 'sfdghjmfgds234kmnjFGhn',
-// 		betChk: 39,
-// 		doorChk: 0,
-// 		doorNum: 10,
-// 		position: '',
-// 		product_status: false,
-// 	},
-// ]
-
-// export const Gateways: IGateway[] = [
-// 	{
-// 		_id: 'sadfg',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0001',
-// 	},
-// 	{
-// 		_id: 'sgsfda',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0002',
-// 	},
-// 	{
-// 		_id: 'sadda',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0003',
-// 	},
-// 	{
-// 		_id: 'sadfgsf',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0004',
-// 	},
-// 	{
-// 		_id: 'gsfda',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0005',
-// 	},
-// 	{
-// 		_id: 'sad',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0006',
-// 	},
-// 	{
-// 		_id: 'sa234kmnjsfda',
-// 		nodes: Nodes,
-// 		product_status: false,
-// 		serial_number: '0007',
-// 	},
-// ]
-
-// export const Buildings: IBuilding[] = [
-// 	{
-// 		_id: 'asdfgbdh',
-// 		building_num: 1,
-// 		building_name: 'Samsung',
-// 		building_addr: 'Seoul goyang',
-// 		building_sts: true,
-// 		gateway_sets: Gateways,
-// 		users: Users,
-// 		permit_date: '2024-09-24',
-// 		expiration_date: '2026-09-24',
-// 	},
-// 	{
-// 		_id: 'asdfgbdh',
-// 		building_num: 1,
-// 		building_name: 'Samsung',
-// 		building_addr: 'Seoul goyang',
-// 		building_sts: true,
-// 		gateway_sets: Gateways,
-// 		users: Users,
-// 		permit_date: '2024-09-24',
-// 		expiration_date: '2026-09-24',
-// 	},
-// 	{
-// 		_id: 'asdfgbdh',
-// 		building_num: 1,
-// 		building_name: 'Samsung',
-// 		building_addr: 'Seoul goyang',
-// 		building_sts: true,
-// 		gateway_sets: Gateways,
-// 		users: Users,
-// 		permit_date: '2024-09-24',
-// 		expiration_date: '2026-09-24',
-// 	},
-// 	{
-// 		_id: 'asdfgbdh',
-// 		building_num: 1,
-// 		building_name: 'Samsung',
-// 		building_addr: 'Seoul goyang',
-// 		building_sts: true,
-// 		gateway_sets: Gateways,
-// 		users: Users,
-// 		permit_date: '2024-09-24',
-// 		expiration_date: '2026-09-24',
-// 	},
-// 	{
-// 		_id: 'asdfgbdh',
-// 		building_num: 1,
-// 		building_name: 'Samsung',
-// 		building_addr: 'Seoul goyang',
-// 		building_sts: true,
-// 		gateway_sets: Gateways,
-// 		users: Users,
-// 		permit_date: '2024-09-24',
-// 		expiration_date: '2026-09-24',
-// 	},
-// ]
 
 export const ActiveClients = [
 	{
@@ -520,48 +300,3 @@ export const ActiveClients = [
 		expiry_date: '2025-02-28',
 	},
 ]
-
-// export const AllCLientsData: IClient[] = [
-// 	{
-// 		_id: '6759456a8bcb14617aa787c7',
-// 		company: 'Hyundai',
-// 		company_addr: '서울 이태원',
-// 		buildings: Buildings,
-// 		boss_users: Users,
-// 		status: true,
-// 	},
-// 	{
-// 		_id: '6759466b8bcc24628bb897d8',
-// 		company: 'Samsung',
-// 		company_addr: '서울 서초구',
-// 		buildings: Buildings,
-// 		boss_users: Users,
-// 		status: false,
-// 	},
-// 	{
-// 		_id: '6759477c9bcc34739cc998e9',
-// 		company: 'LG',
-// 		company_addr: '부산 해운대구',
-// 		buildings: Buildings,
-// 		boss_users: Users,
-// 		status: true,
-// 	},
-// 	{
-// 		_id: '6759488dabbc4484addaa9fa',
-// 		company: 'Kia',
-// 		company_addr: '대구 수성구',
-// 		buildings: Buildings,
-// 		boss_users: Users,
-// 		status: true,
-// 	},
-// 	{
-// 		_id: '6759499e9bcc5495beeaaafb',
-// 		company: 'SK',
-// 		company_addr: '인천 미추홀구',
-// 		buildings: Buildings,
-// 		boss_users: Users,
-// 		status: false,
-// 	},
-// ]
-
-// =========== Temporary Testing datas =========== //

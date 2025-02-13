@@ -1,7 +1,6 @@
 import FillLoading from '@/components/shared/fill-laoding'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import BuildingCard from '@/dashboard/components/shared-dash/buildingCard'
-import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
 import { useClientBuildings } from '@/hooks/useClientdata'
 import { useClientStore } from '@/stores/buildingsStore'
@@ -9,21 +8,24 @@ import { IBuilding, ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { BsBuildingsFill } from 'react-icons/bs'
 import { Link, useParams } from 'react-router-dom'
+import { ClientHeader } from './buildingNodes'
 
-const Buildings = () => {
+const ClientTypeBuildings = () => {
 	const { clientId } = useParams()
 	const { isLoading, error } = useClientBuildings(clientId || '')
+	console.log(clientId)
+
 	const { client_buildings } = useClientStore()
 
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '클라이언트 건물',
-		clients: client_buildings ? client_buildings : [],
+		clients: client_buildings || [],
 		icon: <BsBuildingsFill />,
 	}
 
 	return (
 		<div className='w-full h-full'>
-			<Header />
+			<ClientHeader />
 			<div className='md:w-fit w-full mx-auto my-4'>
 				<TotalCountBox data={totalCountData} />
 			</div>
@@ -57,7 +59,7 @@ const Buildings = () => {
 					)
 				) : (
 					<h1 className='text-center text-red-600'>
-						There are no buildings for this client
+						이 클라이언트에 위한 빌딩을 못 찾았입니다 :(
 					</h1>
 				)}
 			</div>
@@ -65,4 +67,4 @@ const Buildings = () => {
 	)
 }
 
-export default Buildings
+export default ClientTypeBuildings

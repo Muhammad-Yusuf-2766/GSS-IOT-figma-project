@@ -12,7 +12,7 @@ const GatewaysPage = () => {
 
 			<div className='grid grid-cols-1 mx-auto'>
 				<FilteredTotalCnt item={data} itemName={'게이트웨이'} />
-				<GatewaysList gateways={data} />
+				<GatewaysList />
 			</div>
 		</div>
 	)

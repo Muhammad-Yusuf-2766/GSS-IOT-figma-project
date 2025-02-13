@@ -1,6 +1,13 @@
 import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import UnauthorizedPage from './components/shared/unauthorizedPage'
 import { Toaster } from './components/ui/sonner'
+import ProtectedRoute from './dashboard/components/const/protectedRoutes'
+import ClientBuildingNodes from './dashboard/pages/user/buildingNodes'
+import ClientTypeBuildings from './dashboard/pages/user/buildings'
+import ClientBossClientsPage from './dashboard/pages/user/clients'
+import ClientMainPage from './dashboard/pages/user/hero'
+import { AdminDashboard, ClientDashboard } from './pages/dashboard'
 
 // Lazy loading components
 const MembersDetail = lazy(() => import('./components/pages.comp/memberDetail'))
@@ -24,7 +31,6 @@ const Products = lazy(() => import('./dashboard/pages/admin/products'))
 const UserTable = lazy(() => import('./dashboard/pages/admin/users'))
 const Authentication = lazy(() => import('./pages/authentication'))
 const Community = lazy(() => import('./pages/community'))
-const Dashboard = lazy(() => import('./pages/dashboard'))
 const Home = lazy(() => import('./pages/Home'))
 const MyPage = lazy(() => import('./pages/my-page'))
 const Resource = lazy(() => import('./pages/resources'))
@@ -48,9 +54,17 @@ const App = () => {
 					<Route path='/community' element={<Community />} />
 					<Route path='/community/:memberId' element={<MembersDetail />} />
 					<Route path='/my-page' element={<MyPage />} />
+					<Route path='/unauthorized' element={<UnauthorizedPage />} />
 
 					{/* Dashboard routes */}
-					<Route path='/admin/dashboard' element={<Dashboard />}>
+					<Route
+						path='/admin/dashboard'
+						element={
+							<ProtectedRoute allowedRoles={['ADMIN']}>
+								<AdminDashboard />
+							</ProtectedRoute>
+						}
+					>
 						<Route path='' element={<MainPage />} />
 						<Route path='active-clients' element={<ActiveClientsPage />} />
 						<Route path='add-product' element={<AddProduct />} />
@@ -64,6 +78,27 @@ const App = () => {
 						<Route
 							path='clients/:id/buildings/:buildingId'
 							element={<BuildingNodes />}
+						/>
+					</Route>
+
+					{/* Client Dashboard routes */}
+					<Route
+						path='/client/dashboard'
+						element={
+							<ProtectedRoute allowedRoles={['CLIENT']}>
+								<ClientDashboard />
+							</ProtectedRoute>
+						}
+					>
+						<Route path='' element={<ClientMainPage />} />
+						<Route path='clients' element={<ClientBossClientsPage />} />
+						<Route
+							path='clients/:clientId/buildings'
+							element={<ClientTypeBuildings />}
+						/>
+						<Route
+							path='clients/:id/buildings/:buildingId'
+							element={<ClientBuildingNodes />}
 						/>
 					</Route>
 				</Routes>
