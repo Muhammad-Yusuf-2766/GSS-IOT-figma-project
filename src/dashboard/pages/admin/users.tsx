@@ -1,60 +1,61 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import GeneralError from '@/components/errors/api.errors'
 import FillLoading from '@/components/shared/fill-laoding'
+import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import Header from '@/dashboard/components/shared-dash/Header'
 import { useUsersList } from '@/hooks/useUsersData'
 import { deleteUser, updateUserTypes } from '@/services/apiRequests'
 import { useUsersStore } from '@/stores/usersStore'
 import { IUpdateUserType } from '@/types/interfaces'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 type Thead = string
 
 const tHead: Thead[] = [
-	'사용자 이름',
-	'사용자 이메일',
-	'사용자 유형',
-	'변경',
-	'Admin 추가',
+	'이름',
+	'이메일',
+	'전화번호',
+	'유형',
+	'상태 변경',
+	'관리자',
 	'삭제',
 ]
 
 export default function UserTable() {
 	const { isLoading, error, refetch } = useUsersList()
 	const { users } = useUsersStore()
+	const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
 	const updateUserType = async (updatingData: IUpdateUserType) => {
-		await updateUserTypes(updatingData)
-			.then(() => {
-				toast.success('User type changed successfully!')
-				refetch()
-			})
-			.catch(error => {
-				toast.error(error.message || 'Error on deleting-user')
-			})
+		try {
+			await updateUserTypes(updatingData)
+			toast.success('User type changed successfully!')
+			refetch()
+		} catch (error: any) {
+			toast(error.message || 'Error on updating user type')
+		}
 	}
 
 	const handleDelete = async (user_id: string) => {
 		try {
 			await deleteUser(user_id)
-			toast.success('deleted successfully!')
+			toast.error('User deleted successfully!')
 			refetch()
 		} catch (error: any) {
-			toast.error(error.message || 'Error on deleting-user')
+			toast(error.message || 'Error on deleting user')
 		}
 	}
 
 	return (
 		<div className='w-full h-full'>
 			<Header />
-			<div className='grid grid-cols-1 max-w-7xl mx-auto'>
-				<h1 className='leading-none md:text-2xl text-xl font-bold text-gray-700 pb-2 my-2'>
-					모든 사용자들
-				</h1>
-				<ScrollArea className='w-full md:h-[570px] h-[550px] relative'>
+			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+				<h1 className='text-2xl font-bold text-gray-700 my-4'>모든 사용자들</h1>
+				<ScrollArea className='w-full h-[calc(100vh-200px)] relative'>
 					{error && (
-						<div className='absolute inset-0 flex justify-center items-center w-1/2 mx-auto'>
+						<div className='absolute inset-0 flex justify-center items-center'>
 							<GeneralError
 								message='Error'
 								error={error}
@@ -62,123 +63,202 @@ export default function UserTable() {
 							/>
 						</div>
 					)}
-					<table className='w-full text-sm text-center text-gray-500'>
-						<thead className='md:h-12 sticky top-0 text-white font-bold text-xs uppercase bg-blue-800'>
-							<tr>
-								{tHead.map(head => (
-									<th
-										key={head}
-										scope='col'
-										className='w-fit px-4 border-x border-gray-400'
-									>
-										{head}
-									</th>
-								))}
-							</tr>
-						</thead>
-						{isLoading ? (
-							// Agar yuklanayotgan bo'lsa, butun `<tbody>` o'rniga shunchaki biror `<tr>` qaytariladi
-							<tbody>
+					<div className='min-w-full'>
+						<table className='min-w-full divide-y divide-gray-200'>
+							<thead className='bg-blue-800 sticky top-0'>
 								<tr>
-									<td colSpan={tHead.length}>
-										<FillLoading />
-									</td>
-								</tr>
-							</tbody>
-						) : users && users.length > 0 ? (
-							<tbody className='text-center'>
-								{users &&
-									users.map(user => (
-										<tr
-											key={user._id}
-											className='border border-slate-400 hover:bg-gray-100'
+									{tHead.map(head => (
+										<th
+											key={head}
+											scope='col'
+											className='px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider hidden md:table-cell'
 										>
-											<th
-												scope='row'
-												className='md:px-4 py-2 font-medium text-gray-900 whitespace-nowrap'
-											>
-												{user.user_name}
-											</th>
-											<td className='md:px-4 px-2 py-2 border-x border-gray-400 '>
-												{user.user_email}
-											</td>
-											<td className='md:px-4 px-2 py-2 border-x border-gray-400'>
-												{user.user_type}
-											</td>
-											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
-												{user.user_type === 'CLIENT' ? (
-													<button
+											{head}
+										</th>
+									))}
+									<th
+										scope='col'
+										className='md:hidden px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider'
+									>
+										사용자 정보
+									</th>
+								</tr>
+							</thead>
+							{isLoading ? (
+								<tbody>
+									<tr>
+										<td colSpan={tHead.length + 1}>
+											<FillLoading />
+										</td>
+									</tr>
+								</tbody>
+							) : users && users.length > 0 ? (
+								<tbody className='bg-white divide-y divide-gray-200'>
+									{users.map(user => (
+										<>
+											<tr key={user._id} className='hover:bg-gray-50'>
+												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 hidden md:table-cell'>
+													{user.user_name}
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell'>
+													{user.user_email}
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell'>
+													{user.user_phone}
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell'>
+													{user.user_type}
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell'>
+													<Button
 														onClick={() =>
 															updateUserType({
 																user_id: user._id,
-																user_type: 'USER',
+																user_type:
+																	user.user_type === 'CLIENT'
+																		? 'USER'
+																		: 'CLIENT',
 															})
 														}
-														className='border py-1 px-2 rounded-md bg-gray-500 text-white hover:bg-gray-600'
+														variant={
+															user.user_type === 'CLIENT'
+																? 'secondary'
+																: 'default'
+														}
 													>
 														상태변경
-													</button>
-												) : (
-													<button
+													</Button>
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell'>
+													<Button
 														onClick={() =>
 															updateUserType({
 																user_id: user._id,
-																user_type: 'CLIENT',
+																user_type: 'ADMIN',
 															})
 														}
-														className='border py-1 px-2 rounded-md bg-blue-800 text-white hover:bg-blue-900'
+														disabled={user.user_type === 'ADMIN'}
+														variant={
+															user.user_type === 'ADMIN' ? 'outline' : 'default'
+														}
 													>
-														상태 변경
-													</button>
-												)}
-											</td>
-											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
-												<button
-													onClick={() =>
-														updateUserType({
-															user_id: user._id,
-															user_type: 'ADMIN',
-														})
-													}
-													disabled={user.user_type === 'ADMIN'}
-													className={`border py-1 px-2 rounded-md ${
-														user.user_type === 'ADMIN'
-															? 'bg-gray-500'
-															: 'bg-green-500 hover:bg-green-600'
-													} text-white`}
-												>
-													Admin 추가
-												</button>
-											</td>
-											<td className='md:px-4 px-2 py-2 border-x border-gray-400 text-center'>
-												<button
-													onClick={() =>
-														confirm(
-															`${user.user_name} 사용자를 삭제 하시겠습니까 ?`
-														) && handleDelete(user._id)
-													}
-													className='border py-1 px-2 rounded-md bg-red-500 text-white hover:bg-red-600'
-												>
-													삭제
-												</button>
-											</td>
-										</tr>
+														Admin 추가
+													</Button>
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium hidden md:table-cell'>
+													<Button
+														onClick={() =>
+															confirm(
+																`${user.user_name} 사용자를 삭제 하시겠습니까 ?`
+															) && handleDelete(user._id)
+														}
+														variant='destructive'
+													>
+														삭제
+													</Button>
+												</td>
+												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium md:hidden'>
+													<div className='flex items-center justify-between'>
+														<span className='font-medium text-gray-900 mr-2'>
+															{user.user_name}
+														</span>
+														<Button
+															onClick={() =>
+																setExpandedRow(
+																	expandedRow === user._id ? null : user._id
+																)
+															}
+															variant='outline'
+															size='sm'
+														>
+															{expandedRow === user._id ? '접기' : '펼치기'}
+														</Button>
+													</div>
+												</td>
+											</tr>
+											{expandedRow === user._id && (
+												<tr className='md:hidden'>
+													<td colSpan={tHead.length + 1}>
+														<div className='px-6 py-4 space-y-2'>
+															<p>
+																<strong>이메일:</strong> {user.user_email}
+															</p>
+															<p>
+																<strong>전화번호:</strong> {user.user_phone}
+															</p>
+															<p>
+																<strong>유형:</strong> {user.user_type}
+															</p>
+															<div className='space-y-2'>
+																<Button
+																	onClick={() =>
+																		updateUserType({
+																			user_id: user._id,
+																			user_type:
+																				user.user_type === 'CLIENT'
+																					? 'USER'
+																					: 'CLIENT',
+																		})
+																	}
+																	variant={
+																		user.user_type === 'CLIENT'
+																			? 'secondary'
+																			: 'default'
+																	}
+																	className='w-full'
+																>
+																	상태변경
+																</Button>
+																<Button
+																	onClick={() =>
+																		updateUserType({
+																			user_id: user._id,
+																			user_type: 'ADMIN',
+																		})
+																	}
+																	disabled={user.user_type === 'ADMIN'}
+																	variant={
+																		user.user_type === 'ADMIN'
+																			? 'outline'
+																			: 'default'
+																	}
+																	className='w-full'
+																>
+																	Admin 추가
+																</Button>
+																<Button
+																	onClick={() =>
+																		confirm(
+																			`${user.user_name} 사용자를 삭제 하시겠습니까 ?`
+																		) && handleDelete(user._id)
+																	}
+																	variant='destructive'
+																	className='w-full'
+																>
+																	삭제
+																</Button>
+															</div>
+														</div>
+													</td>
+												</tr>
+											)}
+										</>
 									))}
-							</tbody>
-						) : (
-							<tbody>
-								<tr>
-									<td
-										colSpan={tHead.length}
-										className='text-center text-gray-500 py-4'
-									>
-										No users found
-									</td>
-								</tr>
-							</tbody>
-						)}
-					</table>
-
+								</tbody>
+							) : (
+								<tbody>
+									<tr>
+										<td
+											colSpan={tHead.length + 1}
+											className='text-center text-gray-500 py-4'
+										>
+											No users found
+										</td>
+									</tr>
+								</tbody>
+							)}
+						</table>
+					</div>
 					<ScrollBar orientation='horizontal' />
 				</ScrollArea>
 			</div>

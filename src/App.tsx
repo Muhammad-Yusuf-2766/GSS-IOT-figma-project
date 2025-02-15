@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import FillLoading from './components/shared/fill-laoding'
 import UnauthorizedPage from './components/shared/unauthorizedPage'
 import { Toaster } from './components/ui/sonner'
 import ProtectedRoute from './dashboard/components/const/protectedRoutes'
@@ -38,7 +39,9 @@ const Services = lazy(() => import('./pages/services'))
 
 // Fallback Loader Component
 const FallbackLoader = () => (
-	<div className='flex justify-center items-center h-screen'>Loading...</div>
+	<>
+		<FillLoading />
+	</>
 )
 
 const App = () => {
