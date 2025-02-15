@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { INode } from '../../../types/interfaces'
 import TotalcntCsv from './TotalnctCSV'
-const socket = io('http://52.79.50.40:3000/') // Backend server manzilini o'zgartiring
+const socket = io(`${import.meta.env.VITE_SERVER_BASE_URL}`) // Backend server manzilini o'zgartiring
 
 const BuildingNodes = () => {
 	const { building, nodes, updateNode } = useBuildingNodesStore()
