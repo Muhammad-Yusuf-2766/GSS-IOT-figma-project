@@ -3,7 +3,6 @@
 import { registerSchema } from '@/lib/vatidation'
 import { registerRequest } from '@/services/apiRequests'
 import { useAuthState } from '@/stores/auth.store'
-import { useUserState } from '@/stores/user.auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -26,8 +25,7 @@ import { Input } from '../ui/input'
 
 const Register = () => {
 	const { setAuth } = useAuthState()
-	const { setUser } = useUserState()
-	const [isLoading, setIsLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 
 	const form = useForm<z.infer<typeof registerSchema>>({
@@ -42,7 +40,7 @@ const Register = () => {
 	})
 
 	const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-		setIsLoading(false)
+		setIsLoading(true)
 		try {
 			const { confirmPassword, ...dataToSend } = values
 
@@ -53,17 +51,16 @@ const Register = () => {
 					if (res.state === 'success') {
 						setError('')
 						setTimeout(() => {
-							setUser(res.user)
-							setIsLoading(true)
-							window.location.reload()
+							setIsLoading(false)
+							setAuth('login')
 						}, 1000)
 						return 'Registered successfully!'
 					}
-					setIsLoading(true)
+					setIsLoading(false)
 					throw new Error('Unexpected response structure')
 				},
 				error: err => {
-					setIsLoading(true)
+					setIsLoading(false)
 					const errorMessage = err.message || 'Something went wrong'
 					setError(errorMessage) // Xatoni statega yozish
 					return errorMessage
@@ -107,7 +104,7 @@ const Register = () => {
 					className='space-y-8 mt-5 relative'
 				>
 					{/* FillLoading komponenti */}
-					{!isLoading && (
+					{isLoading && (
 						<div className='absolute inset-0 flex items-center justify-center z-10'>
 							<FillLoading />
 						</div>
@@ -122,7 +119,7 @@ const Register = () => {
 								<FormControl>
 									<Input
 										placeholder='User name'
-										disabled={!isLoading}
+										disabled={isLoading}
 										{...field}
 										className='placeholder:text-white/75 text-white bg-transparent'
 									/>
@@ -142,7 +139,7 @@ const Register = () => {
 								<FormControl>
 									<Input
 										placeholder='example@gmail.com'
-										disabled={!isLoading}
+										disabled={isLoading}
 										{...field}
 										className='placeholder:text-white/75 text-white bg-transparent'
 									/>
@@ -164,7 +161,7 @@ const Register = () => {
 									<Input
 										type='number'
 										placeholder='01043257896'
-										disabled={!isLoading}
+										disabled={isLoading}
 										{...field}
 										className='placeholder:text-white/75 text-white bg-transparent no-spinner'
 									/>
@@ -187,7 +184,7 @@ const Register = () => {
 										<Input
 											type='password'
 											placeholder='****'
-											disabled={!isLoading}
+											disabled={isLoading}
 											{...field}
 											className='placeholder:text-white/75 text-white bg-transparent'
 										/>
@@ -207,7 +204,7 @@ const Register = () => {
 										<Input
 											type='password'
 											placeholder='****'
-											disabled={!isLoading}
+											disabled={isLoading}
 											{...field}
 											className='placeholder:text-white/75 text-white bg-transparent'
 										/>
@@ -221,7 +218,7 @@ const Register = () => {
 					<div>
 						<Button
 							type='submit'
-							disabled={!isLoading}
+							disabled={isLoading}
 							className='h-12 w-full mt-2'
 						>
 							Submit

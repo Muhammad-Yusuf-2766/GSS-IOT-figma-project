@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { FaTelegramPlane } from 'react-icons/fa'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import FillLoading from '../shared/fill-laoding'
@@ -22,8 +23,8 @@ import { Input } from '../ui/input'
 
 const Login = () => {
 	const { setAuth } = useAuthState()
-	// const { setUser } = useUserState()
-	const [isLoading, setIsLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
+	const [botLink, setBotLink] = useState<string | null>(null)
 	const [error, setError] = useState('')
 
 	const form = useForm<z.infer<typeof loginSchema>>({
@@ -32,37 +33,44 @@ const Login = () => {
 	})
 
 	const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-		setIsLoading(false)
+		setIsLoading(true) // Yuklash holatini boshlash
+
 		try {
 			const resPromise = loginRequest(values)
+
+			// toast.promise ni alohida boshqarish
 			toast.promise(resPromise, {
 				loading: 'Loading...',
 				success: res => {
 					if (res.state === 'success') {
 						setError('')
 						setTimeout(() => {
-							setIsLoading(true)
 							window.location.reload()
 						}, 1000)
 						return 'Login successfully!'
+					} else if (res.state === 'continue' && res.bot_link) {
+						setBotLink(res.bot_link)
+						return 'Please continue with the bot link.'
 					}
-					setIsLoading(true)
 					throw new Error('Unexpected response structure')
 				},
 				error: err => {
-					setIsLoading(true)
-					// Xato xabarini konsolga chop etish va ko‘rsatish
+					setIsLoading(false)
 					console.error('Error:', err)
 					const errorMessage = err.message || 'Something went wrong'
 					setError(errorMessage)
 					return errorMessage
 				},
 			})
-			setIsLoading(false)
 		} catch (error) {
 			const result = error as Error
 			setError(result.message)
 		}
+	}
+
+	const handeleBotLink = () => {
+		setIsLoading(false)
+		setBotLink(null)
 	}
 
 	return (
@@ -97,13 +105,31 @@ const Login = () => {
 				</Alert>
 			)}
 
+			{/* Agar foydalanuvchi Telegram bog‘lash kerak bo‘lsa, unga link ko‘rsatamiz */}
+			{botLink && (
+				<div className='bg-blue-500 text-white p-3	 mt-4 rounded-lg'>
+					<p>
+						Telegram orqali profilingizni bog‘lang so'ng qaytadan login qiling !
+						<a
+							href={botLink}
+							target='_blank'
+							rel='noopener noreferrer'
+							className='underline flex items-center'
+							onClick={() => handeleBotLink()}
+						>
+							<FaTelegramPlane className='mr-2' /> Telegram botga kirish
+						</a>
+					</p>
+				</div>
+			)}
+
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
 					className='space-y-8 mt-5 relative'
 				>
 					{/* FillLoading komponenti */}
-					{!isLoading && (
+					{isLoading && (
 						<div className='absolute inset-0 flex items-center justify-center z-10'>
 							<FillLoading />
 						</div>
@@ -119,7 +145,7 @@ const Login = () => {
 								<FormControl>
 									<Input
 										placeholder='example@gmail.com'
-										disabled={!isLoading}
+										disabled={isLoading}
 										{...field}
 										className='placeholder:text-white/75 text-white bg-transparent'
 									/>
@@ -140,7 +166,7 @@ const Login = () => {
 									<Input
 										type='password'
 										placeholder='****'
-										disabled={!isLoading}
+										disabled={isLoading}
 										{...field}
 										className='placeholder:text-white/75 text-white bg-transparent'
 									/>
@@ -154,7 +180,7 @@ const Login = () => {
 						<Button
 							type='submit'
 							className='h-12 w-full mt-2'
-							disabled={!isLoading}
+							disabled={isLoading}
 						>
 							Submit
 						</Button>
