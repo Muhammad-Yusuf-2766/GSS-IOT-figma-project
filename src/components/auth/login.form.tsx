@@ -109,7 +109,7 @@ const Login = () => {
 			{botLink && (
 				<div className='bg-blue-500 text-white p-3	 mt-4 rounded-lg'>
 					<p>
-						Telegram orqali profilingizni bog‘lang so'ng qaytadan login qiling !
+						로그인을 완료하려면 다음 텔레그램 링크를 클릭하세요!
 						<a
 							href={botLink}
 							target='_blank'
@@ -117,7 +117,7 @@ const Login = () => {
 							className='underline flex items-center'
 							onClick={() => handeleBotLink()}
 						>
-							<FaTelegramPlane className='mr-2' /> Telegram botga kirish
+							<FaTelegramPlane className='mr-2' /> 링크 클릭
 						</a>
 					</p>
 				</div>
