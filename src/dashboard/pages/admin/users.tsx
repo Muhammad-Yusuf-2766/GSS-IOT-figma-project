@@ -8,7 +8,7 @@ import { useUsersList } from '@/hooks/useUsersData'
 import { deleteUser, updateUserTypes } from '@/services/apiRequests'
 import { useUsersStore } from '@/stores/usersStore'
 import { IUpdateUserType } from '@/types/interfaces'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 
 type Thead = string
@@ -95,7 +95,8 @@ export default function UserTable() {
 							) : users && users.length > 0 ? (
 								<tbody className='bg-white divide-y divide-gray-200'>
 									{users.map(user => (
-										<>
+										// Bu React fragment div yoki boshqa html tag ishlatilmasligi va <> body </> ishlatilishi krak bo'lgan joyda ishlatiladi.
+										<React.Fragment key={user._id}>
 											<tr key={user._id} className='hover:bg-gray-50'>
 												<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 hidden md:table-cell'>
 													{user.user_name}
@@ -242,7 +243,7 @@ export default function UserTable() {
 													</td>
 												</tr>
 											)}
-										</>
+										</React.Fragment>
 									))}
 								</tbody>
 							) : (

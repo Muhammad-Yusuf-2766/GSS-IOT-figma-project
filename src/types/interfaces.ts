@@ -95,7 +95,7 @@ export interface IGateway {
 }
 
 export interface ICreateGateway {
-	serial_number: number
+	serial_number: string
 	nodes: string[]
 }
 

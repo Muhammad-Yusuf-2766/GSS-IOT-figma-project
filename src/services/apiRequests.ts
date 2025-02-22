@@ -309,11 +309,11 @@ export const createNodeRequest = async (nodes: ICreateNode[]) => {
 	}
 }
 
-export const createGatewayRequest = async (nodes: ICreateGateway) => {
+export const createGatewayRequest = async (gateway: ICreateGateway) => {
 	try {
 		const res = await axios.post(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-gateway`,
-			nodes,
+			gateway,
 			{
 				withCredentials: true,
 			}
@@ -478,6 +478,27 @@ export const fetchClients = async (): Promise<IClient[]> => {
 	}
 }
 
+export const deleteClient = async (clintId: string) => {
+	try {
+		const res = await axios.delete(
+			`${
+				import.meta.env.VITE_SERVER_BASE_URL
+			}/company/delete/client/${clintId}`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on deleting-Client: Undefined error'
+			)
+		}
+		return data
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
 export const fetchClientBuildings = async (clientId: string | undefined) => {
 	try {
 		const response = await axios.get(
@@ -495,6 +516,27 @@ export const fetchClientBuildings = async (clientId: string | undefined) => {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
 		)
+	}
+}
+
+export const deleteBuilding = async (buildngId: string) => {
+	try {
+		const res = await axios.delete(
+			`${
+				import.meta.env.VITE_SERVER_BASE_URL
+			}/company/delete/building/${buildngId}`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on deleting-bulding: Undefined error'
+			)
+		}
+		return data
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
 

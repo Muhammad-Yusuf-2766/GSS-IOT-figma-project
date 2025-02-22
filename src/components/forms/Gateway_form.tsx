@@ -50,6 +50,7 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 				serial_number: values.serial_number,
 				nodes: values.selected_nodes,
 			}
+			console.log(typeof values.serial_number, sendingData)
 
 			const resPromise = createGatewayRequest(sendingData)
 			toast.promise(resPromise, {
@@ -96,13 +97,10 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 								<FormLabel>게이트웨이 No.</FormLabel>
 								<FormControl>
 									<Input
-										type='number'
+										type='text'
 										{...field}
 										value={field.value ?? ''}
-										onChange={e => {
-											const num = parseFloat(e.target.value)
-											field.onChange(isNaN(num) ? '' : num)
-										}}
+										onChange={e => field.onChange(e.target.value)}
 										className='border-gray-700 focus:border-transparent'
 									/>
 								</FormControl>

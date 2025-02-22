@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 
 export const loginSchema = z.object({
 	user_email: z.string().email(),
@@ -37,7 +37,7 @@ export const addNodeSchema = z.object({
 })
 
 export const addGatewaychema = z.object({
-	serial_number: z.number(),
+	serial_number: string(),
 	startNumber: z.number(),
 	endNumber: z.number(),
 	selected_nodes: z.array(z.string()),

@@ -4,13 +4,25 @@ import ClientCard from '@/dashboard/components/shared-dash/ClientCard'
 import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
 import { useClients } from '@/hooks/useClientdata'
+import { deleteClient } from '@/services/apiRequests'
 import { ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { LuUser } from 'react-icons/lu'
-import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Clients = () => {
-	const { data, isLoading, error } = useClients()
+	const { data, isLoading, error, refetch } = useClients()
+
+	const handleDelete = async (id: string) => {
+		try {
+			const res = await deleteClient(id)
+			const info = `${res.state}-${res.message}`
+			toast.success(info)
+			refetch()
+		} catch (error) {
+			toast.error((error as Error).message || 'Error on deleting node status')
+		}
+	}
 
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '임대 현황',
@@ -45,17 +57,13 @@ const Clients = () => {
 					data &&
 					data.length > 0 &&
 					data.map(client => (
-						<Link
-							key={client._id}
-							to={`/admin/dashboard/clients/${client._id}/buildings`}
-						>
-							<ClientCard
-								client={{
-									...client,
-									client_buildings: client.client_buildings ?? [],
-								}}
-							/>
-						</Link>
+						<ClientCard
+							onDelete={handleDelete}
+							client={{
+								...client,
+								client_buildings: client.client_buildings ?? [],
+							}}
+						/>
 					))}
 			</div>
 		</div>

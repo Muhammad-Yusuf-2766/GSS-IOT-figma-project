@@ -27,21 +27,19 @@ const Navbar = () => {
 				{/* Desktop Menu */}
 				<div className='hidden md:flex w-2/3 items-center justify-between'>
 					{navLinks.map(nav => (
-						<>
-							<NavLink
-								key={nav.path}
-								to={nav.path}
-								className={({ isActive }) =>
-									`font-bold text-xl hover:underline underline-offset-8 decoration-[2px] ${
-										isActive
-											? 'underline underline-offset-4 decoration-[2px]'
-											: ''
-									}`
-								}
-							>
-								{nav.label}
-							</NavLink>
-						</>
+						<NavLink
+							key={nav.path}
+							to={nav.path}
+							className={({ isActive }) =>
+								`font-bold text-xl hover:underline underline-offset-8 decoration-[2px] ${
+									isActive
+										? 'underline underline-offset-4 decoration-[2px]'
+										: ''
+								}`
+							}
+						>
+							{nav.label}
+						</NavLink>
 					))}
 					<NavLink
 						className={({ isActive }) =>
