@@ -14,7 +14,7 @@ import { MdEdit, MdOutlineLocationCity } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 interface BuildingCardProps {
 	building: IBuilding
-	onDelete: (id: string) => void
+	onDelete?: (id: string) => void
 }
 
 const BuildingCard = ({ building, onDelete }: BuildingCardProps) => {
@@ -119,7 +119,9 @@ const BuildingCard = ({ building, onDelete }: BuildingCardProps) => {
 						onClick={() =>
 							confirm(
 								`이 ${building.building_name} ${building.building_num} 건물을 삭제 하시겠습니까?`
-							) && onDelete(building._id)
+							) &&
+							onDelete &&
+							onDelete(building._id)
 						}
 						className='flex items-center justify-center gap-x-3 hover:bg-blue-100 bg-blue-50 text-gray text-red-500'
 						aria-label='Delete client'

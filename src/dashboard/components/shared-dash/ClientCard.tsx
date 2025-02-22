@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ClientCard: React.FC<{
 	client: IClient
-	onDelete: (id: string) => void
+	onDelete?: (id: string) => void
 }> = ({ client, onDelete }) => {
 	const navigate = useNavigate()
 
@@ -71,7 +71,9 @@ const ClientCard: React.FC<{
 							onClick={() =>
 								confirm(
 									`이 ${client.client_name} 클라이언트를 삭제 하시겠습니까?`
-								) && onDelete(client._id)
+								) &&
+								onDelete &&
+								onDelete(client._id)
 							}
 							className='flex items-center justify-center gap-x-3 hover:bg-blue-100 bg-blue-50 text-gray text-red-500'
 							aria-label='Delete client'

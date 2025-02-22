@@ -63,10 +63,8 @@ const Buildings = () => {
 				client_buildings.length > 0 ? (
 					client_buildings.map((building: IBuilding) =>
 						building._id ? (
-							// <Link key={building._id} to={`${building._id}`}>
 							<BuildingCard onDelete={handleDelete} building={building} />
-						) : // </Link>
-						null
+						) : null
 					)
 				) : (
 					<h1 className='text-center text-red-600'>
