@@ -1,5 +1,6 @@
 'use client'
 
+import FillLoading from '@/components/shared/fill-laoding'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useBuildingNodes } from '@/hooks/useClientdata'
@@ -15,7 +16,7 @@ const socket = io(`${import.meta.env.VITE_SERVER_BASE_URL}`) // Backend server m
 const BuildingNodes = () => {
 	const { building, nodes, updateNode } = useBuildingNodesStore()
 	const { client } = useClientStore()
-	const [filteredNodes, setFilteredNodes] = useState(nodes)
+	const [filteredNodes, setFilteredNodes] = useState<INode[]>(nodes || [])
 	const { buildingId } = useParams()
 
 	if (!buildingId) {
@@ -27,7 +28,6 @@ const BuildingNodes = () => {
 	useEffect(() => {
 		const topic = `mqtt/building/${buildingId}`
 		socket.on(topic, (updatedNode: INode) => {
-			console.log('New MQTT Data:', updatedNode)
 			updateNode(updatedNode)
 		})
 
@@ -39,10 +39,6 @@ const BuildingNodes = () => {
 	useEffect(() => {
 		setFilteredNodes(nodes)
 	}, [nodes])
-
-	if (isLoading) {
-		return <div>Loading...</div>
-	}
 
 	const handleFilterChange = (filterOpenDoors: boolean) => {
 		if (filterOpenDoors) {
@@ -59,47 +55,46 @@ const BuildingNodes = () => {
 		let percentage
 
 		switch (true) {
-			case batteryLevel >= 42:
+			case batteryLevel >= 38:
 				color = 'bg-green-500'
 				percentage = '100%'
 				break
-			case batteryLevel >= 41:
+			case batteryLevel >= 37:
 				color = 'bg-green-500'
 				percentage = '84%'
 				break
-			case batteryLevel >= 40:
+			case batteryLevel >= 36:
 				color = 'bg-green-500'
 				percentage = '65%'
 				break
-			case batteryLevel >= 39:
+			case batteryLevel >= 35:
 				color = 'bg-blue-400'
 				percentage = '56%'
 				break
-			case batteryLevel >= 38:
+			case batteryLevel >= 34:
 				color = 'bg-green-400'
 				percentage = '50%'
 				break
-			case batteryLevel >= 37:
+			case batteryLevel >= 33:
 				color = 'bg-red-400'
 				percentage = '41%'
 				break
-			case batteryLevel >= 36:
+			case batteryLevel >= 32:
 				color = 'bg-red-400'
 				percentage = '35%'
 				break
-			case batteryLevel >= 35:
+			case batteryLevel >= 31:
 				color = 'bg-red-400'
 				percentage = '25%'
 				break
-			case batteryLevel >= 34:
+			case batteryLevel >= 30:
 				color = 'bg-red-400'
 				percentage = '20%'
 				break
-			case batteryLevel >= 30:
+			case batteryLevel >= 29:
 				color = 'bg-red-500'
 				percentage = '10%'
 				break
-
 			default:
 				color = 'bg-blue-400'
 				percentage = '100%'
@@ -109,12 +104,16 @@ const BuildingNodes = () => {
 	}
 	// ========== Battery percentage ============ //
 
+	if (isLoading) {
+		return <FillLoading />
+	}
+
 	return (
 		<div className='w-full md:p-5 mx-auto'>
 			<div className='space-y-6'>
 				<div className='text-center space-y-2'>
 					<h1 className='md:text-2xl text-lg md:font-bold font-semibold text-gray-700'>
-						{client?.client_name}, building-{building?.building_num}
+						{client?.client_name} building-{building?.building_num}
 					</h1>
 				</div>
 
@@ -126,7 +125,7 @@ const BuildingNodes = () => {
 				{/* Filtrlangan nodlarni ko'rsatish */}
 				<ScrollArea className='md:h-[530px] h-[74vh] w-full rounded-lg border border-slate-400'>
 					<div className='grid grid-cols-3  md:grid-cols-6 md:gap-4 gap-2 md:p-4 p-2'>
-						{filteredNodes.map(door => {
+						{filteredNodes?.map(door => {
 							const { color, percentage } = getBatteryIconAndPercentage(
 								door.betChk
 							)

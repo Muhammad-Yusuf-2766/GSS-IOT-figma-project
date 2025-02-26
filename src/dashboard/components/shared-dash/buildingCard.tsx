@@ -25,6 +25,10 @@ const BuildingCard = ({ building, onDelete }: BuildingCardProps) => {
 		navigate(`${building._id}`)
 	}
 
+	const handleEdit = () => {
+		alert(`이 기능이 아직 개발중입니다!`) // Formga yo'naltirish
+	}
+
 	const expirationDate = new Date(building.expiry_date)
 	const today = new Date()
 
@@ -110,6 +114,7 @@ const BuildingCard = ({ building, onDelete }: BuildingCardProps) => {
 				</Button>
 				<div className='flex gap-1'>
 					<Button
+						onClick={handleEdit}
 						className='flex items-center justify-center hover:bg-blue-100 bg-blue-50 gap-x-3 text-gray text-blue-500'
 						aria-label='Edit client'
 					>

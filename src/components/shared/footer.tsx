@@ -1,12 +1,10 @@
+import logo from '@/assets/GSS-logo.svg'
+
 const Footer = () => {
 	return (
 		<div className='w-full h-full md:flex items-center justify-between bg-blue-950 md:p-6 p-3 text-secondary'>
 			<div className=''>
-				<img
-					src='/src/assets/GSS-logo.svg'
-					alt='logo'
-					className='w-fit h-fit'
-				/>
+				<img src={logo} alt='logo' className='w-fit h-fit' />
 			</div>
 
 			<div className='md:mt-0 mt-5 border-b md:border-b-0'>

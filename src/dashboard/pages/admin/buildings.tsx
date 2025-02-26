@@ -34,6 +34,10 @@ const Buildings = () => {
 		icon: <BsBuildingsFill />,
 	}
 
+	if (isLoading) {
+		return <FillLoading />
+	}
+
 	return (
 		<div className='w-full h-full'>
 			<Header />
@@ -42,7 +46,7 @@ const Buildings = () => {
 			</div>
 
 			{/* Loading field */}
-			{isLoading && <FillLoading />}
+			{/* {isLoading && <FillLoading />} */}
 
 			{/* Error fielad */}
 			{error && (
@@ -57,13 +61,14 @@ const Buildings = () => {
 
 			{/* Data field */}
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto'>
-				{!isLoading &&
-				client_buildings &&
-				Array.isArray(client_buildings) &&
-				client_buildings.length > 0 ? (
+				{!isLoading && client_buildings && client_buildings.length > 0 ? (
 					client_buildings.map((building: IBuilding) =>
 						building._id ? (
-							<BuildingCard onDelete={handleDelete} building={building} />
+							<BuildingCard
+								key={building._id}
+								onDelete={handleDelete}
+								building={building}
+							/>
 						) : null
 					)
 				) : (

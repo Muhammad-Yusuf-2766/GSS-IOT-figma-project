@@ -55,33 +55,6 @@ export const members: IMember[] = [
 		description:
 			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
 	},
-	{
-		id: 4,
-		name: 'Yusuf',
-		role: 'Web-Developer',
-		image: Yusuf_dev,
-		position: { left: '500px', top: '100px' },
-		description:
-			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-	},
-	{
-		id: 5,
-		name: 'Kim Jye Hyun',
-		role: 'CEO manager',
-		image: Kim_manager,
-		position: { left: '250px', top: '50px' },
-		description:
-			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-	},
-	{
-		id: 6,
-		name: 'Kim Song Kang',
-		role: 'Professor & Director',
-		image: Kim_prof_img,
-		position: { left: '0', top: '0' },
-		description:
-			'Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.',
-	},
 ]
 
 export const serviceData: IHomeService[] = [

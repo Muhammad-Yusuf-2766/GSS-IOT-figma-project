@@ -58,6 +58,7 @@ const Clients = () => {
 					data.length > 0 &&
 					data.map(client => (
 						<ClientCard
+							key={client._id}
 							onDelete={handleDelete}
 							client={{
 								...client,

@@ -19,6 +19,14 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 		onFilterChange(isChecked) // Callback funksiyasini chaqirish
 	}
 
+	if ((nodes?.length ?? 0) <= 0) {
+		return (
+			<h1 className='w-full h-full flex justify-center mt-10 text-red-600 text-lg'>
+				이 건물의 노드를 못 찾았습니다 :(
+			</h1>
+		)
+	}
+
 	return (
 		<div className='w-full'>
 			<div className='w-full md:px-6 px-2 py-3 flex items-center justify-between gap-2 bg-blue-900 text-white mx-auto text-sm'>
