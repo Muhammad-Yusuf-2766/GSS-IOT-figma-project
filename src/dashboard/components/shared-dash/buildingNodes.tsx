@@ -55,37 +55,41 @@ const BuildingNodes = () => {
 		let percentage
 
 		switch (true) {
-			case batteryLevel >= 38:
-				color = 'bg-green-500'
+			case batteryLevel >= 39:
+				color = 'bg-blue-400'
 				percentage = '100%'
 				break
+			case batteryLevel >= 38:
+				color = 'bg-blue-400'
+				percentage = '87%'
+				break
 			case batteryLevel >= 37:
-				color = 'bg-green-500'
-				percentage = '84%'
+				color = 'bg-blue-400'
+				percentage = '74%'
 				break
 			case batteryLevel >= 36:
-				color = 'bg-green-500'
-				percentage = '65%'
+				color = 'bg-blue-400'
+				percentage = '68%'
 				break
 			case batteryLevel >= 35:
 				color = 'bg-blue-400'
-				percentage = '56%'
+				percentage = '55%'
 				break
 			case batteryLevel >= 34:
-				color = 'bg-green-400'
+				color = 'bg-blue-400'
 				percentage = '50%'
 				break
 			case batteryLevel >= 33:
-				color = 'bg-red-400'
-				percentage = '41%'
+				color = 'bg-blue-400'
+				percentage = '43%'
 				break
 			case batteryLevel >= 32:
-				color = 'bg-red-400'
-				percentage = '35%'
+				color = 'bg-blue-400'
+				percentage = '32%'
 				break
 			case batteryLevel >= 31:
 				color = 'bg-red-400'
-				percentage = '25%'
+				percentage = '27%'
 				break
 			case batteryLevel >= 30:
 				color = 'bg-red-400'
@@ -160,7 +164,7 @@ const BuildingNodes = () => {
 										{/* Battery check - 12v */}
 										<div className='w-full flex justify-center items-center md:space-x-2'>
 											<span className='text-[10px] '>12v:</span>
-											<div className='md:w-2/3 md:flex hidden w-full bg-gray-300 rounded-full md:h-3 h-1'>
+											<div className='md:w-2/3 md:flex hidden w-full bg-white rounded-full md:h-3 h-1'>
 												<div
 													className={`${color} h-full rounded-full`}
 													style={{ width: `${percentage}` }}

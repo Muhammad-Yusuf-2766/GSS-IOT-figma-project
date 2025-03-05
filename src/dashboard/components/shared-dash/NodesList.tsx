@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useNodesList } from '@/hooks/useProducts'
 import { deleteProduct, updateProductStatus } from '@/services/apiRequests'
 import { IUpdateProductStatus } from '@/types/interfaces'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 
 const tHead = [
@@ -40,6 +40,8 @@ const NodesList = () => {
 		}
 	}
 
+	const sortedNodes = data?.sort((a, b) => a.doorNum - b.doorNum)
+
 	return (
 		<div className='max-h-[calc(100vh-200px)] overflow-y-auto bg-white'>
 			<table className='w-full text-sm text-center text-gray-500 rounded-md'>
@@ -63,9 +65,9 @@ const NodesList = () => {
 					</tr>
 				</thead>
 				<tbody className='text-center'>
-					{data && data.length > 0 ? (
-						data.map(node => (
-							<>
+					{sortedNodes && sortedNodes.length > 0 ? (
+						sortedNodes.map(node => (
+							<React.Fragment key={node._id}>
 								<tr
 									key={node._id}
 									className='border border-gray-400 hover:bg-gray-100'
@@ -199,7 +201,7 @@ const NodesList = () => {
 										</td>
 									</tr>
 								)}
-							</>
+							</React.Fragment>
 						))
 					) : (
 						<tr>

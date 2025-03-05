@@ -5,13 +5,15 @@ import Header from '@/dashboard/components/shared-dash/Header'
 import TotalCountBox from '@/dashboard/components/shared-dash/TotalCount'
 import { useClients } from '@/hooks/useClientdata'
 import { deleteClient } from '@/services/apiRequests'
+import { useClientsSorte } from '@/stores/clientsStore'
 import { ITotalCountBoxProps } from '@/types/interfaces'
 import { AlertCircle } from 'lucide-react'
 import { LuUser } from 'react-icons/lu'
 import { toast } from 'sonner'
 
 const Clients = () => {
-	const { data, isLoading, error, refetch } = useClients()
+	const { isLoading, error, refetch } = useClients()
+	const { clients } = useClientsSorte()
 
 	const handleDelete = async (id: string) => {
 		try {
@@ -26,7 +28,7 @@ const Clients = () => {
 
 	const totalCountData: ITotalCountBoxProps = {
 		itemName: '임대 현황',
-		clients: data,
+		clients: clients,
 		icon: <LuUser />,
 	}
 
@@ -54,9 +56,9 @@ const Clients = () => {
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto'>
 				{/* Data field */}
 				{!isLoading &&
-					data &&
-					data.length > 0 &&
-					data.map(client => (
+					clients &&
+					clients.length > 0 &&
+					clients.map(client => (
 						<ClientCard
 							key={client._id}
 							onDelete={handleDelete}

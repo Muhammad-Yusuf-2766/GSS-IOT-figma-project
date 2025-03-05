@@ -38,8 +38,7 @@ export const addNodeSchema = z.object({
 
 export const addGatewaychema = z.object({
 	serial_number: string(),
-	startNumber: z.number(),
-	endNumber: z.number(),
+	nodes: z.string().min(1, 'Password must be at least 1 characters'),
 	selected_nodes: z.array(z.string()),
 })
 

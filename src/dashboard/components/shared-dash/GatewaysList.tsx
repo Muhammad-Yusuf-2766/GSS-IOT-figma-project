@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useGatewaysList } from '@/hooks/useProducts'
 import { deleteProduct, updateProductStatus } from '@/services/apiRequests'
 import { IUpdateProductStatus } from '@/types/interfaces'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 
 const tHead = ['게이트웨이 No.', '노드', '상태', '상태 변경', '삭제']
@@ -32,6 +32,12 @@ const GatewaysList = () => {
 		}
 	}
 
+	console.log(data)
+
+	const sortedGateways = data?.sort(
+		(a, b) => parseInt(a.serial_number, 10) - parseInt(b.serial_number, 10)
+	)
+
 	return (
 		<div className='max-h-[calc(100vh-200px)] overflow-y-auto bg-white'>
 			<table className='w-full text-sm text-center text-gray-500 rounded-md'>
@@ -55,10 +61,10 @@ const GatewaysList = () => {
 					</tr>
 				</thead>
 				<tbody className='text-center text-sm'>
-					{data &&
-						data.length > 0 &&
-						data.map(gateway => (
-							<>
+					{sortedGateways &&
+						sortedGateways.length > 0 &&
+						sortedGateways.map(gateway => (
+							<React.Fragment key={gateway._id}>
 								<tr
 									key={gateway._id}
 									className='border border-gray-400 hover:bg-gray-100'
@@ -182,7 +188,7 @@ const GatewaysList = () => {
 										</td>
 									</tr>
 								)}
-							</>
+							</React.Fragment>
 						))}
 				</tbody>
 			</table>

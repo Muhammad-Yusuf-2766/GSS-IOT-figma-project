@@ -29,35 +29,43 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 			selected_nodes: [],
 		},
 	})
-	const { startNumber, endNumber } = form.getValues()
+
 	const { setValue, watch } = form
 
 	// =============== Handle Node selection ============ //
-
 	const handleSelectedNodes = () => {
-		console.log(nodes)
+		const inputNodes = form.getValues().nodes || ''
+
+		// Vergul bilan ajratilgan raqamlarni massivga aylantiramiz
+		const nodeNumbers = inputNodes
+			.split(',')
+			.map(num => Number(num.trim()))
+			.filter(num => !isNaN(num)) // NaN bo'lganlarini olib tashlaymiz
+
+		// nodes ichidan mos keladigan node'larni topamiz
 		const selectedNodes = nodes
-			.filter(node => node.doorNum >= startNumber && node.doorNum <= endNumber)
+			.filter(node => nodeNumbers.includes(node.doorNum))
 			.map(node => node._id)
+
 		setValue('selected_nodes', selectedNodes, { shouldDirty: true })
 	}
 
-	// =============== Handle submit funtion ============ //
-
+	// =============== Handle submit function ============ //
 	const onSubmit = async (values: z.infer<typeof addGatewaychema>) => {
 		try {
 			const sendingData: ICreateGateway = {
 				serial_number: values.serial_number,
 				nodes: values.selected_nodes,
 			}
-			console.log(typeof values.serial_number, sendingData)
+
+			console.log(sendingData)
 
 			const resPromise = createGatewayRequest(sendingData)
 			toast.promise(resPromise, {
 				loading: 'Loading...',
 				success: res => {
 					setTimeout(() => {
-						form.reset({ startNumber: 0, endNumber: 0 })
+						form.reset({ nodes: '' })
 						refetch()
 					}, 1000)
 					return res.message
@@ -70,8 +78,6 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 			toast.error(error.message || 'Something went wrong :(')
 		}
 	}
-
-	// =============== Handle submit funtion ============ //
 
 	// Watch for changes to 'selected_nodes' to trigger re-render
 	const selectedNodes = watch('selected_nodes', [])
@@ -86,7 +92,7 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 					className='w-full h-auto p-4 pb-8 border bg-white rounded-lg shadow-lg shadow-gray-300 space-y-3'
 					onSubmit={form.handleSubmit(onSubmit)}
 				>
-					<h4 className='text-center  capitalize mb-4'>
+					<h4 className='text-center capitalize mb-4'>
 						스마트가드 게이트웨이 No.
 					</h4>
 					<FormField
@@ -108,21 +114,21 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 							</FormItem>
 						)}
 					/>
+
+					{/* Yangi nodes input */}
 					<FormField
 						control={form.control}
-						name='startNumber'
+						name='nodes'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>노드 시작넘버:</FormLabel>
+								<FormLabel>노드 번호 입력 (쉼표로 구분):</FormLabel>
 								<FormControl>
 									<Input
-										type='number'
+										type='text'
 										{...field}
 										value={field.value ?? ''}
-										onChange={e => {
-											const num = parseFloat(e.target.value)
-											field.onChange(isNaN(num) ? '' : num)
-										}}
+										onChange={e => field.onChange(e.target.value)}
+										placeholder='1,2,4,5'
 										className='border-gray-700 focus:border-transparent'
 									/>
 								</FormControl>
@@ -130,28 +136,7 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name='endNumber'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>노드 끝넘버:</FormLabel>
-								<FormControl>
-									<Input
-										type='number'
-										{...field}
-										value={field.value ?? ''}
-										onChange={e => {
-											const num = parseFloat(e.target.value)
-											field.onChange(isNaN(num) ? '' : num)
-										}}
-										className='border-gray-700 focus:border-transparent'
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+
 					<Button
 						type='button'
 						onClick={handleSelectedNodes}
@@ -159,6 +144,7 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 					>
 						노드 세트 확인
 					</Button>
+
 					<div className='mb-4'>
 						<label className='block text-[16px] '>노드 선택:</label>
 						{selectedNodes.length > 0 ? (
@@ -173,11 +159,8 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 							<p>선택된 노드 없음</p>
 						)}
 					</div>
-					<Button
-						type='submit'
-						// disabled={isLoading}
-						className='h-12 w-full mt-2'
-					>
+
+					<Button type='submit' className='h-12 w-full mt-2'>
 						게이트웨이 생성
 					</Button>
 				</form>
