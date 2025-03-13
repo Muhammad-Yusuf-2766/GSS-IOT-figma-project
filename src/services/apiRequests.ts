@@ -381,6 +381,28 @@ export const deleteProduct = async (deleteData: IUpdateProductStatus) => {
 	}
 }
 
+export const NodePositionRequest = async (FormData: FormData) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/set-node-position`,
+			FormData,
+			{
+				withCredentials: true,
+			}
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on node-positioning: Undefined error'
+			)
+		}
+		return data
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
 //  ============= PRODUCT related requests ============ //
 
 //  ============= CLIENT related requests ============ //

@@ -1,8 +1,14 @@
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
+import { NodePositionRequest } from '@/services/apiRequests'
+import { INodePositionFile } from '@/types/fileTypes'
 import { INode } from '@/types/interfaces'
 import { useRef, useState } from 'react'
 import { HiMiniSquares2X2 } from 'react-icons/hi2'
+import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
+import * as XLSX from 'xlsx'
 
 interface IProps {
 	nodes: INode[]
@@ -10,9 +16,75 @@ interface IProps {
 }
 
 const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
-	// const [fileData, setFileData] = useState([])
-	const fileInputRef = useRef(null) // Fayl input uchun ref
+	const [fileData, setFileData] = useState<INodePositionFile[]>([])
+	const [file, setFile] = useState<File | null>(null)
+	const { buildingId } = useParams<{ buildingId: string }>()
+	const fileInputRef = useRef<HTMLInputElement>(null) // Fayl input uchun ref
 	const [filterOpenDoors, setFilterOpenDoors] = useState(false)
+
+	const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (!file) return
+
+		setFile(file)
+
+		const reader = new FileReader()
+
+		reader.onload = event => {
+			const data = new Uint8Array(event.target?.result as ArrayBuffer)
+			const workbook = XLSX.read(data, { type: 'array' })
+
+			// 1-chi varaqni o'qish (sheet)
+			const sheetName = workbook.SheetNames[0]
+			const worksheet = workbook.Sheets[sheetName]
+
+			// Excelni JSON formatiga o'girish
+			const jsonData: INodePositionFile[] =
+				XLSX.utils.sheet_to_json<INodePositionFile>(worksheet)
+
+			// `nodeNum` ni number ga aylantirish
+			const cleanedData = jsonData.map(row => ({
+				...row,
+				nodeNum: Number(row.nodeNum), // Agar number emas bo'lsa avtomatik numberga o‘tkazadi
+			}))
+
+			console.log('ParsedData:', cleanedData)
+			setFileData(cleanedData)
+		}
+
+		reader.readAsArrayBuffer(file)
+	}
+
+	const handleNodePositionRequest = async () => {
+		if (!file || fileData.length === 0) {
+			alert('Fayl tanlang yoki ma`lumot to`ldirilmagan!')
+			return
+		}
+		const formData: FormData = new FormData()
+		formData.append('file', file)
+		formData.append('buildingId', buildingId ?? '')
+		formData.append('nodesPosition', JSON.stringify(fileData))
+
+		const promise = NodePositionRequest(formData)
+		toast.promise(promise, {
+			loading: 'Saving positions...',
+			success: response => {
+				const positionedNodes = response
+				if (positionedNodes.state === 'success') {
+					setTimeout(() => {
+						setFileData([]) // FileData-ni bo'shatamiz
+						if (fileInputRef.current) fileInputRef.current.value = ''
+					}, 1000)
+					return positionedNodes.message
+				} else {
+					throw new Error(positionedNodes.message)
+				}
+			},
+			error: error => {
+				return error.message || 'Something went wrong!'
+			},
+		})
+	}
 
 	const handleCheckboxChange = (isChecked: boolean) => {
 		setFilterOpenDoors(isChecked)
@@ -64,8 +136,8 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 						ref={fileInputRef} // Ref orqali fayl inputni ulaymiz
 						className='w-[220px] rounded-md flex items-center hover:underline underline-offset-4 duration-150'
 						type='file'
-						accept='.csv'
-						// onChange={handleFileUpload}
+						accept='.xlsx, .xls'
+						onChange={handleFileUpload}
 					/>
 				</div>
 			</div>
@@ -109,6 +181,50 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 					</button>
 				</>
 			)} */}
+
+			{fileData.length > 0 && (
+				<div className=''>
+					{/* Header faqat bir marta ko'rsatiladi */}
+					<table className='table-auto border-collapse border border-gray-400 w-full text-gray-700'>
+						<thead>
+							<tr>
+								{Object.keys(fileData[0]).map((key, idx) => (
+									<th key={idx} className='bg-gray-400 py-2 text-center border'>
+										{key}:
+									</th>
+								))}
+							</tr>
+						</thead>
+					</table>
+
+					{/* Ma'lumotlarni ikkita qator qilib grid bilan joylashtiramiz */}
+					<div className='grid md:grid-cols-4 gap-4 mt-2'>
+						{fileData.map((row, index) => (
+							<table
+								key={index}
+								className='table-auto border-collapse border border-gray-400 text-gray-700'
+							>
+								<tbody>
+									<tr>
+										{Object.values(row).map((value, idx) => (
+											<td
+												key={idx}
+												className='w-1/2 border border-gray-400 p-1 bg-white text-center'
+											>
+												{value || 'N/A'}
+											</td>
+										))}
+									</tr>
+								</tbody>
+							</table>
+						))}
+					</div>
+
+					<Button className='mt-3' onClick={() => handleNodePositionRequest()}>
+						노드 위치 설정
+					</Button>
+				</div>
+			)}
 		</div>
 	)
 }

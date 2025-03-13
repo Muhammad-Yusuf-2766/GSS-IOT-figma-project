@@ -142,18 +142,20 @@ const BuildingNodes = () => {
 											: 'bg-[#1e3a8a] text-white '
 									}`}
 								>
-									<CardContent className='md:p-6 p-2 text-center space-y-1 md:text-xl text-sm relative'>
+									<CardContent className='md:p-4 p-1 text-center space-y-1 md:text-xl text-sm relative'>
 										<p className='md:w-7 md:h-7 w-5 h-5 flex justify-center items-center rounded-full bg-white border-blue-800 border text-blue-700 absolute -top-1 -left-1 text-sm'>
 											{door.doorNum}
 										</p>
 										{/* <div className='flex items-center gap-2 text-sm bg-gray-300 p-1 rounded-md mb-2'>
 											<p className='text-gray-700'>위치: {door.position}</p>
 										</div> */}
-										<div className=''>{door.doorChk ? '열림' : '닫힘'}</div>
+										<div className='md:text-lg'>
+											{door.doorChk ? '열림' : '닫힘'}
+										</div>
 										{/* Battery check - 3.7v */}
 										<div className='w-full flex justify-center items-center md:space-x-2'>
 											<span className='text-[10px] '>3.7v:</span>
-											<div className='md:w-2/3 md:flex hidden w-full bg-white rounded-full md:h-3 h-1'>
+											<div className='md:w-2/3 md:flex hidden w-full bg-white rounded-full md:h-2 h-1'>
 												<div
 													className={`${color} h-full rounded-full`}
 													style={{ width: `${percentage}` }}
@@ -164,7 +166,7 @@ const BuildingNodes = () => {
 										{/* Battery check - 12v */}
 										<div className='w-full flex justify-center items-center md:space-x-2'>
 											<span className='text-[10px] '>12v:</span>
-											<div className='md:w-2/3 md:flex hidden w-full bg-white rounded-full md:h-3 h-1'>
+											<div className='md:w-2/3 md:flex hidden w-full bg-white rounded-full md:h-2 h-1'>
 												<div
 													className={`${color} h-full rounded-full`}
 													style={{ width: `${percentage}` }}
@@ -172,6 +174,13 @@ const BuildingNodes = () => {
 											</div>
 											<span className='text-[10px] '>{percentage}</span>
 										</div>
+
+										{/* Position */}
+										{door.position !== '' && (
+											<p className='md:py-1 md:text-sm text-[10px] bg-blue-500 rounded-md font-semibold'>
+												{door.position}
+											</p>
+										)}
 									</CardContent>
 								</Card>
 							)
