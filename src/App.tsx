@@ -9,7 +9,7 @@ import ClientTypeBuildings from './dashboard/pages/user/buildings'
 import ClientBossClientsPage from './dashboard/pages/user/clients'
 import ClientMainPage from './dashboard/pages/user/hero'
 import { AdminDashboard, ClientDashboard } from './pages/dashboard'
-import OrientationDisplay from './test/orientation'
+// import OrientationDisplay from './test/orientation'
 
 // Lazy loading components
 const MembersDetail = lazy(() => import('./components/pages.comp/memberDetail'))
@@ -69,7 +69,7 @@ const App = () => {
 							</ProtectedRoute>
 						}
 					>
-						<Route path='orientation' element={<OrientationDisplay />} />
+						{/* <Route path='orientation' element={<OrientationDisplay />} /> */}
 						<Route path='' element={<MainPage />} />
 						<Route path='active-clients' element={<ActiveClientsPage />} />
 						<Route path='add-product' element={<AddProduct />} />
