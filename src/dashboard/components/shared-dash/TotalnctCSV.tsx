@@ -3,7 +3,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 import { NodePositionRequest } from '@/services/apiRequests'
 import { INodePositionFile } from '@/types/fileTypes'
-import { INode } from '@/types/interfaces'
+import { IBuilding, INode } from '@/types/interfaces'
+import { DownloadIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { HiMiniSquares2X2 } from 'react-icons/hi2'
 import { useParams } from 'react-router-dom'
@@ -13,20 +14,24 @@ import * as XLSX from 'xlsx'
 interface IProps {
 	nodes: INode[]
 	onFilterChange: (filterOpenDoors: boolean) => void // Callback
+	building?: IBuilding
 }
 
-const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
+const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 	const [fileData, setFileData] = useState<INodePositionFile[]>([])
 	const [file, setFile] = useState<File | null>(null)
 	const { buildingId } = useParams<{ buildingId: string }>()
 	const fileInputRef = useRef<HTMLInputElement>(null) // Fayl input uchun ref
 	const [filterOpenDoors, setFilterOpenDoors] = useState(false)
+	const [fileName, setFileName] = useState('파일 선택') // "파일 선택" - "Choose File" degani
+	const [isOpen, setIsOpen] = useState(false)
 
 	const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0]
 		if (!file) return
 
 		setFile(file)
+		setFileName(file.name)
 
 		const reader = new FileReader()
 
@@ -130,58 +135,52 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 				</div>
 
 				<div className='md:flex hidden justify-center items-center gap-3'>
-					<label htmlFor='nodesFile'>노드 위치 CSV 파일 업로드:</label>
+					<label
+						htmlFor='nodesFile'
+						className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
+					>
+						{fileName}
+					</label>
+
+					{/* Yashirin file input */}
 					<input
 						id='nodesFile'
-						ref={fileInputRef} // Ref orqali fayl inputni ulaymiz
-						className='w-[220px] rounded-md flex items-center hover:underline underline-offset-4 duration-150'
+						ref={fileInputRef}
 						type='file'
 						accept='.xlsx, .xls'
+						className='hidden'
 						onChange={handleFileUpload}
 					/>
 				</div>
+
+				<div className='flex justify-center items-center gap-3'>
+					<button
+						className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
+						onClick={() => setIsOpen(true)}
+					>
+						도면 보기
+					</button>
+					{building?.nodes_position_file && (
+						<a
+							href={`/exels/${building.nodes_position_file}`} // ✅ Fayl nomini to‘g‘ri encode qilish
+							download
+							className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
+						>
+							위치 파일 <DownloadIcon size={18} />
+						</a>
+					)}
+				</div>
+				{/* Modal ko‘rinadi */}
+				{isOpen && (
+					<ImageModal
+						imageUrl='/src/assets/도면.png'
+						buildingName={building?.building_name} // ✅ Rasm URL'sini to‘g‘ri ko‘rsatish kerak
+						onClose={() => setIsOpen(false)}
+					/>
+				)}
 			</div>
 
-			{/* CSV file data viewing in table */}
-
-			{/* {fileData.length > 0 && (
-				<>
-					<table className='table-auto border-collapse border border-gray-400 mt-4 text-gray-700'>
-						<thead>
-							<tr>
-								{Object.keys(fileData[0]).map((key, index) => (
-									<th
-										key={index}
-										className='bg-gray-400 border border-gray-400 px-4 py-2'
-									>
-										{key}:
-									</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{fileData.map((row, index) => (
-								<tr key={index}>
-									{Object.values(row).map((value, idx) => (
-										<td
-											key={idx}
-											className='border border-gray-400 px-4 py-2 bg-white'
-										>
-										</td>
-									))}
-								</tr>
-							))}
-						</tbody>
-					</table>
-					<button
-						className='py-2 px-3 w-fit h-auto bg-indigo-500 text-white text-mg rounded-md mt-3'
-						onClick={() => SetPostionRequest(fileData)}
-					>
-						노드 위치 설정
-					</button>
-				</>
-			)} */}
-
+			{/* xlsx file data viewing in table */}
 			{fileData.length > 0 && (
 				<div className=''>
 					{/* Header faqat bir marta ko'rsatiladi */}
@@ -230,3 +229,34 @@ const TotalcntCsv = ({ nodes, onFilterChange }: IProps) => {
 }
 
 export default TotalcntCsv
+
+const ImageModal = ({
+	imageUrl,
+	onClose,
+	buildingName,
+}: {
+	imageUrl: string
+	onClose: () => void
+	buildingName?: string
+}) => {
+	return (
+		<div className='fixed inset-0 bg-black/75 flex justify-center items-center z-50'>
+			<div className='relative w-[90%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center gap-y-3 text-gray-700'>
+				<h1 className='md:text-2xl'>
+					{buildingName} 도면이다. 도면을 통해서 노드 위치를 파악할수 있다.
+				</h1>
+				<img
+					src={imageUrl}
+					alt='도면 보기'
+					className='w-[80%] h-[80%] rounded-lg object-cover border border-black'
+				/>
+				<button
+					onClick={onClose}
+					className='absolute top-2 right-2 bg-gray-900/40 text-white px-3 py-2 rounded-full hover:bg-gray-700 transition'
+				>
+					✕
+				</button>
+			</div>
+		</div>
+	)
+}

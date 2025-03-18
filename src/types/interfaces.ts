@@ -109,6 +109,7 @@ export interface IBuilding {
 	permit_date: string
 	expiry_date: string
 	building_status: boolean
+	nodes_position_file: string
 }
 export interface ICreateBuilding {
 	building_name: string

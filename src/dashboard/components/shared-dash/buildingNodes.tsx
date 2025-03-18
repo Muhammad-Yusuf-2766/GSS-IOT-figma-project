@@ -123,13 +123,17 @@ const BuildingNodes = () => {
 
 				{/* TotalcntCsv komponenti */}
 				<div className='w-full'>
-					<TotalcntCsv nodes={nodes} onFilterChange={handleFilterChange} />
+					<TotalcntCsv
+						nodes={nodes}
+						onFilterChange={handleFilterChange}
+						building={building || undefined}
+					/>
 				</div>
 
 				{/* Filtrlangan nodlarni ko'rsatish */}
 				<ScrollArea className='md:h-[530px] h-[74vh] w-full rounded-lg border border-slate-400'>
 					<div className='grid grid-cols-3  md:grid-cols-6 md:gap-4 gap-2 md:p-4 p-2'>
-						{filteredNodes?.map(door => {
+						{filteredNodes?.map((door, index) => {
 							const { color, percentage } = getBatteryIconAndPercentage(
 								door.betChk
 							)
@@ -144,13 +148,10 @@ const BuildingNodes = () => {
 								>
 									<CardContent className='md:p-4 p-1 text-center space-y-1 md:text-xl text-sm relative'>
 										<p className='md:w-7 md:h-7 w-5 h-5 flex justify-center items-center rounded-full bg-white border-blue-800 border text-blue-700 absolute -top-1 -left-1 text-sm'>
-											{door.doorNum}
+											{index + 1}
 										</p>
-										{/* <div className='flex items-center gap-2 text-sm bg-gray-300 p-1 rounded-md mb-2'>
-											<p className='text-gray-700'>위치: {door.position}</p>
-										</div> */}
 										<div className='md:text-lg'>
-											{door.doorChk ? '열림' : '닫힘'}
+											{door.doorNum}-{door.doorChk ? '열림' : '닫힘'}
 										</div>
 										{/* Battery check - 3.7v */}
 										<div className='w-full flex justify-center items-center md:space-x-2'>
