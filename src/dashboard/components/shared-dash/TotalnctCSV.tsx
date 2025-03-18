@@ -1,3 +1,4 @@
+import modalImg from '@/assets/도면.png'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
@@ -173,7 +174,7 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 				{/* Modal ko‘rinadi */}
 				{isOpen && (
 					<ImageModal
-						imageUrl='/src/assets/도면.png'
+						imageUrl={modalImg}
 						buildingName={building?.building_name} // ✅ Rasm URL'sini to‘g‘ri ko‘rsatish kerak
 						onClose={() => setIsOpen(false)}
 					/>
