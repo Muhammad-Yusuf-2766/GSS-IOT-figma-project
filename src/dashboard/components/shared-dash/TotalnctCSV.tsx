@@ -163,7 +163,9 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 					</button>
 					{building?.nodes_position_file && (
 						<a
-							href={`/exels/${building.nodes_position_file}`} // ✅ Fayl nomini to‘g‘ri encode qilish
+							href={`${
+								import.meta.env.VITE_SERVER_BASE_URL
+							}/exels/${encodeURIComponent(building.nodes_position_file)}`} // 🔥 Fayl nomini to‘g‘ri kodlash
 							download
 							className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
 						>
