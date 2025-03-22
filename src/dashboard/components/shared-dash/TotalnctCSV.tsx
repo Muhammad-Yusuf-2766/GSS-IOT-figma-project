@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { NodePositionRequest } from '@/services/apiRequests'
 import { INodePositionFile } from '@/types/fileTypes'
 import { IBuilding, INode } from '@/types/interfaces'
+import axios from 'axios'
 import { DownloadIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { HiMiniSquares2X2 } from 'react-icons/hi2'
@@ -16,6 +17,10 @@ interface IProps {
 	nodes: INode[]
 	onFilterChange: (filterOpenDoors: boolean) => void // Callback
 	building?: IBuilding
+}
+
+interface IProps2 {
+	buildingId?: string
 }
 
 const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
@@ -97,6 +102,13 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 		onFilterChange(isChecked) // Callback funksiyasini chaqirish
 	}
 
+	const clearFile = () => {
+		setFileName('파일 선택')
+		setFile(null)
+		setFileData([])
+		if (fileInputRef.current) fileInputRef.current.value = ''
+	}
+
 	if ((nodes?.length ?? 0) <= 0) {
 		return (
 			<h1 className='w-full h-full flex justify-center mt-10 text-red-600 text-lg'>
@@ -108,11 +120,13 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 	return (
 		<div className='w-full'>
 			<div className='w-full md:px-6 px-2 py-3 flex items-center justify-between gap-2 bg-blue-900 text-white mx-auto text-sm'>
+				{/* Total nodes number field */}
 				<div className='flex items-center gap-3'>
 					<HiMiniSquares2X2 className='md:text-[30px] text-[20px]' />
 					<span>총 노드 수: {nodes.length}</span>
 				</div>
 
+				{/* Open doors field */}
 				<div
 					className={`px-2 flex items-center ${cn(
 						nodes.filter(node => node.doorChk === 1).length > 0
@@ -125,6 +139,7 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 					{nodes.filter(node => node.doorChk === 1).length}
 				</div>
 
+				{/* Filtering field */}
 				<div className='flex justify-center items-center gap-3'>
 					<Checkbox
 						id='terms'
@@ -135,13 +150,24 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 					<label htmlFor='terms'>열림 문만 보기</label>
 				</div>
 
-				<div className='md:flex hidden justify-center items-center gap-3'>
+				{/* Nodes-position exel-file upload field */}
+				<div className='md:flex hidden justify-center items-center gap-2'>
 					<label
 						htmlFor='nodesFile'
-						className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
+						className='flex px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
 					>
-						{fileName}
+						{fileName.slice(0, 10)}
+						{fileName !== '파일 선택' && '...'}
 					</label>
+					{fileName !== '파일 선택' && (
+						<button
+							type='button'
+							onClick={clearFile}
+							className='bg-red-500/70 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md hover:bg-red-500 transition text-[15px]'
+						>
+							✕
+						</button>
+					)}
 
 					{/* Yashirin file input */}
 					<input
@@ -154,6 +180,7 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 					/>
 				</div>
 
+				{/* Floor-plan & Exel-file download buttons field */}
 				<div className='flex justify-center items-center gap-3'>
 					<button
 						className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
@@ -173,7 +200,8 @@ const TotalcntCsv = ({ nodes, onFilterChange, building }: IProps) => {
 						</a>
 					)}
 				</div>
-				{/* Modal ko‘rinadi */}
+
+				{/* Modal image field */}
 				{isOpen && (
 					<ImageModal
 						imageUrl={modalImg}
@@ -259,6 +287,52 @@ const ImageModal = ({
 				>
 					✕
 				</button>
+			</div>
+		</div>
+	)
+}
+
+export const NodesMultipleButtonsField = ({ buildingId }: IProps2) => {
+	const handleDownload = async () => {
+		try {
+			// Backend API'ga so‘rov yuborish
+			const response = await axios.get(
+				`${
+					import.meta.env.VITE_SERVER_BASE_URL
+				}/product/download-nodes-history`,
+				{
+					params: {
+						buildingId, // Params orqali yuborish
+					},
+					responseType: 'blob', // Javobni `blob` formatida olish
+				}
+			)
+
+			// Blob orqali URL yaratish
+			const url = window.URL.createObjectURL(new Blob([response.data]))
+			const a = document.createElement('a')
+			a.href = url
+			a.download = 'building-nodes-history.xlsx' // Fayl nomi
+			document.body.appendChild(a)
+			a.click() // Faylni avtomatik yuklab olish
+			document.body.removeChild(a)
+		} catch (error) {
+			console.error('Failed to download file:', error)
+		}
+	}
+	return (
+		<div className='w-full mt-1'>
+			<div className='w-full md:px-6 px-2 py-3 flex items-center justify-between gap-2 bg-blue-900 text-white mx-auto text-sm'>
+				{/* Floor-plan & Exel-file download buttons field */}
+				<div className='flex justify-center items-center gap-3'>
+					<label htmlFor=''>현장 노드 내역 다운로드</label>
+					<button
+						className='flex gap-x-2 px-3 border border-white/60 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition'
+						onClick={handleDownload}
+					>
+						다운로드
+					</button>
+				</div>
 			</div>
 		</div>
 	)

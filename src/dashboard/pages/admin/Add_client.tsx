@@ -40,12 +40,11 @@ const AddClient = () => {
 	}
 
 	if (isLoading) return <p>Loading...</p>
-	// if (isError) return <p>Error loading data</p>
 
 	return (
 		<div className='w-full h-full flex flex-col justify-between'>
 			<Header />
-			<div className='w-full h-full md:flex justify-center md:items-start mt-10 gap-3 p-3 pb-6 md:space-y-0 space-y-5'>
+			<div className='w-full h-full md:flex justify-center md:items-start py-5 gap-3 md:space-y-0 space-y-5'>
 				<BuildingForm gateways={gateways} users={users} refetch={refetchAll} />
 				<ClientForm buildings={builidngs} users={users} refetch={refetch} />
 			</div>

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { INode } from '../../../types/interfaces'
-import TotalcntCsv from './TotalnctCSV'
+import TotalcntCsv, { NodesMultipleButtonsField } from './TotalnctCSV'
 const socket = io(`${import.meta.env.VITE_SERVER_BASE_URL}`) // Backend server manzilini o'zgartiring
 
 const BuildingNodes = () => {
@@ -128,6 +128,7 @@ const BuildingNodes = () => {
 						onFilterChange={handleFilterChange}
 						building={building || undefined}
 					/>
+					<NodesMultipleButtonsField buildingId={buildingId} />
 				</div>
 
 				{/* Filtrlangan nodlarni ko'rsatish */}

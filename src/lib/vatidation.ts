@@ -53,6 +53,12 @@ export const addBuildingSchema = z
 		users: z.array(z.string()).optional(),
 		permit_date: z.string(),
 		expiry_date: z.string(),
+		floorplan_image: z
+			.instanceof(File)
+			.refine(file => file.type.startsWith('image/'), {
+				message: '파일은 이미지 형식이어야 합니다.',
+			})
+			.optional(),
 	})
 	.refine(data => new Date(data.permit_date) < new Date(data.expiry_date), {
 		message: '임대 날짜는 만료 날짜보다 이전이어야 합니다.',

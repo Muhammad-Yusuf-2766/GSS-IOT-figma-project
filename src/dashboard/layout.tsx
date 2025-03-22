@@ -19,7 +19,7 @@ export const AdminLayout = () => {
 							<div className='h-screen md:w-52 w-10'>
 								<SidebarAdmin />
 							</div>
-							<div className='w-full h-screen  flex justify-center items-center px-3'>
+							<div className='w-full min-h-screen flex justify-center items-center px-3'>
 								<Outlet />
 							</div>
 						</>
@@ -55,7 +55,7 @@ export const ClientLayout = () => {
 					<div className='h-screen md:w-52 w-10'>
 						<SidebarClient />
 					</div>
-					<div className='w-full h-screen  flex justify-center items-center px-3'>
+					<div className='w-full h-full  flex justify-center items-center px-3'>
 						<Outlet />
 					</div>
 				</>

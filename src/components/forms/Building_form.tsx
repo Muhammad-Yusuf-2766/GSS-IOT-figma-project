@@ -3,19 +3,12 @@ import { addBuildingSchema } from '@/lib/vatidation'
 import { createBuildingRequest } from '@/services/apiRequests'
 import { IGateway, IUser } from '@/types/interfaces'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '../ui/button'
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 
 interface BuildingFormProps {
@@ -30,16 +23,18 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 	const [selectedGateways, setSelectedGateways] = useState<string[]>([])
 	const [selectedUsers, setSelectedUsers] = useState<string[]>([])
 	const [error, setError] = useState('')
+	const [preview, setPreview] = useState<string | null>(null)
+	const inputRef = useRef<HTMLInputElement>(null)
 
 	const form = useForm<z.infer<typeof addBuildingSchema>>({
 		resolver: zodResolver(addBuildingSchema),
 		defaultValues: {
 			building_name: '',
 			building_addr: '',
-			permit_date: '',
-			expiry_date: '',
 			gateway_sets: [], // yangi default values
 			users: [],
+			permit_date: '',
+			expiry_date: '',
 		},
 	})
 
@@ -97,8 +92,9 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 			toast.error(error.message || 'Something went wrong :(')
 		}
 	}
+
 	return (
-		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-500'>
+		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-700'>
 			<h1 className='leading-none md:text-3xl text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
 				현장 추가생성
 			</h1>
@@ -122,7 +118,7 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 										className='border-gray-400 focus:border-transparent'
 									/>
 								</FormControl>
-								<FormMessage />
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
@@ -146,7 +142,7 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 										className='border-gray-700 focus:border-transparent'
 									/>
 								</FormControl>
-								<FormMessage />
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
@@ -166,7 +162,7 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 										className='border-gray-400 focus:border-transparent'
 									/>
 								</FormControl>
-								<FormMessage />
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
@@ -230,7 +226,7 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 															<FormLabel>
 																게이트웨이: {gw.serial_number}
 															</FormLabel>
-															<FormMessage />
+															{/* <FormMessage /> */}
 														</FormItem>
 													)}
 												/>
@@ -298,45 +294,104 @@ const BuildingForm = ({ gateways, users, refetch }: BuildingFormProps) => {
 						</div>
 					</div>
 
-					{/* Permit Date */}
+					{/* Date */}
+					<div className='md:flex justify-start items-center gap-x-5 mb-4'>
+						{/* Permit Date */}
+						<FormField
+							control={form.control}
+							name='permit_date'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>임대일.</FormLabel>
+									<FormControl>
+										<Input
+											type='date'
+											// disabled={isLoading}
+											{...field}
+											className='border-gray-400 focus:border-transparent'
+										/>
+									</FormControl>
+									{/* <FormMessage /> */}
+								</FormItem>
+							)}
+						/>
+
+						{/* Expiry Date */}
+						<FormField
+							control={form.control}
+							name='expiry_date'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>만료일.</FormLabel>
+									<FormControl>
+										<Input
+											type='date'
+											// disabled={isLoading}
+											{...field}
+											className='border-gray-400 focus:border-transparent'
+										/>
+									</FormControl>
+									{/* <FormMessage /> */}
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					{/* Floor-plan IMG field */}
 					<FormField
 						control={form.control}
-						name='permit_date'
+						name='floorplan_image'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>임대일.</FormLabel>
-								<FormControl>
-									<Input
-										type='date'
-										// disabled={isLoading}
-										{...field}
-										className='border-gray-400 focus:border-transparent w-fit'
-									/>
-								</FormControl>
-								<FormMessage />
+								<FormLabel>현장 도면 업로드</FormLabel>
+								<div className='flex items-start gap-4'>
+									<FormControl>
+										<Input
+											type='file'
+											accept='image/*'
+											ref={inputRef}
+											onChange={e => {
+												const file = e.target.files?.[0]
+												field.onChange(file) // Faylni form state'ga yuklash
+												if (file) {
+													const previewUrl = URL.createObjectURL(file)
+													setPreview(previewUrl)
+												} else {
+													setPreview(null)
+												}
+											}}
+											className='border-gray-400 md:w-1/2'
+										/>
+									</FormControl>
+
+									{preview && (
+										<div className='relative'>
+											<img
+												src={preview}
+												alt='Preview'
+												className=' h-24 object-cover border rounded'
+											/>
+											<button
+												type='button'
+												onClick={() => {
+													setPreview(null)
+													field.onChange(undefined) // Form state tozalash
+													if (inputRef.current) {
+														inputRef.current.value = '' // 🔥 inputni tozalash
+													}
+												}}
+												className='absolute -top-4 -right-4 bg-gray-900/60 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md hover:bg-gray-800 transition text-[15px]'
+											>
+												✕
+											</button>
+										</div>
+									)}
+								</div>
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
 
-					{/* Expiry Date */}
-					<FormField
-						control={form.control}
-						name='expiry_date'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>만료일.</FormLabel>
-								<FormControl>
-									<Input
-										type='date'
-										// disabled={isLoading}
-										{...field}
-										className='border-gray-400 focus:border-transparent w-fit'
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 					{/* Submit Button */}
 					<Button className='mt-5 py-5 mx-auto w-1/3' type='submit'>
 						제출
