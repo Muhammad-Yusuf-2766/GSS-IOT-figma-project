@@ -8,6 +8,7 @@ import ClientBuildingNodes from './dashboard/pages/user/buildingNodes'
 import ClientTypeBuildings from './dashboard/pages/user/buildings'
 import ClientBossClientsPage from './dashboard/pages/user/clients'
 import ClientMainPage from './dashboard/pages/user/hero'
+import { ChartByDateFilters } from './dashboard/pages/user/lineChart'
 import { AdminDashboard, ClientDashboard } from './pages/dashboard'
 // import OrientationDisplay from './test/orientation'
 
@@ -74,6 +75,7 @@ const App = () => {
 						<Route path='active-clients' element={<ActiveClientsPage />} />
 						<Route path='add-product' element={<AddProduct />} />
 						<Route path='add-client' element={<AddClient />} />
+						<Route path='statistics' element={<ChartByDateFilters />} />
 						<Route path='users' element={<UserTable />} />
 						<Route path='products' element={<Products />} />
 						<Route path='product/gateways' element={<GatewaysPage />} />

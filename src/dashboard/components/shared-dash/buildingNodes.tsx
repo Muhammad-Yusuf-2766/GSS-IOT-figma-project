@@ -128,7 +128,7 @@ const BuildingNodes = () => {
 						onFilterChange={handleFilterChange}
 						building={building || undefined}
 					/>
-					<NodesMultipleButtonsField buildingId={buildingId} />
+					<NodesMultipleButtonsField building={building!} />
 				</div>
 
 				{/* Filtrlangan nodlarni ko'rsatish */}
