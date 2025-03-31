@@ -280,7 +280,7 @@ const ImageModal = ({
 export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 	const [isOpen, setIsOpen] = useState(false)
 
-	const handleDownload = async () => {
+	const handleDownload = async (id: string) => {
 		try {
 			// Backend API'ga so'rov yuborish
 			const response = await axios.get(
@@ -288,7 +288,7 @@ export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 					import.meta.env.VITE_SERVER_BASE_URL
 				}/product/download-nodes-history`,
 				{
-					params: building?._id, // Params orqali yuborish
+					params: { buildingId: id }, // Params orqali yuborish
 					responseType: 'blob', // Javobni `blob` formatida olish
 				}
 			)
@@ -341,7 +341,7 @@ export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 
 					<button
 						className='flex justify-center gap-x-2 px-3 border border-white/60 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs md:text-sm md:w-1/3 w-full '
-						onClick={handleDownload}
+						onClick={() => handleDownload(building!._id)}
 					>
 						현장 노드 리포트 <DownloadIcon size={17} />
 					</button>

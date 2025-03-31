@@ -13,7 +13,7 @@ const ActiveClientsList = () => {
 	}
 
 	return (
-		<div className='md:text-2xl text-lg py-5 md:ml-4'>
+		<div className='md:text-2xl text-lg md:ml-4'>
 			<h1 className='leading-none font-bold text-gray-700 pb-2 m-2'>
 				실시간 클라이언트
 			</h1>
