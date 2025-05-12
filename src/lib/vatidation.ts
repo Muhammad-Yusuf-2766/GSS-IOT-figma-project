@@ -67,9 +67,19 @@ export const addBuildingSchema = z
 
 export const addClientSchema = z.object({
 	client_name: z.string().min(3),
-	client_addr: z.string(),
+	client_addr: z.string().min(4),
 	client_buildings: z
 		.array(z.string())
 		.min(1, '최소 1개 빌딩을을 선택해야됩니다.'),
 	boss_users: z.array(z.string()).min(1, '최소 1개 담당자를를 선택해야됩니다.'),
+})
+
+export const angleNodeSchema = z.object({
+	angle_node_counts: z.string(),
+})
+
+export const connectNodeBuildingchema = z.object({
+	angle_nodes: z.string().min(3),
+	building_id: z.string().min(5),
+	selected_nodes: z.array(string()),
 })

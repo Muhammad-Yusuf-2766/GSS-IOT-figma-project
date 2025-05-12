@@ -1,4 +1,4 @@
-import modalImg from '@/assets/도면.png'
+import modalImg from '@/assets/도면.jpg'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'

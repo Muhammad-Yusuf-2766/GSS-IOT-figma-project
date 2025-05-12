@@ -335,6 +335,58 @@ export const createGatewayRequest = async (gateway: ICreateGateway) => {
 	}
 }
 
+export const createAngleNodeRequest = async (nodes: number[]) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-angle-nodes`,
+			nodes,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
+export const connectAngleNodesRequest = async (nodes: any) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/connect-angle-nodes`,
+			nodes,
+			{
+				withCredentials: true,
+			}
+		)
+		const data = res.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
+
 export const updateProductStatus = async (updateData: IUpdateProductStatus) => {
 	try {
 		const res = await axios.post(
@@ -469,6 +521,25 @@ export const getActiveBuildings = async () => {
 		const data = res.data
 		if (data.state === 'fail') {
 			throw new Error(data.message || 'Error on getting-Nodes: Undefined error')
+		}
+		return data.buildings
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
+export const getBuildings = async () => {
+	try {
+		const res = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/company/get-buildings`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on getting-buildings: Undefined error'
+			)
 		}
 		return data.buildings
 	} catch (error: any) {

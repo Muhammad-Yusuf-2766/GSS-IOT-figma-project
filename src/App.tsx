@@ -10,7 +10,9 @@ import ClientBossClientsPage from './dashboard/pages/user/clients'
 import ClientMainPage from './dashboard/pages/user/hero'
 import { AdminDashboard, ClientDashboard } from './pages/dashboard'
 // import OrientationDisplay from './test/orientation'
+import CreateAngleNode from './dashboard/pages/admin/createAngleNode'
 import { ChartByDateFilters } from './dashboard/pages/user/lineChart'
+import ScaffoldingView from './test/orientation'
 
 // Lazy loading components
 const MembersDetail = lazy(() => import('./components/pages.comp/memberDetail'))
@@ -70,11 +72,12 @@ const App = () => {
 							</ProtectedRoute>
 						}
 					>
-						{/* <Route path='orientation' element={<OrientationDisplay />} /> */}
+						<Route path='orientation' element={<ScaffoldingView />} />
 						<Route path='' element={<MainPage />} />
 						<Route path='active-clients' element={<ActiveClientsPage />} />
 						<Route path='add-product' element={<AddProduct />} />
 						<Route path='add-client' element={<AddClient />} />
+						<Route path='create-angle-node' element={<CreateAngleNode />} />
 						<Route path='statistics' element={<ChartByDateFilters />} />
 						<Route path='users' element={<UserTable />} />
 						<Route path='products' element={<Products />} />

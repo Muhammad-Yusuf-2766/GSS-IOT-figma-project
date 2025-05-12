@@ -8,14 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '../ui/button'
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { Input } from '../ui/input'
 interface IClientFormProps {
 	buildings: IBuilding[]
@@ -110,7 +103,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 										className='border-gray-400 focus:border-transparent'
 									/>
 								</FormControl>
-								<FormMessage />
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
@@ -130,7 +123,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 										className='border-gray-400 focus:border-transparent'
 									/>
 								</FormControl>
-								<FormMessage />
+								{/* <FormMessage /> */}
 							</FormItem>
 						)}
 					/>
@@ -196,7 +189,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 																빌딩딩: {building.building_name}-
 																{building.building_num}
 															</FormLabel>
-															<FormMessage />
+															{/* <FormMessage /> */}
 														</FormItem>
 													)}
 												/>
@@ -259,7 +252,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 																/>
 															</FormControl>
 															<FormLabel>사용자: {user.user_name}</FormLabel>
-															<FormMessage />
+															{/* <FormMessage /> */}
 														</FormItem>
 													)}
 												/>

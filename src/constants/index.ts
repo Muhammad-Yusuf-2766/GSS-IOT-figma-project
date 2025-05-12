@@ -18,6 +18,7 @@ import { BsBuildingsFill } from 'react-icons/bs'
 import { FaClipboardList, FaUserPlus } from 'react-icons/fa'
 import { HiSquaresPlus } from 'react-icons/hi2'
 import { LuUser } from 'react-icons/lu'
+import { MdGraphicEq } from 'react-icons/md'
 import { TbUsers } from 'react-icons/tb'
 
 export const navLinks = [
@@ -148,7 +149,18 @@ export const headButtons: IHeadButton[] = [
 		route: 'active-clients',
 	},
 	{ id: '2', icon: HiSquaresPlus, name: '제품 등록', route: 'add-product' },
-	{ id: '3', icon: FaUserPlus, name: '사용자 생성', route: 'add-client' },
+	{
+		id: '3',
+		icon: FaUserPlus,
+		name: '비계전도 노드 생선',
+		route: 'add-client',
+	},
+	{
+		id: '4',
+		icon: MdGraphicEq,
+		name: '사용자 생선',
+		route: 'create-angle-node',
+	},
 ]
 
 export const ActiveClients = [
