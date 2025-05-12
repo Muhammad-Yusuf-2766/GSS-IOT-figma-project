@@ -39,15 +39,16 @@ export default function ScaffoldingView() {
 	// Subscribe to MQTT topic
 	useEffect(() => {
 		const topic = `mqtt/angle/0010`
-		const interval = socket.on(topic, (updatedAngle: AngleType) => {
+		const handleAngleUpdate = (updatedAngle: AngleType) => {
 			console.log('MPU-6500 sensor data:', updatedAngle)
 			setOrientation(updatedAngle)
 			orientationRef.current = updatedAngle
-		})
+		}
+
+		socket.on(topic, handleAngleUpdate)
 
 		return () => {
-			socket.off(topic)
-			if (interval) clearInterval(interval)
+			socket.off(topic, handleAngleUpdate) // to‘g‘ri usul: xuddi shu function reference bilan
 		}
 	}, [])
 
