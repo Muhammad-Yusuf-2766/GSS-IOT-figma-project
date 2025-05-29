@@ -46,7 +46,7 @@ const Buildings = () => {
 			</div>
 
 			{/* Loading field */}
-			{/* {isLoading && <FillLoading />} */}
+			{isLoading && <FillLoading />}
 
 			{/* Error fielad */}
 			{error && (

@@ -4,14 +4,14 @@ import FillLoading from '@/components/shared/fill-laoding'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useBuildingNodes } from '@/hooks/useClientdata'
+import socket from '@/hooks/useSocket'
 import { useClientStore } from '@/stores/buildingsStore'
 import { useBuildingNodesStore } from '@/stores/nodeStore'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { io } from 'socket.io-client'
 import { INode } from '../../../types/interfaces'
 import TotalcntCsv, { NodesMultipleButtonsField } from './TotalnctCSV'
-const socket = io(`${import.meta.env.VITE_SERVER_BASE_URL}`) // Backend server manzilini o'zgartiring
+// const socket = io(`${import.meta.env.VITE_SERVER_BASE_URL}`) // Backend server manzilini o'zgartiring
 
 const BuildingNodes = () => {
 	const { building, nodes, updateNode } = useBuildingNodesStore()
@@ -28,11 +28,13 @@ const BuildingNodes = () => {
 	useEffect(() => {
 		const topic = `mqtt/building/${buildingId}`
 		socket.on(topic, (updatedNode: INode) => {
+			console.log('Socket node-data listener is on')
 			updateNode(updatedNode)
 		})
 
 		return () => {
 			socket.off(topic)
+			console.log('Socket node-data listener is off')
 		}
 	}, [buildingId, updateNode])
 

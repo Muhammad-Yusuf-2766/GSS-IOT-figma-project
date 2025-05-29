@@ -6,10 +6,12 @@ import { NodePositionRequest } from '@/services/apiRequests'
 import { INodePositionFile } from '@/types/fileTypes'
 import { IBuilding, INode } from '@/types/interfaces'
 import axios from 'axios'
-import { DownloadIcon } from 'lucide-react'
+// import { DownloadIcon } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { ChartSpline, Download, Eye, FileText, Upload } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { HiMiniSquares2X2 } from 'react-icons/hi2'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import * as XLSX from 'xlsx'
 
@@ -256,22 +258,17 @@ const ImageModal = ({
 	buildingName?: string
 }) => {
 	return (
-		<div className='fixed inset-0 bg-black/75 flex justify-center items-center z-50'>
-			<div className='relative md:w-[90%] md:h-[90%] w-full h-full bg-white md:rounded-lg flex flex-col justify-center items-center gap-y-3 text-gray-700'>
-				<h1 className='md:text-2xl text-center'>
-					{buildingName} 도면이다. 도면을 통해서 노드 위치를 파악할수 있다.
-				</h1>
+		<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+			<div className='bg-white p-4 rounded-lg max-w-4xl w-full mx-2'>
+				<h3 className='text-lg font-semibold mb-4'>{buildingName}</h3>
 				<img
-					src={imageUrl}
-					alt='도면 보기'
-					className='max-w-[100%] max-h-[80%] md:w-[90%] rounded-lg md:object-cover object-contain border border-black rotated-image'
+					src={imageUrl || '/placeholder.svg'}
+					alt='Building'
+					className='w-full h-auto'
 				/>
-				<button
-					onClick={onClose}
-					className='absolute top-2 right-2 bg-gray-900/40 text-white px-3 py-2 rounded-full hover:bg-gray-700 transition'
-				>
-					✕
-				</button>
+				<Button onClick={onClose} className='mt-4'>
+					닫기
+				</Button>
 			</div>
 		</div>
 	)
@@ -279,27 +276,26 @@ const ImageModal = ({
 
 export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 	const [isOpen, setIsOpen] = useState(false)
+	const { clientId } = useParams()
 
 	const handleDownload = async (id: string) => {
 		try {
-			// Backend API'ga so'rov yuborish
 			const response = await axios.get(
 				`${
 					import.meta.env.VITE_SERVER_BASE_URL
 				}/product/download-nodes-history`,
 				{
-					params: { buildingId: id }, // Params orqali yuborish
-					responseType: 'blob', // Javobni `blob` formatida olish
+					params: { buildingId: id },
+					responseType: 'blob',
 				}
 			)
 
-			// Blob orqali URL yaratish
 			const url = window.URL.createObjectURL(new Blob([response.data]))
 			const a = document.createElement('a')
 			a.href = url
-			a.download = 'building-nodes-history.xlsx' // Fayl nomi
+			a.download = 'building-nodes-history.xlsx'
 			document.body.appendChild(a)
-			a.click() // Faylni avtomatik yuklab olish
+			a.click()
 			document.body.removeChild(a)
 		} catch (error) {
 			console.error('Failed to download file:', error)
@@ -307,47 +303,79 @@ export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 	}
 
 	return (
-		<div className='w-full mt-1'>
-			<div className='w-full md:px-6 px-2 py-3 flex md:flex-row flex-col items-start md:items-center md:justify-between gap-3 bg-blue-900 text-white mx-auto text-sm'>
-				{/* Floor-plan Exel-file download buttons field */}
-				<div className='md:w-1/2 w-full flex items-start md:items-center gap-2 md:gap-3'>
-					<button
-						className='md:w-1/3 w-full px-3 border border-white/60 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs md:text-sm'
+		<Card className='mt-4 border-slate-400'>
+			<CardContent className='p-4'>
+				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3'>
+					{/* Floor Plan Upload */}
+					<Button
+						variant='outline'
 						onClick={() => setIsOpen(true)}
+						className='flex items-center gap-2 h-auto py-3 border-slate-400'
 					>
-						도면 이미지 업로드
-					</button>
-					<button
-						className='md:w-1/3 w-full px-3 border border-white/60 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs md:text-sm'
-						onClick={() => setIsOpen(true)}
-					>
-						도면 보기
-					</button>
-				</div>
+						<Upload className='w-4 h-4' />
+						<span className='text-sm'>도면 이미지 업로드</span>
+					</Button>
 
-				{/* Floor-plan image & Exel-file download buttons field */}
-				<div className='md:w-1/2 w-full flex justify-center items-center gap-2 md:gap-3'>
+					{/* Floor Plan View */}
+					<Button
+						variant='outline'
+						onClick={() => setIsOpen(true)}
+						className='flex items-center gap-2 h-auto py-3 border-slate-400'
+					>
+						<Eye className='w-4 h-4' />
+						<span className='text-sm'>도면 보기</span>
+					</Button>
+
+					{/* Position File Download */}
 					{building?.nodes_position_file && (
-						<a
-							href={`${
-								import.meta.env.VITE_SERVER_BASE_URL
-							}/exels/${encodeURIComponent(building.nodes_position_file)}`}
-							download
-							className='flex justify-center gap-x-2 px-3 border border-white/60 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs md:text-sm md:w-1/3 w-full'
+						<Button
+							variant='outline'
+							asChild
+							className='flex items-center gap-2 h-auto py-3 border-slate-400'
 						>
-							위치 파일 <DownloadIcon size={17} />
-						</a>
+							<a
+								href={`${
+									import.meta.env.VITE_SERVER_BASE_URL
+								}/exels/${encodeURIComponent(building.nodes_position_file)}`}
+								download
+							>
+								<FileText className='w-4 h-4' />
+								<span className='text-sm'>위치 파일</span>
+								<Download className='w-3 h-3' />
+							</a>
+						</Button>
 					)}
 
-					<button
-						className='flex justify-center gap-x-2 px-3 border border-white/60 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs md:text-sm md:w-1/3 w-full '
+					{/* Nodes Report Download */}
+					<Button
+						variant='outline'
 						onClick={() => handleDownload(building!._id)}
+						className='flex items-center gap-2 h-auto py-3 border-slate-400'
 					>
-						현장 노드 리포트 <DownloadIcon size={17} />
-					</button>
+						<FileText className='w-4 h-4' />
+						<span className='text-sm'>현장 노드 리포트</span>
+						<Download className='w-3 h-3' />
+					</Button>
+
+					{/* Angle-Nodes page Link */}
+					<Button
+						variant='outline'
+						asChild
+						className='flex items-center gap-2 h-auto py-3 border-slate-400'
+					>
+						<Link
+							to={`/admin/dashboard/clients/${clientId}/buildings/${
+								building!._id
+							}/angle-nodes`}
+							className='flex items-center gap-2'
+						>
+							<ChartSpline className='w-4 h-4' />
+							<span className='text-sm'>건물 비계전도 노드 보기기</span>
+						</Link>
+					</Button>
 				</div>
 
-				{/* Modal image field */}
+				{/* Modal */}
 				{isOpen && (
 					<ImageModal
 						imageUrl={modalImg}
@@ -355,7 +383,7 @@ export const NodesMultipleButtonsField = ({ building }: IProps2) => {
 						onClose={() => setIsOpen(false)}
 					/>
 				)}
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	)
 }

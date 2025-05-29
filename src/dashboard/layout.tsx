@@ -8,7 +8,7 @@ export const AdminLayout = () => {
 	const { user } = useUserState()
 
 	return (
-		<div className='w-full h-full flex justify-center'>
+		<div className='w-full h-full flex justify-center '>
 			{!user ? (
 				<UnauthorizedPage />
 			) : (
@@ -19,7 +19,7 @@ export const AdminLayout = () => {
 							<div className='h-screen md:w-52 w-10'>
 								<SidebarAdmin />
 							</div>
-							<div className='w-full min-h-screen flex justify-center items-center px-3'>
+							<div className='w-full flex justify-center px-3'>
 								<Outlet />
 							</div>
 						</>

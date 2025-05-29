@@ -79,6 +79,26 @@
 	}
 }
 
+@layer utilities {
+	.grid-areas-layout-md {
+		grid-template-areas: 'scroll1 scroll2';
+	}
+
+	.grid-areas-layout-sm {
+		grid-template-areas:
+			'scroll2'
+			'scroll1';
+	}
+
+	.area-scroll1 {
+		grid-area: scroll1;
+	}
+
+	.area-scroll2 {
+		grid-area: scroll2;
+	}
+}
+
 @media (max-width: 768px) {
 	.rotated-image {
 		transform: rotate(90deg);
