@@ -6,6 +6,8 @@ interface INodeProps {
 }
 
 const ActiveNodes = ({ nodes }: INodeProps) => {
+	const sortedNodes = nodes?.sort((a, b) => a.doorNum - b.doorNum)
+
 	return (
 		<div className='flex justify-center items-center flex-col'>
 			<h1 className='leading-none text-xl font-bold text-gray-700 underline underline-offset-4'>
@@ -26,8 +28,8 @@ const ActiveNodes = ({ nodes }: INodeProps) => {
 							</tr>
 						</thead>
 						<tbody className='text-center'>
-							{nodes && nodes.length > 0 ? (
-								nodes.map(node => (
+							{sortedNodes && sortedNodes.length > 0 ? (
+								sortedNodes.map(node => (
 									<tr key={node._id} className='border-b'>
 										<th
 											scope='row'

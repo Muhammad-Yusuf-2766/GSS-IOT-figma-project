@@ -98,7 +98,6 @@ const SensorGraph: React.FC = () => {
 
 		const listener = (newData: SensorData) => {
 			console.log('Socket angle-data listener is on')
-			console.log(newData)
 			const formattedPoint: GraphDataPoint = {
 				time: new Date(newData.createdAt).toLocaleTimeString('en-GB', {
 					hour: '2-digit',

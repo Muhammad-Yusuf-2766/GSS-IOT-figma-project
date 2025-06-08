@@ -38,7 +38,7 @@ export const addNodeSchema = z.object({
 
 export const addGatewaychema = z.object({
 	serial_number: string(),
-	nodes: z.string().min(1, 'Password must be at least 1 characters'),
+	nodes: z.string().min(1, 'Node list must be at least 1'),
 	selected_nodes: z.array(z.string()),
 })
 
@@ -74,12 +74,14 @@ export const addClientSchema = z.object({
 	boss_users: z.array(z.string()).min(1, '최소 1개 담당자를를 선택해야됩니다.'),
 })
 
+// ============= Angle-Node Validation Field ============= //
 export const angleNodeSchema = z.object({
 	angle_node_counts: z.string(),
 })
 
-export const connectNodeBuildingchema = z.object({
-	angle_nodes: z.string().min(3),
-	building_id: z.string().min(5),
+export const combineAngleNodeToGatewaySchema = z.object({
+	gateway_number: z.string(),
+	angle_nodes: z.string(),
+	gateway_id: z.string(),
 	selected_nodes: z.array(string()),
 })

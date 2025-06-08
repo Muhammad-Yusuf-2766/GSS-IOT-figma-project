@@ -213,7 +213,6 @@ export const deleteUser = async (user_id: string) => {
 
 export const getGateways = async () => {
 	try {
-		console.log('getGateways')
 		const res = await axios.get(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-gateways`,
 			{ withCredentials: true }
@@ -248,7 +247,29 @@ export const getActiveGateways = async () => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
+export const getSingleGateway = async (gatewayNumber: string) => {
+	try {
+		const res = await axios.get(
+			`${
+				import.meta.env.VITE_SERVER_BASE_URL
+			}/product/get-single-gateway/${gatewayNumber}`,
+			{ withCredentials: true }
+		)
 
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(
+				data.message || 'Error on getting-gateways: Undefined error'
+			)
+		}
+		return data.gateway
+	} catch (error: any) {
+		// ❗ Faqat throw qilish
+		throw new Error(
+			error.response?.data?.message || 'Serverda xatolik yuz berdi'
+		)
+	}
+}
 export const getNodes = async () => {
 	try {
 		const res = await axios.get(
@@ -265,7 +286,6 @@ export const getNodes = async () => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
-
 export const getActiveNodes = async () => {
 	try {
 		const res = await axios.get(
@@ -282,7 +302,6 @@ export const getActiveNodes = async () => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
-
 export const createNodeRequest = async (nodes: ICreateNode[]) => {
 	try {
 		const res = await axios.post(
@@ -308,7 +327,6 @@ export const createNodeRequest = async (nodes: ICreateNode[]) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
-
 export const createGatewayRequest = async (gateway: ICreateGateway) => {
 	try {
 		const res = await axios.post(
@@ -334,7 +352,6 @@ export const createGatewayRequest = async (gateway: ICreateGateway) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
-
 export const createAngleNodeRequest = async (nodes: number[]) => {
 	try {
 		const res = await axios.post(
@@ -360,12 +377,11 @@ export const createAngleNodeRequest = async (nodes: number[]) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
-
-export const connectAngleNodesRequest = async (nodes: any) => {
+export const connectAngleNodesRequest = async (sendingData: any) => {
 	try {
 		const res = await axios.post(
-			`${import.meta.env.VITE_SERVER_BASE_URL}/product/connect-angle-nodes`,
-			nodes,
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/combine-angle-nodes`,
+			sendingData,
 			{
 				withCredentials: true,
 			}
@@ -386,7 +402,6 @@ export const connectAngleNodesRequest = async (nodes: any) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
-
 export const updateProductStatus = async (updateData: IUpdateProductStatus) => {
 	try {
 		const res = await axios.post(
@@ -409,7 +424,6 @@ export const updateProductStatus = async (updateData: IUpdateProductStatus) => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
-
 export const deleteProduct = async (deleteData: IUpdateProductStatus) => {
 	try {
 		const res = await axios.post(
@@ -432,7 +446,6 @@ export const deleteProduct = async (deleteData: IUpdateProductStatus) => {
 		throw new Error(error.message || 'Error on connecting to server.')
 	}
 }
-
 export const NodePositionRequest = async (FormData: FormData) => {
 	try {
 		const res = await axios.post(
@@ -648,7 +661,7 @@ export const fetchBuildingNodes = async (buildingId: string) => {
 		return data
 	} catch (error: any) {
 		return new Error(
-			error.response?.data?.message || 'Error on fetching client data.'
+			error.response?.data?.message || 'Error on fetching building nodes.'
 		)
 	}
 }
@@ -699,6 +712,47 @@ export const fetchClientBossBuildings = async (
 	} catch (error: any) {
 		return new Error(
 			error.response?.data?.message || 'Error on fetching client data.'
+		)
+	}
+}
+
+//  ============= Angle-Nodes related requests ============ //
+
+export const getActiveAngleNodes = async () => {
+	try {
+		const res = await axios.get(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/get-active-angle-nodes`,
+			{ withCredentials: true }
+		)
+
+		const data = res.data
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on getting-Nodes: Undefined error')
+		}
+		return data.angle_nodes
+	} catch (error: any) {
+		throw new Error(error.message || 'Error on connecting to server.')
+	}
+}
+
+export const fetchBuildingAngleNodes = async (buildingId: string) => {
+	try {
+		const response = await axios.get(
+			`${
+				import.meta.env.VITE_SERVER_BASE_URL
+			}/company/buildings/${buildingId}/angle-nodes`,
+			{ withCredentials: true }
+		)
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data.angle_nodes
+	} catch (error: any) {
+		return new Error(
+			error.response?.data?.message || 'Error on fetching building angle-nodes.'
 		)
 	}
 }

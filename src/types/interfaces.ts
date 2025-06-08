@@ -79,6 +79,17 @@ export interface INode {
 	doorChk: 0 | 1
 	betChk: number
 	node_status: boolean
+	gateway_id: string
+	position: string
+}
+
+export interface IAngleNode {
+	_id: string
+	doorNum: number
+	angle_x: number
+	angle_y: number
+	node_status: boolean
+	gateway_id: string
 	position: string
 }
 

@@ -91,8 +91,8 @@ const AngleNodeForm = () => {
 	}
 
 	return (
-		<div className='md:w-[30%] flex flex-col justify-center items-center md:text-lg text-sm text-gray-800 relative'>
-			<h1 className='leading-none text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
+		<div className='md:w-[30%] flex flex-col justify-center items-center md:text-lg text-sm text-gray-700 relative'>
+			<h1 className='leading-none text-xl font-bold pb-2 mb-5 underline underline-offset-4'>
 				비계전도 노드 생성
 			</h1>
 			{isLoading && <p className='absolute inset-0'>Loading...</p>}
