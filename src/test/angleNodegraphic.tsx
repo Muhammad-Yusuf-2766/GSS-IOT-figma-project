@@ -79,7 +79,9 @@ const SensorGraph: React.FC = () => {
 
 		axios
 			.get<SensorData[]>(
-				`http://localhost:3005/product/angle-node/data?doorNum=1&from=${from}&to=${to}`
+				`${
+					import.meta.env.VITE_SERVER_BASE_URL
+				}/product/angle-node/data?doorNum=1&from=${from}&to=${to}`
 			)
 			.then(res => {
 				const formatted: GraphDataPoint[] = res.data.map(item => ({
