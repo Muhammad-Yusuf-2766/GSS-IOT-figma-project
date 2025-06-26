@@ -79,7 +79,7 @@ const SensorGraph: React.FC = () => {
 
 		axios
 			.get<SensorData[]>(
-				`http://localhost:3005/product/angle-node/data?doorNum=150&from=${from}&to=${to}`
+				`http://localhost:3005/product/angle-node/data?doorNum=1&from=${from}&to=${to}`
 			)
 			.then(res => {
 				const formatted: GraphDataPoint[] = res.data.map(item => ({
@@ -151,7 +151,7 @@ const SensorGraph: React.FC = () => {
 				<CardHeader className='p-3 sm:p-4 space-y-2'>
 					<div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2'>
 						<CardTitle className='text-base md:text-lg font-bold text-gray-900'>
-							비계전도 데이터 모니터링
+							비계전도 데이터 실시간 모니터링
 						</CardTitle>
 
 						<div className='flex flex-row items-center justify-between sm:justify-end gap-3'>

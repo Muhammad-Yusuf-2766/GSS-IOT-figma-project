@@ -756,3 +756,25 @@ export const fetchBuildingAngleNodes = async (buildingId: string) => {
 		)
 	}
 }
+
+export const getAngleNodeSummary = async (buildingId: string) => {
+	try {
+		const response = await axios.get(
+			`${
+				import.meta.env.VITE_SERVER_BASE_URL
+			}/company/buildings/${buildingId}/angle-nodes/summary`,
+			{ withCredentials: true }
+		)
+		const data = response.data
+
+		if (data.state === 'fail') {
+			throw new Error(data.message || 'Error on creating node')
+		}
+
+		return data.angle_nodes
+	} catch (error: any) {
+		return new Error(
+			error.response?.data?.message || 'Error on fetching building angle-nodes.'
+		)
+	}
+}

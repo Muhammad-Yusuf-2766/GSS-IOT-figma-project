@@ -32,7 +32,7 @@ const AngleBuildingForm = ({
 	const form = useForm<z.infer<typeof combineAngleNodeToGatewaySchema>>({
 		resolver: zodResolver(combineAngleNodeToGatewaySchema),
 	})
-	const { setValue, watch } = form
+	const { setValue } = form
 
 	// ===== Handle Gateway checking request ===== //
 	const {
@@ -130,7 +130,7 @@ const AngleBuildingForm = ({
 
 	// Watch for changes to 'selected_nodes' to trigger re-render
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const selectedNodes = watch('selected_nodes')
+	// const selectedNodes = watch('selected_nodes')
 
 	return (
 		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-700'>

@@ -21,14 +21,27 @@ const AngleNodeScroll = ({ building_angle_nodes }: Props) => {
 			<ScrollArea className='max-h-[268px] md:col-span-9 col-span-12 order-2 md:order-1 overflow-auto w-full rounded-lg border border-slate-400 bg-white'>
 				<div className='grid grid-cols-3 md:grid-cols-6 md:gap-4 gap-2 md:p-4 p-2'>
 					{building_angle_nodes.map(item => (
-						<Card key={item.doorNum} className='border-slate-400 bg-blue-50'>
-							<CardContent className='md:p-2 p-1 space-y-1 md:text-sm text-[10px] text-gray-600'>
-								<h1 className='font-semibold text-gray-700'>
-									노드 넘버: {item.doorNum}
-								</h1>
-								<p>Axis-X: {item.angle_x}</p>
-								<p>Axis-Y: {item.angle_y}</p>
-								<p>위치: {item.position}</p>
+						<Card
+							key={item.doorNum}
+							className='border border-slate-300 bg-gradient-to-r from-blue-50 to-blue-200 shadow-md hover:shadow-lg hover:to-blue-300 transition duration-200 ease-in-out rounded-xl cursor-pointer'
+						>
+							<CardContent className='p-4 space-y-2 text-sm text-gray-700'>
+								<div className='flex items-center justify-between'>
+									<h1 className='font-bold text-blue-700'>노드 넘버</h1>
+									<span className='text-blue-800 font-semibold text-lg'>
+										{item.doorNum}
+									</span>
+								</div>
+								<div className='grid grid-cols-2 gap-x-4 gap-y-1'>
+									<p className='font-medium text-gray-600'>Axis-X:</p>
+									<p className='text-gray-800'>{item.angle_x}</p>
+
+									<p className='font-medium text-gray-600'>Axis-Y:</p>
+									<p className='text-gray-800'>{item.angle_y}</p>
+
+									<p className='font-medium text-gray-600'>위치:</p>
+									<p className='text-gray-800'>{item.position}</p>
+								</div>
 							</CardContent>
 						</Card>
 					))}
@@ -38,13 +51,28 @@ const AngleNodeScroll = ({ building_angle_nodes }: Props) => {
 			{/* Xavfli nodlar */}
 			<ScrollArea className='max-h-[268px] md:col-span-3 col-span-12 order-1 md:order-2 overflow-auto w-full rounded-lg border border-slate-400 bg-white'>
 				<div className='md:gap-4 gap-2 md:p-4 p-2'>
-					{building_angle_nodes.map((item, index) => (
-						<div key={index} className='p-2 bg-red-400 border  rounded-md mb-2'>
-							<p className='text-white text-[16px] '>
-								{index + 1}. {item.doorNum}번 노드 위험성 높다. 확인 필수
+					{building_angle_nodes.filter(
+						item => item.angle_x > 9 || item.angle_y > 9
+					).length === 0 ? (
+						<div className='p-2 bg-blue-500 border rounded-md mb-2'>
+							<p className='text-center text-white text-[16px]'>
+								지금 위험이 없습니다.
 							</p>
 						</div>
-					))}
+					) : (
+						building_angle_nodes
+							.filter(item => item.angle_x > 9 || item.angle_y > 9)
+							.map((item, index) => (
+								<div
+									key={index}
+									className='text-center p-2 bg-red-500 border rounded-md mb-2'
+								>
+									<p className='text-white text-[16px]'>
+										{item.doorNum}번 노드 위험성 높다. 확인 필수
+									</p>
+								</div>
+							))
+					)}
 				</div>
 			</ScrollArea>
 		</div>
