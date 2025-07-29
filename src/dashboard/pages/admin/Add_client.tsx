@@ -38,6 +38,14 @@ const AddClient = () => {
 	const refetchAll = () => {
 		results.forEach(query => query.refetch())
 	}
+	const officeGateways = gateways?.filter(
+		(gw: { gateway_type: string }) => gw.gateway_type === 'OFFICE_GATEWAY'
+	)
+
+	const nodeGateways = gateways?.filter(
+		(gw: { gateway_type: string }) =>
+			!gw.gateway_type || gw.gateway_type === 'NODE_GATEWAY'
+	)
 
 	if (isLoading) return <p>Loading...</p>
 
@@ -45,7 +53,12 @@ const AddClient = () => {
 		<div className='w-full h-full flex flex-col justify-between'>
 			<Header />
 			<div className='w-full h-full md:flex justify-center md:items-start py-5 gap-3 md:space-y-0 space-y-5'>
-				<BuildingForm gateways={gateways} users={users} refetch={refetchAll} />
+				<BuildingForm
+					gateways={nodeGateways}
+					officeGateways={officeGateways}
+					users={users}
+					refetch={refetchAll}
+				/>
 				<ClientForm buildings={builidngs} users={users} refetch={refetch} />
 			</div>
 		</div>

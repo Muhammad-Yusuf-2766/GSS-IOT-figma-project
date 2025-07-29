@@ -42,6 +42,10 @@ export const addGatewaychema = z.object({
 	selected_nodes: z.array(z.string()),
 })
 
+export const officeGatewaySchema = z.object({
+	serial_number: string(),
+})
+
 export const addBuildingSchema = z
 	.object({
 		building_name: z.string().min(3),

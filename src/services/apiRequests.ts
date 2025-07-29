@@ -353,6 +353,31 @@ export const createGatewayRequest = async (gateway: ICreateGateway) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
+export const createOfficeGatewayRequest = async (data: any) => {
+	try {
+		const res = await axios.post(
+			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-office-gateway`,
+			data,
+			{
+				withCredentials: true,
+			}
+		)
+		const result = res.data
+
+		if (result.state === 'fail') {
+			throw new Error(result.message || 'Error on creating node')
+		}
+
+		return result
+	} catch (error: any) {
+		// Axios error handling
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.message || 'Error on creating node')
+		}
+		// Other errors
+		throw new Error(error.message || 'Error on creating node: Undefined error.')
+	}
+}
 export const createAngleNodeRequest = async (nodes: AngleNodeCreate[]) => {
 	try {
 		const res = await axios.post(

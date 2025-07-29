@@ -80,8 +80,8 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 
 	return (
 		<div className='md:w-[40%] flex justify-center items-center flex-col md:text-lg text-sm text-gray-500'>
-			<h1 className='leading-none md:text-3xl text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
-				사용자 추가
+			<h1 className='leading-none text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
+				클라이언트 추가
 			</h1>
 			<Form {...form}>
 				<form
@@ -130,7 +130,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 
 					{/* Buildings Selection Dropdown */}
 					<div className='mb-4'>
-						<h3>현장 선택:</h3>
+						<h3 className='text-[15px]'>현장 선택:</h3>
 						<div className='relative'>
 							<button
 								type='button'
@@ -203,7 +203,7 @@ const ClientForm = ({ users, buildings, refetch }: IClientFormProps) => {
 
 					{/* User Selection Dropdown */}
 					<div className='mb-4'>
-						<h3>사용자 선택</h3>
+						<h3 className='text-[15px]'>사용자 선택</h3>
 						<div className='relative'>
 							<button
 								type='button'

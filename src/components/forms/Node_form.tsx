@@ -75,7 +75,7 @@ const NodeForm = ({ refetch }: NodeFormProps) => {
 	}
 
 	return (
-		<div className='md:w-[30%] flex flex-col justify-center items-center md:text-lg text-sm text-gray-800'>
+		<div className='w-full flex flex-col justify-center items-center md:text-lg text-sm text-gray-800'>
 			<h1 className='leading-none text-xl font-bold text-gray-700 pb-2 mb-5 underline underline-offset-4'>
 				노드 생성
 			</h1>
@@ -89,9 +89,8 @@ const NodeForm = ({ refetch }: NodeFormProps) => {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className='w-full h-[400px] flex flex-col justify-around items-center p-4 border bg-white rounded-lg shadow-lg shadow-gray-300'
+					className='w-full flex flex-col justify-around p-4 border bg-white rounded-lg shadow-lg shadow-gray-300'
 				>
-					<h4 className='text-center capitalize mb-4'>스마트가드 노드 No.</h4>
 					<FormField
 						control={form.control}
 						name='startNumber'
@@ -108,7 +107,7 @@ const NodeForm = ({ refetch }: NodeFormProps) => {
 											const num = parseFloat(e.target.value)
 											field.onChange(isNaN(num) ? '' : num)
 										}}
-										className='border-gray-700 focus:border-transparent'
+										className='border-gray-700 focus:border-transparent w-full'
 									/>
 								</FormControl>
 								<FormMessage />
@@ -143,7 +142,7 @@ const NodeForm = ({ refetch }: NodeFormProps) => {
 					<Button
 						type='submit'
 						disabled={isLoading}
-						// className='h-12 w-full mt-2'
+						className='h-12 w-full mt-2'
 					>
 						Submit
 					</Button>

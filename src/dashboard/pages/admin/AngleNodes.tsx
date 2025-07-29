@@ -1,9 +1,9 @@
 import AngleNodeScroll from '@/dashboard/components/shared-dash/AngleNodeScroll'
+import SensorGraph from '@/dashboard/pages/admin/angleNodegraphic'
 import {
 	fetchBuildingAngleNodes,
 	getAngleNodeSummary,
 } from '@/services/apiRequests'
-import SensorGraph from '@/test/angleNodegraphic'
 import { useQueries } from '@tanstack/react-query'
 import axios from 'axios'
 import { useEffect, useState } from 'react'

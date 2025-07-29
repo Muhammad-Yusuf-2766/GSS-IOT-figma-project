@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { addGatewaychema } from '@/lib/vatidation'
-import { createGatewayRequest } from '@/services/apiRequests'
+import { addGatewaychema, officeGatewaySchema } from '@/lib/vatidation'
+import {
+	createGatewayRequest,
+	createOfficeGatewayRequest,
+} from '@/services/apiRequests'
 import { ICreateGateway, INode } from '@/types/interfaces'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AlertCircle } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Button } from '../ui/button'
 import {
 	Form,
@@ -57,8 +63,6 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 				serial_number: values.serial_number,
 				nodes: values.selected_nodes,
 			}
-
-			console.log(sendingData)
 
 			const resPromise = createGatewayRequest(sendingData)
 			toast.promise(resPromise, {
@@ -170,3 +174,95 @@ const GatewayForm = ({ nodes, refetch }: GatewayFormProps) => {
 }
 
 export default GatewayForm
+
+export const OfficeGatewayForm = () => {
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState('')
+
+	const form = useForm<z.infer<typeof officeGatewaySchema>>({
+		resolver: zodResolver(officeGatewaySchema),
+	})
+
+	const onSubmit = async (values: z.infer<typeof officeGatewaySchema>) => {
+		setIsLoading(true)
+		try {
+			const { serial_number } = values,
+				sendingData = {
+					serial_number,
+					gateway_type: 'OFFICE_GATEWAY',
+				}
+
+			const resPromise = createOfficeGatewayRequest(sendingData)
+			toast.promise(resPromise, {
+				loading: 'Loading...',
+				success: res => {
+					setError('')
+					setTimeout(() => {
+						setIsLoading(false)
+						form.reset({ serial_number: '' })
+					}, 1000)
+					return res.message
+				},
+				error: err => {
+					setIsLoading(false)
+					setError(err.message)
+					return err.message || 'Something went wrong :('
+				},
+			})
+		} catch (error: any) {
+			setIsLoading(false)
+			toast.error(error.message || 'Something went wrong :(')
+		}
+	}
+
+	return (
+		<div className='w-full flex justify-center items-center flex-col md:text-lg text-sm text-gray-500'>
+			<h1 className='leading-none text-xl text-gray-700 font-bold pb-2 mb-5 underline underline-offset-4'>
+				사무실용 게이트웨이
+			</h1>
+			{isLoading && <p className='absolute inset-0'>Loading...</p>}
+			{error && (
+				<Alert className='text-red-600 py-2 mt-2' variant='destructive'>
+					<AlertCircle className='h-4 w-4' color='red' />
+					<AlertTitle>Error</AlertTitle>
+					<AlertDescription>{error}</AlertDescription>
+				</Alert>
+			)}
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className='w-full h-auto p-4 border border-gray-200 bg-white rounded-lg shadow-lg shadow-gray-300 space-y-5'
+				>
+					<FormField
+						control={form.control}
+						name='serial_number'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>노드 시작 과 끝 넘버 입력</FormLabel>
+								<FormControl>
+									<Input
+										type='text'
+										placeholder='예: 0001'
+										disabled={isLoading}
+										{...field}
+										value={field.value ?? ''}
+										className='border-gray-700 focus:border-transparent placeholder:text-gray-400'
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<Button
+						type='submit'
+						disabled={isLoading}
+						className='h-12 w-full mt-2'
+					>
+						Submit
+					</Button>
+				</form>
+			</Form>
+		</div>
+	)
+}
