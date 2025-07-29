@@ -198,4 +198,8 @@ export interface IUpdateProductStatus {
 	product_endpoint: '/update-product' | '/delete-product'
 }
 
+export type AngleNodeCreate = {
+	doorNum: number
+}
+
 // ============== Data-Base related Data interfaces ========== //

@@ -63,7 +63,7 @@ const AngleNodeForm = () => {
 			// 5. Oraliqdagi sonlar massivini yasaymiz
 			const angleNodes = []
 			for (let i = angleNodeNumbers[0]; i <= angleNodeNumbers[1]; i++) {
-				angleNodes.push(i)
+				angleNodes.push({ doorNum: i })
 			}
 
 			const resPromise = createAngleNodeRequest(angleNodes)

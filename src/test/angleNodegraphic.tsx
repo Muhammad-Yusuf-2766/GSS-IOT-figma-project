@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/select'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import socket from '@/hooks/useSocket'
-import axios from 'axios'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -24,6 +23,8 @@ import {
 } from 'recharts'
 
 interface SensorData {
+	doorNum: number
+	updatedAt: string
 	createdAt: string
 	angle_x: number
 	angle_y: number
@@ -35,13 +36,28 @@ interface GraphDataPoint {
 	angle_y: number
 }
 
-const SensorGraph: React.FC = () => {
-	const [data, setData] = useState<GraphDataPoint[]>([])
-	const [selectedHours, setSelectedHours] = useState<number>(1)
+type SensorGraphProps = {
+	buildingId: string | undefined
+	doorNum: number | null
+	graphData: GraphDataPoint[]
+	hours: number
+	onSelectTime: (time: number) => void
+}
+
+const SensorGraph: React.FC<SensorGraphProps> = ({
+	doorNum,
+	buildingId,
+	graphData,
+	hours,
+	onSelectTime,
+}) => {
+	// const [data, setData] = useState<GraphDataPoint[]>([])
 	const containerRef = useRef<HTMLDivElement>(null)
 	const [containerHeight, setContainerHeight] = useState(300)
+	const [data, setData] = useState<GraphDataPoint[]>(graphData)
 	const isMobile = useMediaQuery('(max-width: 640px)')
 	const isTablet = useMediaQuery('(max-width: 1024px)')
+	const topicRef = useRef<string | null>(null)
 
 	const timeOptions = [
 		{ value: 1, label: '1 시간' },
@@ -49,6 +65,10 @@ const SensorGraph: React.FC = () => {
 		{ value: 12, label: '12 시간' },
 		{ value: 24, label: '24 시간' },
 	]
+
+	useEffect(() => {
+		setData(graphData)
+	}, [graphData])
 
 	// Calculate container height based on screen size
 	useEffect(() => {
@@ -70,36 +90,23 @@ const SensorGraph: React.FC = () => {
 		return () => window.removeEventListener('resize', updateHeight)
 	}, [isMobile, isTablet])
 
+	const doorNumRef = useRef(doorNum)
+
+	// 🔄 doorNum ni doim yangilab boramiz
 	useEffect(() => {
-		const now = new Date()
-		const from = new Date(
-			now.getTime() - selectedHours * 60 * 60 * 1000
-		).toISOString()
-		const to = now.toISOString()
+		doorNumRef.current = doorNum
+	}, [doorNum])
 
-		axios
-			.get<SensorData[]>(
-				`${
-					import.meta.env.VITE_SERVER_BASE_URL
-				}/product/angle-node/data?doorNum=1&from=${from}&to=${to}`
-			)
-			.then(res => {
-				const formatted: GraphDataPoint[] = res.data.map(item => ({
-					time: new Date(item.createdAt).toLocaleTimeString('en-GB', {
-						hour: '2-digit',
-						minute: '2-digit',
-					}),
-					angle_x: item.angle_x,
-					angle_y: item.angle_y,
-				}))
-				setData(formatted)
-			})
-			.catch(err => {
-				console.error('Data fetch error:', err)
-			})
-
+	// 🔌 socket faqat bir marta ulanadi
+	useEffect(() => {
+		console.log(data)
+		const topic = `${buildingId}_angle-nodes`
+		topicRef.current = topic
 		const listener = (newData: SensorData) => {
-			console.log('Socket angle-data listener is on')
+			if (newData.doorNum !== doorNumRef.current) return
+
+			console.log('Data accepted:', newData)
+			// SensorData ni GraphDataPoint ga aylantiring
 			const formattedPoint: GraphDataPoint = {
 				time: new Date(newData.createdAt).toLocaleTimeString('en-GB', {
 					hour: '2-digit',
@@ -111,21 +118,18 @@ const SensorGraph: React.FC = () => {
 
 			setData(prev => {
 				const updated = [...prev, formattedPoint]
-				const maxSize = 1440
-				if (updated.length > maxSize) {
-					updated.shift()
-				}
+				if (updated.length > 1440) updated.shift()
 				return updated
 			})
 		}
 
-		socket.on('angle-data', listener)
+		socket.on(topic, listener)
 
 		return () => {
-			socket.off('angle-data', listener)
-			console.log('Socket angle-data listener is off')
+			socket.off(topic, listener)
+			console.log('Socket angle-data listener is off:', topic)
 		}
-	}, [selectedHours])
+	}, []) // faqat sahifa yuklanganda
 
 	// Calculate dynamic margins based on screen size
 	const getChartMargins = () => {
@@ -152,8 +156,10 @@ const SensorGraph: React.FC = () => {
 			<Card className='w-full border shadow-sm border-slate-400'>
 				<CardHeader className='p-3 sm:p-4 space-y-2'>
 					<div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2'>
-						<CardTitle className='text-base md:text-lg font-bold text-gray-900'>
+						<CardTitle className='text-sm md:text-lg text-gray-00'>
 							비계전도 데이터 실시간 모니터링
+							<br />
+							<span className='text-blue-400'>Node-{doorNum}</span>
 						</CardTitle>
 
 						<div className='flex flex-row items-center justify-between sm:justify-end gap-3'>
@@ -165,8 +171,8 @@ const SensorGraph: React.FC = () => {
 									기간:
 								</label>
 								<Select
-									value={selectedHours.toString()}
-									onValueChange={value => setSelectedHours(Number(value))}
+									value={hours.toString()}
+									onValueChange={value => onSelectTime(Number(value))}
 								>
 									<SelectTrigger className='h-6 w-[90px] sm:w-[120px] text-xs sm:text-sm border border-slate-400'>
 										<SelectValue placeholder='Select time' />
@@ -190,18 +196,6 @@ const SensorGraph: React.FC = () => {
 							</Badge>
 						</div>
 					</div>
-
-					{/* Mobile Legend - Always visible for better UX */}
-					{/* <div className='flex flex-wrap gap-4 justify-center'>
-						<div className='flex items-center gap-2'>
-							<div className='w-4 h-2 bg-red-500 rounded-sm'></div>
-							<span className='text-xs text-gray-600'>Angle X</span>
-						</div>
-						<div className='flex items-center gap-2'>
-							<div className='w-4 h-2 bg-blue-500 rounded-sm'></div>
-							<span className='text-xs text-gray-600'>Angle Y</span>
-						</div>
-					</div> */}
 				</CardHeader>
 
 				<CardContent className='p-0 pt-2' ref={containerRef}>
