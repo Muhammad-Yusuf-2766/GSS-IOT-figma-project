@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // api.ts
 import {
+	AngleNodeCreate,
 	IClient,
 	ICreateBuilding,
 	ICreateClient,
@@ -352,7 +353,7 @@ export const createGatewayRequest = async (gateway: ICreateGateway) => {
 		throw new Error(error.message || 'Error on creating node: Undefined error.')
 	}
 }
-export const createAngleNodeRequest = async (nodes: number[]) => {
+export const createAngleNodeRequest = async (nodes: AngleNodeCreate[]) => {
 	try {
 		const res = await axios.post(
 			`${import.meta.env.VITE_SERVER_BASE_URL}/product/create-angle-nodes`,
