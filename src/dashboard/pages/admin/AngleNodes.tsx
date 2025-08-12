@@ -1,12 +1,10 @@
 import AngleNodeScroll from '@/dashboard/components/shared-dash/AngleNodeScroll'
 import SensorGraph from '@/dashboard/pages/admin/angleNodegraphic'
-import {
-	fetchBuildingAngleNodes,
-	getAngleNodeSummary,
-} from '@/services/apiRequests'
-import { useQueries } from '@tanstack/react-query'
+import socket from '@/hooks/useSocket'
+import { fetchBuildingAngleNodes } from '@/services/apiRequests'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { IAngleNode } from '../../../types/interfaces'
 
@@ -30,6 +28,7 @@ const AngleNodes = () => {
 	const [data, setData] = useState<GraphDataPoint[]>([])
 	const [isFirstLoad, setIsFirstLoad] = useState(true)
 	const { buildingId } = useParams()
+	const queryClient = useQueryClient()
 
 	const queryData = useQueries({
 		queries: [
@@ -37,47 +36,42 @@ const AngleNodes = () => {
 				queryKey: ['get-building-angle-nodes'],
 				queryFn: () => fetchBuildingAngleNodes(buildingId!),
 				retry: 1,
-				// enabled: false,
 			},
 			// {
-			// 	queryKey: ['dangerous-angle-node-graphic'],
-			// 	// queryFn: getGateways,
-			// 	retry: 1,
-			// 	enabled: false,
+			//   queryKey: ['get-angle-node-summary'],
+			//   queryFn: () => getAngleNodeSummary(buildingId!),
+			//   retry: 1,
+			//   enabled: false,
 			// },
-			{
-				queryKey: ['get-angle-node-summary'],
-				queryFn: () => getAngleNodeSummary(buildingId!),
-				retry: 1,
-				enabled: false,
-			},
 		],
 	})
 
-	// Ma'lumotlarni olish
-	const buildingAngleNodes = queryData[0].data as IAngleNode[] | []
-	const angleNodesSummary = queryData[1].data as IAngleNode[]
-	const dangerAngleNodes =
-		buildingAngleNodes?.filter(
-			item =>
-				item.angle_x >= 0.3 ||
-				item.angle_y >= 0.3 ||
-				item.angle_x <= -0.3 ||
-				item.angle_y <= -0.3
-		) || []
+	const buildingAngleNodes = (queryData[0].data as IAngleNode[]) || []
 
-	// const refetch = queryData[0].refetch
+	// Xavfli nodlar (memo)
+	const dangerAngleNodes = useMemo(
+		() =>
+			buildingAngleNodes.filter(it => it.angle_x >= 0.3 || it.angle_x <= -0.3),
+		[buildingAngleNodes]
+	)
 
-	// 1. doorNum ni dangerAngleNodes'dan tanlab olish
+	// 1) birinchi tanlov
 	useEffect(() => {
-		if (!dangerAngleNodes.length || !isFirstLoad) return
-		setSelectedDoorNum(dangerAngleNodes[0].doorNum)
-		setIsFirstLoad(false)
-	}, [dangerAngleNodes, isFirstLoad])
+		if (!isFirstLoad) return
+		if (dangerAngleNodes.length) {
+			setSelectedDoorNum(dangerAngleNodes[0].doorNum)
+			setIsFirstLoad(false)
+			return
+		}
+		if (buildingAngleNodes.length) {
+			setSelectedDoorNum(buildingAngleNodes[0].doorNum)
+			setIsFirstLoad(false)
+		}
+	}, [dangerAngleNodes, buildingAngleNodes, isFirstLoad])
 
+	// 2) tarixiy grafik ma’lumotini REST orqali olish (tanlangan vaqt va door bo‘yicha)
 	useEffect(() => {
 		if (!selectedDoorNum) return
-
 		const now = new Date()
 		const from = new Date(
 			now.getTime() - selectedHours * 60 * 60 * 1000
@@ -85,29 +79,92 @@ const AngleNodes = () => {
 		const to = now.toISOString()
 
 		axios
-			.get<SensorData[]>(
-				`http://localhost:3005/product/angle-node/data?doorNum=${selectedDoorNum}&from=${from}&to=${to}`
-			)
+			.get<SensorData[]>('/product/angle-node/data', {
+				params: { doorNum: selectedDoorNum, from, to },
+				baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3005',
+			})
 			.then(res => {
 				const formatted: GraphDataPoint[] = res.data.map(item => ({
-					time: new Date(item.createdAt).toLocaleTimeString('en-GB', {
+					time: new Date(item.createdAt).toLocaleTimeString('ko-KR', {
 						hour: '2-digit',
 						minute: '2-digit',
+						hour12: false,
 					}),
 					angle_x: item.angle_x,
 					angle_y: item.angle_y,
 				}))
 				setData(formatted)
 			})
-			.catch(err => {
-				console.error('Data fetch error:', err)
-			})
+			.catch(err => console.error('Data fetch error:', err))
 	}, [selectedDoorNum, selectedHours])
+
+	// 3) 🔌 SOCKET — parent’da tinglash: list va grafikni yangilash
+	useEffect(() => {
+		if (!buildingId) return
+		const topic = `${buildingId}_angle-nodes`
+
+		const listener = (newData: SensorData) => {
+			// 3.1 List (AngleNodeScroll) ma’lumotini yangilash — React Query keshida
+			queryClient.setQueryData<IAngleNode[]>(
+				['get-building-angle-nodes'],
+				(old = []) => {
+					let found = false
+					const updated = old.map(n => {
+						if (n.doorNum === newData.doorNum) {
+							found = true
+							return {
+								...n,
+								angle_x: newData.angle_x,
+								angle_y: newData.angle_y,
+								// ixtiyoriy: oxirgi yangilanish uchun maydon
+								createdAt: new Date(newData.createdAt).toISOString(),
+							} as IAngleNode
+						}
+						return n
+					})
+					// Agar node ro‘yxatda yo‘q bo‘lsa (kutilmagan holat) — qo‘shib qo‘yish
+					if (!found) {
+						updated.push({
+							_id: crypto.randomUUID(),
+							doorNum: newData.doorNum,
+							angle_x: newData.angle_x,
+							angle_y: newData.angle_y,
+							position: 'N/A',
+						} as unknown as IAngleNode)
+					}
+					return updated
+				}
+			)
+
+			// 3.2 Tanlangan node grafikini jonli yangilash
+			if (selectedDoorNum === newData.doorNum) {
+				const point: GraphDataPoint = {
+					time: new Date(newData.updatedAt).toLocaleTimeString('ko-KR', {
+						hour: '2-digit',
+						minute: '2-digit',
+						timeZone: 'Asia/Seoul',
+						hour12: false,
+					}),
+					angle_x: newData.angle_x,
+					angle_y: newData.angle_y,
+				}
+				setData(prev => {
+					const next = [...prev, point]
+					return next.length > 140 ? next.slice(next.length - 140) : next
+				})
+			}
+		}
+
+		socket.on(topic, listener)
+		return () => {
+			socket.off(topic, listener)
+		}
+	}, [buildingId, queryClient, selectedDoorNum])
 
 	return (
 		<div className='w-full max-h-screen bg-gray-50 p-2 md:p-5 space-y-4'>
 			<AngleNodeScroll
-				onSelectNode={(doorNum: number) => setSelectedDoorNum(doorNum)}
+				onSelectNode={door => setSelectedDoorNum(door)}
 				building_angle_nodes={buildingAngleNodes}
 				dangerAngleNodes={dangerAngleNodes}
 			/>
@@ -115,35 +172,9 @@ const AngleNodes = () => {
 				graphData={data}
 				buildingId={buildingId}
 				doorNum={selectedDoorNum}
-				onSelectTime={time => setSelectedHours(time)}
+				onSelectTime={setSelectedHours}
 				hours={selectedHours}
 			/>
-
-			<div className='w-full h-full p-2 mt-5'>
-				<h1>비계전도 노드 Summary</h1>
-				{angleNodesSummary?.map(angleNode => (
-					<div className='border border-slate-300 bg-gradient-to-r from-blue-50 to-blue-200 shadow-md hover:shadow-lg hover:to-blue-300 transition duration-200 ease-in-out rounded-xl cursor-pointer'>
-						<div className='p-4 space-y-2 text-sm text-gray-700'>
-							<div className='flex items-center justify-between'>
-								<h1 className='font-bold text-blue-700'>노드 넘버</h1>
-								<span className='text-blue-800 font-semibold text-lg'>
-									{angleNode.doorNum}
-								</span>
-							</div>
-							<div className='grid grid-cols-2 gap-x-4 gap-y-1'>
-								<p className='font-medium text-gray-600'>Axis-X:</p>
-								<p className='text-gray-800'>{angleNode.angle_x}</p>
-
-								<p className='font-medium text-gray-600'>Axis-Y:</p>
-								<p className='text-gray-800'>{angleNode.angle_y}</p>
-
-								<p className='font-medium text-gray-600'>위치:</p>
-								<p className='text-gray-800'>{angleNode.position}</p>
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
 		</div>
 	)
 }

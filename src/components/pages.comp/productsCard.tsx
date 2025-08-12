@@ -14,7 +14,7 @@ export const NodesCard = () => {
 export const GatewaysCard = () => {
 	return (
 		<div className='p-5 w-full h-[250px] flex justify-center items-center gap-x-10 bg-white rounded-xl shadow-lg shadow-gray-200 cursor-pointer hover:shadow-gray-400 border border-slate-400 duration-200 text-blue-600'>
-			<PiShareNetworkFill size={100} className=' font-bold' />
+			<PiShareNetworkFill size={100} className='font-bold' />
 
 			<h1 className='text-2xl  font-bold'>Gate-ways</h1>
 		</div>
